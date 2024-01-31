@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-
 import AuthForm from "./AuthForm";
 
 const Register = () => {
@@ -13,9 +12,7 @@ const Register = () => {
     setCredentials({ ...credentials, [e.target.name]: e.target.value });
   };
 
-  const handleRegister = () => {
-    // Registration logic here
-  };
+  const handleRegister = () => {};
 
   return (
     <AuthForm

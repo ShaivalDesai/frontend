@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   Avatar,
   Box,
@@ -13,14 +13,19 @@ import { LockOutlined } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 
 interface AuthFormProps {
-  formType: 'login' | 'register';
+  formType: "login" | "register";
   credentials: { email: string; password: string; name?: string };
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onSubmit: () => void;
 }
 
-const AuthForm: React.FC<AuthFormProps> = ({ formType, credentials, onChange, onSubmit }) => {
-  const isLogin = formType === 'login';
+const AuthForm: React.FC<AuthFormProps> = ({
+  formType,
+  credentials,
+  onChange,
+  onSubmit,
+}) => {
+  const isLogin = formType === "login";
 
   return (
     <Container maxWidth="xs">
@@ -36,7 +41,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ formType, credentials, onChange, on
         <Avatar sx={{ m: 1, bgcolor: "primary.light" }}>
           <LockOutlined />
         </Avatar>
-        <Typography variant="h5">{isLogin ? 'Login' : 'Register'}</Typography>
+        <Typography variant="h5">{isLogin ? "Login" : "Register"}</Typography>
         <Box component="form" onSubmit={onSubmit} sx={{ mt: 1 }}>
           {!isLogin && (
             <TextField
@@ -81,12 +86,14 @@ const AuthForm: React.FC<AuthFormProps> = ({ formType, credentials, onChange, on
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
           >
-            {isLogin ? 'Login' : 'Register'}
+            {isLogin ? "Login" : "Register"}
           </Button>
           <Grid container justifyContent="flex-end">
             <Grid item>
               <Link to={isLogin ? "/register" : "/login"}>
-                {isLogin ? "Don't have an account? Register" : "Already have an account? Login"}
+                {isLogin
+                  ? "Don't have an account? Register"
+                  : "Already have an account? Login"}
               </Link>
             </Grid>
           </Grid>
