@@ -14,7 +14,7 @@ import { Link } from "react-router-dom";
 
 interface AuthFormProps {
   formType: "login" | "register";
-  credentials: { email: string; password: string; name?: string };
+  credentials: { email: string; password: string; name?: string,role?:string };
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onSubmit: () => void;
 }
@@ -55,6 +55,10 @@ const AuthForm: React.FC<AuthFormProps> = ({
               value={credentials.name}
               onChange={onChange}
             />
+
+            
+
+            
           )}
 
           <TextField
@@ -67,6 +71,11 @@ const AuthForm: React.FC<AuthFormProps> = ({
             value={credentials.email}
             onChange={onChange}
           />
+
+
+
+
+
 
           <TextField
             margin="normal"
