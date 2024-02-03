@@ -1,29 +1,3 @@
-// import React, { useState } from "react";
-// import AuthForm from "./AuthForm";
-
-// const Login = () => {
-//   const [credentials, setCredentials] = useState({ email: "", password: "" });
-
-//   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-//     setCredentials({ ...credentials, [e.target.name]: e.target.value });
-//   };
-
-//   const handleLogin = () => {
-//     // Login logic here
-//   };
-
-//   return (
-//     <AuthForm
-//       formType="login"
-//       credentials={credentials}
-//       onChange={handleChange}
-//       onSubmit={handleLogin}
-//     />
-//   );
-// };
-
-// export default Login;
-
 import { LockOutlined } from "@mui/icons-material";
 import {
   Container,
@@ -50,10 +24,15 @@ const Login = () => {
         <CssBaseline />
         <Box
           sx={{
-            mt: 20,
+            mt: 8,
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
+            border: "1px solid #ccc", 
+            borderRadius: "5px", 
+            padding: "20px",
+            boxShadow: "0 3px 5px 2px rgba(0, 0, 0, .1)", 
+            backgroundColor: "white",
           }}
         >
           <Avatar sx={{ m: 1, bgcolor: "primary.light" }}>
@@ -97,8 +76,8 @@ const Login = () => {
             </Button>
             <Grid container justifyContent={"flex-end"}>
               <Grid item>
-                <Link to="/register" style={{ marginRight: "35px" }}>
-                  Don't have an account? Register
+                <Link to="/register" style={{ marginRight: "55px" }}>
+                  Don't have an account?
                 </Link>
                 <Link to="/forgot-password">Forgot Password</Link>
               </Grid>
