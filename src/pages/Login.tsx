@@ -62,7 +62,7 @@ const Login = () => {
             alignItems: "center",
             border: "1px solid #ccc",
             borderRadius: "5px",
-            padding: "20px",
+            padding: "10px",
             boxShadow: "0 3px 5px 2px rgba(0, 0, 0, .1)",
             backgroundColor: "white",
           }}

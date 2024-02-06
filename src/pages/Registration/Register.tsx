@@ -51,7 +51,7 @@ const Register = () => {
           minWidth: 275,
           maxWidth: 500,
           padding: "20px",
-          position: "relative",
+          textAlign: "center",
         }}
       >
         <CardContent>
@@ -104,20 +104,14 @@ const Register = () => {
           container
           justifyContent="center"
           style={{
-            position: "absolute",
-            bottom: "20px",
-          }}
-        ></Grid>
-
-        <Grid
-          item
-          style={{
-            marginLeft: "20px",
+            marginTop: "20px", // Adjust the margin as needed
           }}
         >
-          <Link to="/login" style={{ fontSize: "1.0rem", color: "#1976D2" }}>
-            Already have an account? Login
-          </Link>
+          <Grid item>
+            <Link to="/login" style={{ fontSize: "1.0rem", color: "#1976D2" }}>
+              Already have an account? Login
+            </Link>
+          </Grid>
         </Grid>
       </Card>
     </div>
