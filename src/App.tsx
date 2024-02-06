@@ -3,9 +3,13 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import "./App.css";
 import HomePage from "./pages/HomePage";
 import Login from "./pages/Login";
+import LoginUser from "./pages/LoginUser";
+import LoginVendor from "./pages/LoginVendor";
 import Register from "./pages/Registration/Register";
 import RegistrationUser from "./pages/Registration/RegistrationUser";
 import RegistrationVendor from "./pages/Registration/RegistrationVendor";
+// import New from "./pages/Neww"
+import Neww from "./pages/Neww";
 
 
 
@@ -13,12 +17,14 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<Navigate to="/login" replace/>}/>
+        <Route path="/" element={<Navigate to="/register" replace/>}/>
+        <Route path="/loginUser" element={<LoginUser/>}/>
+        <Route path="/loginVendor" element={<LoginVendor/>}/>
         <Route path="/register" element={<Register/>}/>
-        <Route path="/login" element={<Login/>}/>
+        <Route path="/neww" element={<Neww/>}/>
         <Route path="/home" element={<HomePage/>}/>
-        <Route path="/user" element={<RegistrationUser/>}/>
-        <Route path="/vendor" element={<RegistrationVendor/>}/>
+        <Route path="/RegisterUser" element={<RegistrationUser/>}/>
+        <Route path="/RegisterVendor" element={<RegistrationVendor/>}/>
       </Routes>
     </>
   );

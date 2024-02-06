@@ -24,28 +24,27 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 interface FormData {
-  name: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-  role: string;
-  gender: string;
-  dob: string;
+  uname: string;
+  uemail: string;
+  upwd: string;
+  confirmupwd: string;
+  ugender: string;
+  udob: string;
+  unumber: string;
 }
 
 const RegistrationUser = () => {
-  const [name, setName] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [showConfirmPassword, setShowConfirmPassword] =
-    useState<boolean>(false);
-  const [confirmPassword, setConfirmPassword] = useState<string>("");
-  const [role, setRole] = useState<string>("");
-  const [gender, setGender] = useState<string>("");
-  const [dob, setDob] = useState<string>("");
-  const [phoneNumber, setPhoneNumber] = useState<string>("");
-  const [isPhoneNumberValid, setIsPhoneNumberValid] = useState(true);
+  const [uname, setUname] = useState<string>("");
+  const [uemail, setUemail] = useState<string>("");
+  const [upwd, setUpwd] = useState<string>("");
+  const [showupwd, setShowupwd] = useState<boolean>(false);
+  const [showConfirmupwd, setShowConfirmupwd] = useState<boolean>(false);
+  const [confirmupwd, setConfirmupwd] = useState<string>("");
+
+  const [ugender, setUgender] = useState<string>("");
+  const [udob, setUdob] = useState<string>("");
+  const [unumber, setUnumber] = useState<string>("");
+  const [validPhoneNumber, setValidPhoneNumber] = useState("");
 
   const navigate = useNavigate();
 
@@ -54,55 +53,55 @@ const RegistrationUser = () => {
   const handleRegister = async () => {
     const validationErrors: Partial<Record<keyof FormData, string>> = {};
 
-    if (!name.trim()) {
-      validationErrors.name = "Name is required";
+    if (!uname.trim()) {
+      validationErrors.uname = "Name is required";
     }
 
-    if (!email.trim()) {
-      validationErrors.email = "Email is required";
-    } else if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
-      validationErrors.email = "Email is invalid";
+    if (!uemail.trim()) {
+      validationErrors.uemail = "Email is required";
+    } else if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(uemail)) {
+      validationErrors.uemail = "Email is invalid";
     }
 
-    if (!role.trim()) {
-      validationErrors.role = "Select Role";
+    if (!ugender.trim()) {
+      validationErrors.ugender = "Select gender";
     }
 
-    if (!gender.trim()) {
-      validationErrors.gender = "Select Gender";
+    if (!udob.trim()) {
+      validationErrors.udob = "Date of Birth is required";
     }
 
-    if (!dob.trim()) {
-      validationErrors.dob = "Date of Birth is required";
-    }
-
-    if (!password.trim()) {
-      validationErrors.password = "Password is required";
-    } else if (password.length < 8) {
-      validationErrors.password = "Password must be at least 8 characters long";
-    } else if (!/[A-Z]/.test(password) || !/[a-z]/.test(password)) {
-      validationErrors.password =
+    if (!upwd.trim()) {
+      validationErrors.upwd = "Password is required";
+    } else if (upwd.length < 8) {
+      validationErrors.upwd = "Password must be at least 8 characters long";
+    } else if (!/[A-Z]/.test(upwd) || !/[a-z]/.test(upwd)) {
+      validationErrors.upwd =
         "Password must contain at least one uppercase and one lowercase letter";
-    } else if (!/\d/.test(password)) {
-      validationErrors.password = "Password must contain at least one number";
-    } else if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
-      validationErrors.password =
+    } else if (!/\d/.test(upwd)) {
+      validationErrors.upwd = "Password must contain at least one number";
+    } else if (!/[!@#$%^&*(),.?":{}|<>]/.test(upwd)) {
+      validationErrors.upwd =
         "Password must contain at least one special character";
     }
 
-    if (!confirmPassword.trim()) {
-      validationErrors.confirmPassword = "Confirm Password is required";
-    } else if (confirmPassword !== password) {
-      validationErrors.confirmPassword = "Passwords do not match";
+    if (!confirmupwd.trim()) {
+      validationErrors.confirmupwd = "Confirm Password is required";
+    } else if (confirmupwd !== upwd) {
+      validationErrors.confirmupwd = "Password do not match";
     }
 
-    // if (!phoneNumber.trim()) {
-    //     validationErrors.phoneNumber = "Confirm Password is required";
-    //   } else if (confirmPassword !== password) {
-    //     validationErrors.confirmPassword = "Passwords do not match";
-    //   }
+    const isValidPhoneNumber = (unumber: string) => {
+      const phoneRegex = /^[6789]\d{9}$/;
+      // Assumes 10-digit phone number, modify as needed
+      return phoneRegex.test(unumber);
+    };
 
-
+    if (!unumber) {
+      validationErrors.unumber = "Phone number is required";
+    } else if (!isValidPhoneNumber(unumber)) {
+      validationErrors.unumber = "Invalid phone number";
+    }
 
     setErrors(validationErrors);
 
@@ -111,12 +110,12 @@ const RegistrationUser = () => {
         const response = await axios.post(
           "http://localhost:5000/api/register",
           {
-            name,
-            email,
-            password,
-            role,
-            gender,
-            dob,
+            uname,
+            uemail,
+            upwd,
+
+            ugender,
+            udob,
           }
         );
         console.log("response " + JSON.stringify(response.data));
@@ -143,22 +142,22 @@ const RegistrationUser = () => {
             <Avatar sx={{ m: 1, bgcolor: "primary.light" }}>
               <LockOutlined />
             </Avatar>
-            <Typography variant="h5">Register</Typography>
+            <Typography variant="h5">User Registration</Typography>
             <Box sx={{ mt: 3 }}>
               <Grid container spacing={2}>
                 <Grid item xs={12}>
                   <TextField
-                    name="name"
+                    name="uname"
                     required
                     fullWidth
-                    id="name"
+                    id="uname"
                     label="Name"
                     autoFocus
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    value={uname}
+                    onChange={(e) => setUname(e.target.value)}
                   />
                   <div style={{ color: "red" }}>
-                    {errors.name && <span>{errors.name}</span>}
+                    {errors.uname && <span>{errors.uname}</span>}
                   </div>
                 </Grid>
 
@@ -166,45 +165,42 @@ const RegistrationUser = () => {
                   <TextField
                     required
                     fullWidth
-                    id="email"
+                    id="uemail"
                     label="Email Address"
-                    name="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    name="uemail"
+                    value={uemail}
+                    onChange={(e) => setUemail(e.target.value)}
                   />
                   <div style={{ color: "red" }}>
-                    {errors.email && <span>{errors.email}</span>}
+                    {errors.uemail && <span>{errors.uemail}</span>}
                   </div>
                 </Grid>
 
-                
                 <Grid item xs={12}>
-                  <PhoneInput
-                    country={"in"} // Set the default country, you can change it based on your requirements
-                    value={phoneNumber}
-                    onChange={(value) => setPhoneNumber(value)}
-                    inputStyle={{
-                      width: "100%",
-                      height: "2.5rem",
-                      fontSize: "1rem",
-                      padding: "0.5rem",
-                    }}
+                  <TextField
+                    required
+                    fullWidth
+                    id="unumber"
+                    label="Phone Number"
+                    name="unumber"
+                    value={unumber}
+                    onChange={(e) => setUnumber(e.target.value)}
+                    inputProps={{ maxLength: 10 }}
                   />
                   <div style={{ color: "red" }}>
-                    {/* Add validation error message if needed */}
+                    {errors.unumber && <span>{errors.unumber}</span>}
                   </div>
                 </Grid>
-                
 
                 <Grid item xs={12}>
                   <FormControl fullWidth required variant="outlined">
-                    <InputLabel id="gender-label">Gender</InputLabel>
+                    <InputLabel id="ugender-label">Gender</InputLabel>
                     <Select
-                      labelId="gender-label"
-                      id="gender"
-                      name="gender"
-                      value={gender}
-                      onChange={(e) => setGender(e.target.value)}
+                      labelId="ugender-label"
+                      id="ugender"
+                      name="ugender"
+                      value={ugender}
+                      onChange={(e) => setUgender(e.target.value)}
                       label="Gender"
                     >
                       <MenuItem value="Male">Male</MenuItem>
@@ -214,7 +210,7 @@ const RegistrationUser = () => {
                   </FormControl>
 
                   <div style={{ color: "red" }}>
-                    {errors.gender && <span>{errors.gender}</span>}
+                    {errors.ugender && <span>{errors.ugender}</span>}
                   </div>
                 </Grid>
 
@@ -223,16 +219,16 @@ const RegistrationUser = () => {
                     required
                     fullWidth
                     type="date"
-                    id="dob"
+                    id="udob"
                     label="Date of Birth"
-                    name="dob"
+                    name="udob"
                     InputLabelProps={{ shrink: true }}
-                    value={dob}
-                    onChange={(e) => setDob(e.target.value)}
+                    value={udob}
+                    onChange={(e) => setUdob(e.target.value)}
                   />
 
                   <div style={{ color: "red" }}>
-                    {errors.dob && <span>{errors.dob}</span>}
+                    {errors.udob && <span>{errors.udob}</span>}
                   </div>
                 </Grid>
 
@@ -240,26 +236,26 @@ const RegistrationUser = () => {
                   <TextField
                     required
                     fullWidth
-                    name="password"
+                    name="upwd"
                     label="Password"
-                    type={showPassword ? "text" : "password"}
-                    id="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    type={showupwd ? "text" : "upwd"}
+                    id="upwd"
+                    value={upwd}
+                    onChange={(e) => setUpwd(e.target.value)}
                     InputProps={{
                       endAdornment: (
                         <IconButton
-                          onClick={() => setShowPassword(!showPassword)}
+                          onClick={() => setShowupwd(!showupwd)}
                           edge="end"
                         >
-                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                          {showupwd ? <VisibilityOff /> : <Visibility />}
                         </IconButton>
                       ),
                     }}
                   />
 
                   <div style={{ color: "red" }}>
-                    {errors.password && <span>{errors.password}</span>}
+                    {errors.upwd && <span>{errors.upwd}</span>}
                   </div>
                 </Grid>
 
@@ -267,34 +263,26 @@ const RegistrationUser = () => {
                   <TextField
                     required
                     fullWidth
-                    name="confirmPassword"
+                    name="confirmupwd"
                     label="Confirm Password"
-                    type={showConfirmPassword ? "text" : "password"}
-                    id="confirmPassword"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    type={showConfirmupwd ? "text" : "upwd"}
+                    id="confirmupwd"
+                    value={confirmupwd}
+                    onChange={(e) => setConfirmupwd(e.target.value)}
                     InputProps={{
                       endAdornment: (
                         <IconButton
-                          onClick={() =>
-                            setShowConfirmPassword(!showConfirmPassword)
-                          }
+                          onClick={() => setShowConfirmupwd(!showConfirmupwd)}
                           edge="end"
                         >
-                          {showConfirmPassword ? (
-                            <VisibilityOff />
-                          ) : (
-                            <Visibility />
-                          )}
+                          {showConfirmupwd ? <VisibilityOff /> : <Visibility />}
                         </IconButton>
                       ),
                     }}
                   />
 
                   <div style={{ color: "red" }}>
-                    {errors.confirmPassword && (
-                      <span>{errors.confirmPassword}</span>
-                    )}
+                    {errors.confirmupwd && <span>{errors.confirmupwd}</span>}
                   </div>
                 </Grid>
               </Grid>
