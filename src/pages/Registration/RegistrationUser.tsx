@@ -120,8 +120,18 @@ const RegistrationUser = () => {
         );
         console.log("response " + JSON.stringify(response.data));
         navigate("/home");
-      } catch (error) {
-        console.error("Error during registration:", error);
+      } catch (error: any) {
+        if (error.response) {
+          // Here you check for specific status codes or messages depending on your API
+          if (error.response.status === 400) { // Example status code for conflict
+            setErrors({ ...errors, uemail: "Email already exists" });
+          } else {
+            // Handle other errors or general error message
+            console.error("Error during registration:", error.message);
+          }
+        } else {
+          console.error("Error during registration:", error);
+        }
       }
     }
   };

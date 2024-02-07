@@ -165,7 +165,7 @@ function Item(props: {
       <img
         src={props.item.image}
         alt={props.item.description}
-        style={{ width: "100%", height: "auto" }}
+        style={{ width: "100%", height: "auto",display:"block" }}
       />
     </Paper>
   );

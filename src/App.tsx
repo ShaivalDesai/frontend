@@ -1,15 +1,17 @@
 import React from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import "./App.css";
-import HomePage from "./pages/HomePage";
-import Login from "./pages/Login";
-import LoginUser from "./pages/LoginUser";
-import LoginVendor from "./pages/LoginVendor";
+// import HomePage from "./pages/HomePage";
+import Login from "./pages/Registration/Login";
+import LoginUser from "./pages/Registration/LoginUser";
+import LoginVendor from "./pages/Registration/LoginVendor";
 import Register from "./pages/Registration/Register";
 import RegistrationUser from "./pages/Registration/RegistrationUser";
 import RegistrationVendor from "./pages/Registration/RegistrationVendor";
 // import New from "./pages/Neww"
 import Neww from "./pages/Neww";
+import Navbar from "./pages/Home/HomePage";
+import HomePage from "./pages/Home/HomePage";
 
 
 

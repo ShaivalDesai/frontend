@@ -33,21 +33,38 @@ const LoginUser = () => {
     } else if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(uemail)) {
       validationErrors.uemail = "uemail is invalid";
     }
+
+    if (!upwd.trim()) {
+      validationErrors.upwd = "Password is required";
+    }
     setErrors(validationErrors);
 
-
     if (Object.keys(validationErrors).length === 0) {
-    try {
-      const response = await axios.post("http://localhost:5000/api/login", {
-        uemail,
-        upwd,
-      });
-      console.log("response " + JSON.stringify(response.data));
-      navigate("/home");
-    } catch (error) {
-      console.error("Error during registration:", error);
+      try {
+        const response = await axios.post("http://127.0.0.1:8000/login/user", {
+          uemail,
+          upwd,
+        });
+        console.log(response.data);
+
+        // Check if the response indicates successful login
+        if (response.data.status_code === 200) {
+          console.log("Login successful");
+          alert(response.data.detail);
+          navigate("/home");
+        } else {
+          alert(response.data.detail);
+          console.error("Login failed: Incorrect password");
+        }
+      } catch (error: any) {
+        console.error("Error during login:", error);
+
+        // Check if the error is due to incorrect credentials (400 Bad Request)
+        if (error.response && error.response.status === 400) {
+          console.error("Login failed: Incorrect credentials");
+        }
+      }
     }
-  }
   };
 
   return (
@@ -72,20 +89,20 @@ const LoginUser = () => {
           </Avatar>
           <Typography variant="h5">User Login</Typography>
           <Box sx={{ mt: 1 }}>
-          <Grid item xs={12}>
-                  <TextField
-                    required
-                    fullWidth
-                    id="uemail"
-                    label="uemail Address"
-                    name="uemail"
-                    value={uemail}
-                    onChange={(e) => setUemail(e.target.value)}
-                  />
-                  <div style={{ color: "red" }}>
-                    {errors.uemail && <span>{errors.uemail}</span>}
-                  </div>
-                </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                id="uemail"
+                label="uemail Address"
+                name="uemail"
+                value={uemail}
+                onChange={(e) => setUemail(e.target.value)}
+              />
+              <div style={{ color: "red" }}>
+                {errors.uemail && <span>{errors.uemail}</span>}
+              </div>
+            </Grid>
 
             <TextField
               margin="normal"
@@ -100,6 +117,9 @@ const LoginUser = () => {
                 setPassword(e.target.value);
               }}
             />
+            <div style={{ color: "red" }}>
+              {errors.upwd && <span>{errors.upwd}</span>}
+            </div>
 
             <Button
               fullWidth
