@@ -16,26 +16,27 @@ const ImageCarousel: React.FC = () => {
 
   return (
     <>
+    <div style={{ height: "100vh", width: "100vw" }}>
       <Slider {...settings}>
         <div>
           <img
             src="m1.avif"
             alt="image1"
-            style={{ height: "70vh", width: "100%" }}
+            style={{ height: "50vh", width: "100%" }}
           />
         </div>
         <div>
           <img
             src="bg3.jpg"
             alt="image2"
-            style={{ height: "70vh", width: "100%" }}
+            style={{ height: "50vh", width: "100%" }}
           />
         </div>
         <div>
           <img
             src="bg4.jpg"
             alt="image3"
-            style={{ height: "70vh", width: "100%" }}
+            style={{ height: "50vh", width: "100%" }}
           />
         </div>
       </Slider>
@@ -45,6 +46,7 @@ const ImageCarousel: React.FC = () => {
         alt="Another image"
         style={{ height: "70vh", width: "100%" }}
       /> */}
+      </div>
     </>
   );
 };

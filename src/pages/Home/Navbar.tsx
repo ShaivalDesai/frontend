@@ -5,7 +5,6 @@ import {
   Typography,
   Button,
   IconButton,
-  Badge,
   Menu,
   MenuItem,
   Box,
@@ -92,7 +91,6 @@ const Navbar: React.FC = () => {
       onClose={handleMenuClose}
     >
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      {/* <MenuItem onClick={handleMenuClose}>My account</MenuItem> */}
     </Menu>
   );
 
@@ -102,9 +100,13 @@ const Navbar: React.FC = () => {
         flexGrow: 1,
         fontStyle: "italic",
         fontSize: "1.5rem",
+        width: "100vw",
       }}
     >
-      <AppBar position="static">
+      <AppBar
+        position="static"
+        sx={{ backgroundColor: "lightblue", width: "100vw" }}
+      >
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             <RouterLink
@@ -142,15 +144,6 @@ const Navbar: React.FC = () => {
           <Button color="inherit" component={RouterLink} to="/contact">
             Contact
           </Button>
-          {/* <IconButton
-            size="large"
-            aria-label="show 4 new mails"
-            color="inherit"
-          >
-            <Badge badgeContent={4} color="error">
-              <ShoppingCart />
-            </Badge>
-          </IconButton> */}
           <IconButton
             size="large"
             edge="end"

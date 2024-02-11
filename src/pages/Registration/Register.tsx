@@ -1,236 +1,239 @@
-// import React, { useState } from "react";
-// import {
-//   Radio,
-//   RadioGroup,
-//   FormControlLabel,
-//   FormControl,
-//   Card,
-//   CardContent,
-//   Typography,
-//   styled,
-//   Grid,
-// } from "@mui/material";
-// import { Link, useNavigate } from "react-router-dom";
-
-// // Custom styled Radio component
-// const BigRadio = styled(Radio)(({ theme }) => ({
-//   "& .MuiSvgIcon-root": {
-//     // Target the inner SVG icon of the Radio button
-//     fontSize: "2rem", // Increase the icon size
-//   },
-// }));
-
-// const Register = () => {
-//   const navigate = useNavigate();
-//   const [selectedValue, setSelectedValue] = useState("");
-
-//   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-//     setSelectedValue(event.target.value);
-//     // Navigate based on the selection
-//     if (event.target.value === "user") {
-//       navigate("/loginUser");
-//     } else if (event.target.value === "vendor") {
-//       navigate("/loginVendor");
-//     }
-//   };
-
-//   return (
-//     <div
-//       style={{
-//         display: "flex",
-//         justifyContent: "center",
-//         alignItems: "center",
-//         backgroundImage: `url('/bg5.jpg')`,
-//         backgroundSize: "cover",
-//         backgroundPosition: "center",
-//         minHeight: "100vh",
-//       }}
-//     >
-//       <Card
-//         sx={{
-//           minWidth: 275,
-//           maxWidth: 500,
-//           padding: "20px",
-//           textAlign: "center",
-//           // backgroundColor:"black",
-//           // color:"white"
-//         }}
-//       >
-//         <CardContent>
-//           <Typography sx={{ fontSize: 50 }} color="text.secondary" gutterBottom>
-//             Choose Your Role
-//           </Typography>
-//           <FormControl component="fieldset">
-//             <RadioGroup
-//               row
-//               aria-label="userType"
-//               name="userType"
-//               value={selectedValue}
-//               onChange={handleChange}
-//             >
-//               <FormControlLabel
-//                 value="user"
-//                 control={<BigRadio />}
-//                 label={
-//                   <span
-//                     style={{
-//                       display: "flex",
-//                       alignItems: "center",
-//                       fontSize: "1.75rem",
-//                     }}
-//                   >
-//                     User
-//                   </span>
-//                 }
-//               />
-//               <FormControlLabel
-//                 value="vendor"
-//                 control={<BigRadio />}
-//                 label={
-//                   <span
-//                     style={{
-//                       display: "flex",
-//                       alignItems: "center",
-//                       fontSize: "1.75rem",
-//                     }}
-//                   >
-//                     Vendor
-//                   </span>
-//                 }
-//               />
-//             </RadioGroup>
-//           </FormControl>
-//         </CardContent>
-
-//         <Grid
-//           container
-//           justifyContent="center"
-//           style={{
-//             marginTop: "20px", // Adjust the margin as needed
-//           }}
-//         >
-//           <Grid item>
-//             <Link to="/login" style={{ fontSize: "1.0rem", color: "#1976D2" }}>
-//               Already have an account? Login
-//             </Link>
-//           </Grid>
-//         </Grid>
-//       </Card>
-//     </div>
-//   );
-// };
-
-// export default Register;
-
 import * as React from "react";
 import {
+  Typography,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Radio,
+  RadioGroup,
+  FormControlLabel,
+  createTheme,
+  ThemeProvider,
+  Box,
+  Grid,
+  Button,
+  CardContent,
   Card,
   CardActions,
-  CardContent,
-  Button,
-  Typography,
-  Grid,
-  Paper,
+  Avatar,
 } from "@mui/material";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import ShoppingBasketIcon from "@mui/icons-material/ShoppingBasket";
 import Carousel from "react-material-ui-carousel";
-import { Link } from "react-router-dom"; // Import Link from react-router-dom
+import { useNavigate } from "react-router-dom";
 
 const defaultTheme = createTheme();
 
+interface ItemProps {
+  item: {
+    image: string;
+    description: string;
+  };
+}
+
 const items = [
   {
-    image: "/fashion.png",
+    image: "/p1.jpeg",
     description: "Random Image 1",
   },
   {
-    image: "/ri1.avif",
-    description: "Random Image 1",
-  },
-  {
-    image: "/ri2.jpg",
+    image: "/p2.jpg",
     description: "Random Image 2",
   },
   {
-    image: "/x1.webp",
+    image: "/p3.jpg",
     description: "Random Image 3",
+  },
+  {
+    image: "/p4.jpg",
+    description: "Random Image 4",
   },
 ];
 
-function Item(props: {
-  item: { image: string | undefined; description: string | undefined };
-}) {
+function Item({ item }: ItemProps) {
   return (
-    <Paper>
-      <img
-        src={props.item.image}
-        alt={props.item.description}
-        style={{ width: "100%", height: "auto",display:"block" }}
-      />
-    </Paper>
+    <Box
+      sx={{
+        height: "100vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundImage: `url(${item.image})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    ></Box>
   );
 }
 
 export default function SignInSide() {
+  const [open, setOpen] = React.useState(false);
+  const [selectedOption, setSelectedOption] = React.useState("user");
+  const navigate = useNavigate(); // Initialize the useNavigate hook
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleOptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSelectedOption(event.target.value);
+  };
+
+  const handleConfirm = () => {
+    handleClose(); // Close the dialog
+    // Navigate based on the selected option
+    if (selectedOption === "user") {
+      navigate("/loginUser"); // Navigate to loginUser page
+    } else if (selectedOption === "vendor") {
+      navigate("/loginVendor"); // Navigate to loginVendor page
+    }
+  };
+
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Grid
-        container
-        component="main"
+      <Carousel
+        animation="fade"
         sx={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100%",
           height: "100vh",
-          justifyContent: "center",
-          alignItems: "center",
-          padding: 2,
-          backgroundImage: `url('/bg2.jpg')`,
-          backgroundRepeat: "no-repeat",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
+          zIndex: -1, // Ensure the carousel is behind the overlay content
         }}
       >
-        <Grid item xs={12} sm={6} md={4} sx={{ marginRight: -5}}>
-          {/* Added marginRight to create space between carousel and button */}
-          <Carousel>
-            {items.map((item, i) => (
-              <Item key={i} item={item} />
-            ))}
-          </Carousel>
-        </Grid>
+        {items.map((item, i) => (
+          <Item key={i} item={item} />
+        ))}
+      </Carousel>
 
+      {/* Overlay Content */}
+      <Box
+        sx={{
+          position: "absolute",
+          top: 0,
+          left: 15,
+          width: "90%",
+          height: "90%",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          padding: 6,
+          // bgcolor:"brown"
+        }}
+      >
         <Grid item xs={12} sm={6} md={4}>
-          <Button component={Link} to="/neww" fullWidth>
-            {/* Wrap the Card inside a Button component */}
-            <Card
-              sx={{
-                minWidth: 275,
-                margin: 1,
-                backgroundColor: "rgba(255, 255, 255, 0.8)",
-                // height: "300px",
-              }}
+          <Card
+            sx={{
+              minHeight: 415,
+              minWidth: 415,
+              margin: 1,
+              backgroundColor: "#ffffff",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              borderRadius: "15px",
+            }}
+          >
+            <Avatar
+              sx={{ bgcolor: "#724C31", marginTop: 0, height: 80, width: 80 }}
             >
-              <CardContent>
-                <Typography
-                  sx={{ fontSize: 14 }}
-                  color="text.secondary"
-                  gutterBottom
-                >
-                  Stay ahead of fashion game
-                </Typography>
-                <Typography variant="h5" component="div">
-                  Fashion Fleet
-                </Typography>
-                <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                  Sign in or Register to continue
-                </Typography>
-              </CardContent>
+              <ShoppingBasketIcon fontSize="large" />
+            </Avatar>
+            <Typography
+              fontSize="50px"
+              variant="h5"
+              sx={{ color: "#5C3D24", marginBottom: "-25px" }}
+            >
+              FashionFleet
+            </Typography>
+            <CardContent>
+              <Typography
+                sx={{
+                  fontSize: 23,
+                  marginBottom: "35px",
+                  justifyContent: "center",
+                  textAlign: "center",
+                }}
+                color="#724C31"
+                gutterBottom
+              >
+                Stay ahead of fashion game
+              </Typography>
 
-              <CardActions>
-                {/* Remove any specific actions inside CardActions */}
-              </CardActions>
-            </Card>
-          </Button>
+              <Typography
+                sx={{ mb: 1.5, fontSize: 23, marginBottom: "-13px" }}
+                color="#724C31"
+              >
+                Login or Register to continue
+              </Typography>
+            </CardContent>
+
+            <CardActions>
+              <Button
+                variant="contained"
+                sx={{ bgcolor: "#724C31","&:hover": {
+                  bgcolor: "#4A2F21", // Change background color to dark brown on hover
+                }, }}
+                onClick={handleOpen}
+              >
+                Login to Continue
+              </Button>
+            </CardActions>
+          </Card>
+
+          <Dialog
+            open={open}
+            onClose={handleClose}
+            style={{ color: "#724C31" }}
+          >
+            <DialogTitle style={{ color: "#67442b" }}>
+              {" "}
+              Select Option
+            </DialogTitle>
+            <DialogContent>
+              <DialogContentText style={{ color: "#67442b" }}>
+                Please select whether you are a User or a Vendor.
+              </DialogContentText>
+              <RadioGroup
+                style={{ color: "#67442b" }}
+                aria-label="option"
+                name="option"
+                value={selectedOption}
+                onChange={handleOptionChange}
+              >
+                <FormControlLabel
+                  style={{ color: "#724C31" }}
+                  value="user"
+                  control={<Radio />}
+                  label="User"
+                />
+                <FormControlLabel
+                  style={{ color: "#724C31" }}
+                  value="vendor"
+                  control={<Radio />}
+                  label="Vendor"
+                />
+              </RadioGroup>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleClose} style={{ color: "#67442b" }}>
+                Cancel
+              </Button>
+              <Button onClick={handleConfirm} style={{ color: "#67442b" }}>
+                Confirm
+              </Button>
+            </DialogActions>
+          </Dialog>
         </Grid>
-      </Grid>
+      </Box>
     </ThemeProvider>
   );
 }

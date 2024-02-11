@@ -19,11 +19,11 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<Navigate to="/register" replace/>}/>
-        <Route path="/loginUser" element={<LoginUser/>}/>
-        <Route path="/loginVendor" element={<LoginVendor/>}/>
-        <Route path="/register" element={<Register/>}/>
-        <Route path="/neww" element={<Neww/>}/>
+        <Route path="/" element={<Navigate to="/login" replace/>}/>
+        <Route path="/login" element={<LoginUser/>}/>
+        {/* <Route path="/loginVendor" element={<LoginVendor/>}/> */}
+        {/* <Route path="/register" element={<Register/>}/> */}
+        {/* <Route path="/neww" element={<Neww/>}/> */}
         <Route path="/home" element={<HomePage/>}/>
         <Route path="/RegisterUser" element={<RegistrationUser/>}/>
         <Route path="/RegisterVendor" element={<RegistrationVendor/>}/>
