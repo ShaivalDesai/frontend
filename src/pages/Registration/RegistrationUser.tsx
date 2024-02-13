@@ -396,14 +396,14 @@ const defaultTheme = createTheme();
 interface FormData {
   name: string;
   email: string;
-  confirmEmail:string;
+  confirmEmail: string;
   password: string;
   confirmupwd: string;
   mobile_number: string;
   user_type: string;
 }
 
-export default function LoginUser() {
+export default function Register() {
   const [email, setEmail] = React.useState<string>("");
   const [confirmEmail, setConfirmEmail] = React.useState<string>("");
   const [password, setPassword] = React.useState<string>("");
@@ -419,11 +419,8 @@ export default function LoginUser() {
   const [errors, setErrors] = React.useState<Partial<FormData>>({});
   const navigate = useNavigate();
 
-  const handleRegisterClick = () => {
-    setShowRegisterForm(true); // Show the registration form when the link is clicked
-  };
-
-  const handleLogin = async () => {
+  const handleRegister = async (e: any) => {
+    e.preventDefault();
     const validationErrors: Partial<Record<keyof FormData, string>> = {};
 
     if (!name.trim()) {
@@ -475,37 +472,34 @@ export default function LoginUser() {
     }
 
     if (!user_type.trim()) {
-      validationErrors.user_type = "user_type selection is required";
+      validationErrors.user_type = "User Type selection is required";
     }
-    
+
     setErrors(validationErrors);
 
     if (Object.keys(validationErrors).length === 0) {
       try {
-        const response = await axios.post("http://127.0.0.1:8000/login/user", {
-          name,
-          email,
-          password,
-          user_type,
-          mobile_number,
-        });
+        const response = await axios.post(
+          "http://localhost:5000/api/register",
+          {
+            name,
+            email,
+            password,
+            // user_type,
+            // mobile_number,
+          }
+        );
         console.log(response.data);
-
-        // Check if the response indicates successful login
-        if (response.data.status_code === 200) {
-          console.log("Login successful");
-          alert(response.data.detail);
-          navigate("/home");
-        } else {
-          alert(response.data.detail);
-          console.error("Login failed: Incorrect password");
-        }
+        navigate("/home");
       } catch (error: any) {
-        console.error("Error during login:", error);
-
-        // Check if the error is due to incorrect credentials (400 Bad Request)
-        if (error.response && error.response.status === 400) {
-          console.error("Login failed: Incorrect credentials");
+        if (error.response) {
+          if (error.response.status === 400) {
+            setErrors({ ...errors, email: "Email already exists" });
+          } else {
+            console.error("Error during registration:", error.message);
+          }
+        } else {
+          console.error("Error during registration:", error);
         }
       }
     }
@@ -552,12 +546,12 @@ export default function LoginUser() {
               <LockOutlinedIcon fontSize="large" />
             </Avatar>
             <Typography component="h1" variant="h5">
-              Log in
+              Register
             </Typography>
             <Box
               component="form"
               noValidate
-              onSubmit={handleLogin}
+              onSubmit={handleRegister}
               sx={{ mt: 1 }}
             >
               <TextField
@@ -565,7 +559,7 @@ export default function LoginUser() {
                 required
                 fullWidth
                 id="name"
-                label="Name/Comapny's Name"
+                label="Name/Company's Name"
                 name="name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
@@ -573,9 +567,9 @@ export default function LoginUser() {
                   style: { color: "#724C31" },
                 }}
               />
-                      <div style={{ color: "red" }}>
-  {errors.name && <span>{errors.name}</span>}
-</div>
+              <div style={{ color: "red" }}>
+                {errors.name && <span>{errors.name}</span>}
+              </div>
 
               <TextField
                 margin="normal"
@@ -590,13 +584,11 @@ export default function LoginUser() {
                   style: { color: "#724C31" },
                 }}
               />
-                                 <div style={{ color: "red" }}>
-  {errors.email && <span>{errors.email}</span>}
-</div>
-
-              {/* <div style={{ color: "red" }}>
+              <div style={{ color: "red" }}>
                 {errors.email && <span>{errors.email}</span>}
-              </div> */}
+              </div>
+
+              
 
               <TextField
                 margin="normal"
@@ -611,16 +603,14 @@ export default function LoginUser() {
                   style: { color: "#724C31" },
                 }}
               />
-                                         <div style={{ color: "red" }}>
-  {errors.confirmEmail && <span>{errors.confirmEmail}</span>}
-</div>
-
-              {/* <div style={{ color: "red" }}>
+              <div style={{ color: "red" }}>
                 {errors.confirmEmail && <span>{errors.confirmEmail}</span>}
-              </div> */}
+              </div>
+
+              
 
               <TextField
-              margin="normal"
+                margin="normal"
                 required
                 fullWidth
                 id="unumber"
@@ -633,88 +623,77 @@ export default function LoginUser() {
                   style: { color: "#724C31" }, // Set label color to #724C31
                 }}
               />
-                                         <div style={{ color: "red" }}>
-  {errors.mobile_number && <span>{errors.mobile_number}</span>}
-</div>
-              {/* <div style={{ color: "red" }}>
+              <div style={{ color: "red" }}>
                 {errors.mobile_number && <span>{errors.mobile_number}</span>}
-              </div> */}
+              </div>
+             
 
-               <TextField
-               margin="normal"
-                      required
-                      fullWidth
-                      name="password"
-                      label="Password"
-                      type={showPassword ? "text" : "password"}
-                      id="password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      InputLabelProps={{
-                        style: { color: "#724C31" },
-                      }}
-                      InputProps={{
-                        endAdornment: (
-                          <IconButton
-                            onClick={() => setShowPassword(!showPassword)}
-                            edge="end"
-                          >
-                            {showPassword ? <VisibilityOff /> : <Visibility />}
-                          </IconButton>
-                        ),
-                      }}
-                    />
-                                               {/* <div style={{ color: "red" }}>
-  {errors.password && <span>{errors.password}</span>}
-</div> */}
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                name="password"
+                label="Password"
+                type={showPassword ? "text" : "password"}
+                id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                InputLabelProps={{
+                  style: { color: "#724C31" },
+                }}
+                InputProps={{
+                  endAdornment: (
+                    <IconButton
+                      onClick={() => setShowPassword(!showPassword)}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  ),
+                }}
+              />
+              <div style={{ color: "red" }}>
+                {errors.password && <span>{errors.password}</span>}
+              </div>
 
-                    {/* <div style={{ color: "red" }}>
-                      {errors.password && <span>{errors.password}</span>}
-                    </div> */}
-                  
+              
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                name="confirmupwd"
+                label="Confirm Password"
+                type={showConfirmupwd ? "text" : "password"}
+                id="confirmupwd"
+                value={confirmupwd}
+                onChange={(e) => setConfirmupwd(e.target.value)}
+                InputLabelProps={{
+                  style: { color: "#724C31" },
+                }}
+                InputProps={{
+                  endAdornment: (
+                    <IconButton
+                      onClick={() => setShowConfirmupwd(!showConfirmupwd)}
+                      edge="end"
+                    >
+                      {showConfirmupwd ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  ),
+                }}
+              />
 
-                  
-                     <TextField
-                     margin="normal"
-                      required
-                      fullWidth
-                      name="confirmupwd"
-                      label="Confirm Password"
-                      type={showConfirmupwd ? "text" : "password"}
-                      id="confirmupwd"
-                      value={confirmupwd}
-                      onChange={(e) => setConfirmupwd(e.target.value)}
-                      InputLabelProps={{
-                        style: { color: "#724C31" },
-                      }}
-                      InputProps={{
-                        endAdornment: (
-                          <IconButton
-                            onClick={() => setShowConfirmupwd(!showConfirmupwd)}
-                            edge="end"
-                          >
-                            {showConfirmupwd ? (
-                              <VisibilityOff />
-                            ) : (
-                              <Visibility />
-                            )}
-                          </IconButton>
-                        ),
-                      }}
-                    /> 
-
-<div style={{ color: "red" }}>
-  {errors.confirmupwd && <span>{errors.confirmupwd}</span>}
-</div>
-                    {/* <div style={{ color: "red" ,minHeight: '20px', fontSize: '0.75rem'}}>
+              <div style={{ color: "red" }}>
+                {errors.confirmupwd && <span>{errors.confirmupwd}</span>}
+              </div>
+              {/* <div style={{ color: "red" ,minHeight: '20px', fontSize: '0.75rem'}}>
                       {errors.confirmupwd && (
                         <span>{errors.confirmupwd}</span>
                       )}
                     </div> */}
 
-              <Typography 
-              
-              style={{ color: "#67442b", margin:"normal",fontSize:"20px" }}>
+              <Typography
+                style={{ color: "#67442b", margin: "normal", fontSize: "20px" }}
+              >
                 Please select an option:
               </Typography>
 
@@ -724,7 +703,7 @@ export default function LoginUser() {
                 aria-label="option"
                 name="option"
                 onChange={(e) => setUser_type(e.target.value)}
-                // defaultValue="user" // Optionally set a default value
+                
               >
                 <FormControlLabel
                   value="buyer"
@@ -740,9 +719,8 @@ export default function LoginUser() {
                 />
               </RadioGroup>
               <div style={{ color: "red" }}>
-  {errors.user_type && <span>{errors.user_type}</span>}
-</div>
-
+                {errors.user_type && <span>{errors.user_type}</span>}
+              </div>
 
               <Button
                 fullWidth
@@ -755,16 +733,14 @@ export default function LoginUser() {
                     bgcolor: "#4A2F21",
                   },
                 }}
-                onClick={handleLogin}
+                onClick={handleRegister}
               >
                 Register
               </Button>
               <Grid container>
-                <Grid item xs>
-                  
-                </Grid>
+                <Grid item xs></Grid>
                 <Grid item>
-                  <Link href="/login" variant="body2" onClick={handleLogin}>
+                  <Link href="/login" variant="body2" onClick={handleRegister}>
                     {"Already have an account? Login"}
                   </Link>
                 </Grid>
@@ -776,3 +752,5 @@ export default function LoginUser() {
     </ThemeProvider>
   );
 }
+
+

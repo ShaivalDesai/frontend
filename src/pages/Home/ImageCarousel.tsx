@@ -20,31 +20,52 @@ const ImageCarousel: React.FC = () => {
       <Slider {...settings}>
         <div>
           <img
-            src="m1.avif"
+            src="p1.jpeg"
             alt="image1"
-            style={{ height: "50vh", width: "100%" }}
+            style={{ height: "80vh", width: "100vw" }}
           />
         </div>
         <div>
           <img
-            src="bg3.jpg"
+            src="p2.jpg"
             alt="image2"
-            style={{ height: "50vh", width: "100%" }}
+            style={{ height: "80vh", width: "100vw" }}
           />
         </div>
         <div>
           <img
-            src="bg4.jpg"
+            src="p3.jpg"
             alt="image3"
-            style={{ height: "50vh", width: "100%" }}
+            style={{ height: "80vh", width: "100vw" }}
           />
         </div>
       </Slider>
+      <h1 style={{
+  fontFamily: '"Rubik Doodle Shadow", sans-serif',
+  textAlign: 'center',
+  marginTop: '20px',
+  // border: '2px solid #000', 
+  padding: '10px', 
+  // boxShadow: '3px 3px 5px rgba(0,0,0,0.3)', 
+  textShadow: 'brown', 
+  // borderRadius: '10px', 
+  backgroundColor: 'rgba(255, 255, 255, 0.5)', 
+  color: '#724c31',
+  fontSize:"50px",
+  // marginBottom:"20px"
+
+}}>
+  SHOP BY CATEGORY
+</h1>
+
+
+
+
 
       {/* <img
-        src="/sbc.jpg"
+        src="/sbc2.jpg"
         alt="Another image"
-        style={{ height: "70vh", width: "100%" }}
+        style={{ height: "20vh", width: "100%" }}
       /> */}
       </div>
     </>
@@ -52,3 +73,5 @@ const ImageCarousel: React.FC = () => {
 };
 
 export default ImageCarousel;
+
+

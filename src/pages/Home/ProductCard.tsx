@@ -1,27 +1,38 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
+interface MyCardProps {
+  image: string; // Image URL
+  title: string; // Title text
+  color: string; // Color for text and background
+}
+
 const cardStyle: React.CSSProperties = {
   height: "200px",
   width: "300px",
-  backgroundImage: `url('bg3.jpg')`, // Replace 'path_to_your_image.jpg' with the actual path to your image
   backgroundSize: "cover",
   backgroundPosition: "center",
   borderRadius: "10px",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
-  color: "#fff", // Text color on top of the background image
+  color: "#fff", // Default text color on top of the background image
   textAlign: "center",
 };
 
-const MyCard = () => {
+const MyCard: React.FC<MyCardProps> = ({ image, title, color }) => {
+  const dynamicCardStyle: React.CSSProperties = {
+    ...cardStyle,
+    backgroundImage: `url(${image})`,
+    backgroundColor: color,
+  };
+
   return (
     <>
       <Link to="/other-page" style={{ textDecoration: "none" }}>
-        <button style={cardStyle}>
-          <h2>Mens Wear</h2>
-          <p>Click here to shop!</p>
+        <button style={dynamicCardStyle}>
+          <h2 style={{fontSize:"30px"}}>{title}</h2>
+          {/* <p>Click here to shop!</p> */}
         </button>
       </Link>
     </>

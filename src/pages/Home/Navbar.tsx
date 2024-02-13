@@ -23,7 +23,7 @@ const Search = styled("div")(({ theme }) => ({
   borderRadius: theme.shape.borderRadius,
   backgroundColor: alpha(theme.palette.common.white, 0.15),
   "&:hover": {
-    backgroundColor: alpha(theme.palette.common.white, 0.25),
+    backgroundColor: "alpha(theme.palette.common.white, 0.25)",
   },
   marginRight: theme.spacing(2),
   marginLeft: 0,
@@ -100,12 +100,14 @@ const Navbar: React.FC = () => {
         flexGrow: 1,
         fontStyle: "italic",
         fontSize: "1.5rem",
-        width: "100vw",
+        // width: "100vw",
+        // maxWidth:"90%"
+        // height:"100vw"
       }}
     >
       <AppBar
         position="static"
-        sx={{ backgroundColor: "lightblue", width: "100vw" }}
+        sx={{ backgroundColor: "#724C31", width: "100vw" }}
       >
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
