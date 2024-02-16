@@ -58,21 +58,19 @@ export default function LoginUser() {
 
     if (Object.keys(validationErrors).length === 0) {
       try {
-        const response = await axios.post("http://127.0.0.1:8000/login/user", {
+        const response = await axios.post("http://127.0.0.1:8000/login", {
           email,
           password,
           user_type,
         });
 
-        // Check if the response indicates successful login
         if (response.status === 200) {
           console.log("Login successful");
           alert(response.data.status);
 
-          // Redirect based on user type
-          if (user_type === "buyer") {
+          if (user_type === "Customer") {
             navigate("/home");
-          } else if (user_type === "vendor") {
+          } else if (user_type === "Vendor") {
             navigate("/dashboard");
           }
         } else {
@@ -82,7 +80,6 @@ export default function LoginUser() {
       } catch (error: any) {
         console.error("Error during login:", error);
 
-        // Check if the error is due to incorrect credentials (400 Bad Request)
         if (error.response && error.response.status === 400) {
           window.alert("Incorrect credentials");
           console.error("Login failed: Incorrect credentials");
@@ -99,9 +96,9 @@ export default function LoginUser() {
           item
           xs={false}
           sm={4}
-          md={8.7}
+          md={8}
           sx={{
-            backgroundImage: `url("/p1.jpeg")`,
+            backgroundImage: `url("/p11.jpeg")`,
             backgroundRepeat: "no-repeat",
             backgroundSize: "cover",
             backgroundPosition: "center",
@@ -111,21 +108,19 @@ export default function LoginUser() {
           item
           xs={12}
           sm={8}
-          md={3.3}
+          md={4}
           component={Paper}
           elevation={6}
           square
-          // sx={{backgroundColor:"#f3ead6",}}
+          
         >
           <Box
             sx={{
-              my: 15,
+              my: 10,
               mx: 4,
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-              // backgroundImage: `url("/p1.jpeg")`,
-              // backgroundColor:"#c6a27b"
             }}
           >
             <Avatar sx={{ m: 1, bgcolor: "#724C31", height: 65, width: 65 }}>
@@ -157,12 +152,7 @@ export default function LoginUser() {
                 {errors.email && <span>{errors.email}</span>}
               </div>
 
-              {/* <div style={{ color: "red"}} >
-    {errors.email && <span>{errors.email}</span>}
-  </div> */}
-
               <TextField
-                // style={{ marginBottom: 18 }}
                 margin="normal"
                 required
                 fullWidth
@@ -174,8 +164,10 @@ export default function LoginUser() {
                 onChange={(e) => {
                   setPassword(e.target.value);
                 }}
+                onPaste={(e) => e.preventDefault()}
+                onCopy={(e) => e.preventDefault()}
                 InputLabelProps={{
-                  style: { color: "#724C31" }, // Set label color to #5C3D24
+                  style: { color: "#724C31" }, 
                 }}
               />
               <div style={{ color: "red", marginBottom: 14 }}>
@@ -186,23 +178,21 @@ export default function LoginUser() {
                 Please select an option:
               </Typography>
 
-              {/* RadioGroup with options aligned horizontally */}
               <RadioGroup
-                row // This prop aligns the radio buttons horizontally
+                row
                 aria-label="option"
                 name="option"
                 value={user_type}
                 onChange={(e) => setUser_type(e.target.value)}
-                // defaultValue="user" // Optionally set a default value
               >
                 <FormControlLabel
-                  value="buyer"
+                  value="Customer"
                   control={<Radio />}
-                  label="Buyer"
+                  label="Customer"
                   style={{ color: "#724C31" }}
                 />
                 <FormControlLabel
-                  value="vendor"
+                  value="Vendor"
                   control={<Radio />}
                   label="Vendor"
                   style={{ color: "#724C31" }}
@@ -228,7 +218,7 @@ export default function LoginUser() {
               >
                 Login
               </Button>
-              <Grid container>
+              <Grid container justifyContent="space-between">
                 <Grid item xs>
                   <Link href="#" variant="body2">
                     Forgot password?
@@ -240,7 +230,7 @@ export default function LoginUser() {
                     variant="body2"
                     onClick={handleRegisterClick}
                   >
-                    {"Don't have an account? Register"}
+                    {"Don't have an account?"}
                   </Link>
                 </Grid>
               </Grid>
