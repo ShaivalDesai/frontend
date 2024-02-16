@@ -8,9 +8,9 @@ export default function AuthPage() {
   return (
     <div>
       {showLoginForm ? <LoginUser /> : <Register />}
-      <button onClick={() => setShowLoginForm(!showLoginForm)}>
-        {showLoginForm ? "Switch to Register" : "Switch to Login"}
-      </button>
+      {/* <button onClick={() => setShowLoginForm(!showLoginForm)}> */}
+        {/* {showLoginForm ? "Switch to Register" : "Switch to Login"} */}
+      {/* </button> */}
     </div>
   );
 }

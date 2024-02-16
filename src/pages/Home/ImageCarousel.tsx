@@ -16,31 +16,31 @@ const ImageCarousel: React.FC = () => {
 
   return (
     <>
-    <div style={{ height: "100vh", width: "100vw" }}>
+    <div style={{ maxHeight: "100vh", width: "100vw"}}>
       <Slider {...settings}>
         <div>
           <img
             src="p1.jpeg"
             alt="image1"
-            style={{ height: "80vh", width: "100vw" }}
+            style={{ height: "60vh", width: "100vw" }}
           />
         </div>
         <div>
           <img
             src="p2.jpg"
             alt="image2"
-            style={{ height: "80vh", width: "100vw" }}
+            style={{ height: "60vh", width: "100vw" }}
           />
         </div>
         <div>
           <img
             src="p3.jpg"
             alt="image3"
-            style={{ height: "80vh", width: "100vw" }}
+            style={{ height: "60vh", width: "100vw" }}
           />
         </div>
       </Slider>
-      <h1 style={{
+      {/* <h1 style={{
   fontFamily: '"Rubik Doodle Shadow", sans-serif',
   textAlign: 'center',
   marginTop: '20px',
@@ -56,17 +56,17 @@ const ImageCarousel: React.FC = () => {
 
 }}>
   SHOP BY CATEGORY
-</h1>
+</h1> */}
 
 
 
 
 
-      {/* <img
-        src="/sbc2.jpg"
+      <img
+        src="/sbccc.png"
         alt="Another image"
-        style={{ height: "20vh", width: "100%" }}
-      /> */}
+        style={{ height: "19vh", width: "100%",borderRadius:"10px"}}
+      /> 
       </div>
     </>
   );

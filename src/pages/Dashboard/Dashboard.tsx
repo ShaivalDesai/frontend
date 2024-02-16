@@ -1,321 +1,240 @@
-// import React from 'react';
-// import Drawer from '@mui/material/Drawer';
-// import List from '@mui/material/List';
-// import ListItem from '@mui/material/ListItem';
-// import ListItemIcon from '@mui/material/ListItemIcon';
-// import ListItemText from '@mui/material/ListItemText';
-// import Divider from '@mui/material/Divider';
-// import IconButton from '@mui/material/IconButton';
-// import MenuIcon from '@mui/icons-material/Menu';
-// import InboxIcon from '@mui/icons-material/MoveToInbox';
-// import MailIcon from '@mui/icons-material/Mail';
-
-// export default function Dashboard() {
-//   const [open, setOpen] = React.useState(false);
-
-//   const toggleDrawer = () => {
-//     setOpen(!open);
-//   };
-
-//   return (
-//     <div>
-//       <IconButton
-//         edge="start"
-//         color="inherit"
-//         aria-label="menu"
-//         onClick={toggleDrawer}
-//       >
-//         <MenuIcon />
-//       </IconButton>
-//       <Drawer anchor="left" open={open} onClose={toggleDrawer}>
-//         <div>
-//           <List>
-//             <ListItem button key="Inbox">
-//               <ListItemIcon>
-//                 <InboxIcon />
-//               </ListItemIcon>
-//               <ListItemText primary="Inbox" />
-//             </ListItem>
-//             <ListItem button key="Starred">
-//               <ListItemIcon>
-//                 <MailIcon />
-//               </ListItemIcon>
-//               <ListItemText primary="Starred" />
-//             </ListItem>
-//             <ListItem button key="Send email">
-//               <ListItemIcon>
-//                 <MailIcon />
-//               </ListItemIcon>
-//               <ListItemText primary="Send email" />
-//             </ListItem>
-//             <ListItem button key="Drafts">
-//               <ListItemIcon>
-//                 <MailIcon />
-//               </ListItemIcon>
-//               <ListItemText primary="Drafts" />
-//             </ListItem>
-//           </List>
-//           <Divider />
-//           <List>
-//             <ListItem button key="All mail">
-//               <ListItemIcon>
-//                 <MailIcon />
-//               </ListItemIcon>
-//               <ListItemText primary="All mail" />
-//             </ListItem>
-//             <ListItem button key="Trash">
-//               <ListItemIcon>
-//                 <MailIcon />
-//               </ListItemIcon>
-//               <ListItemText primary="Trash" />
-//             </ListItem>
-//             <ListItem button key="Spam">
-//               <ListItemIcon>
-//                 <MailIcon />
-//               </ListItemIcon>
-//               <ListItemText primary="Spam" />
-//             </ListItem>
-//           </List>
-//         </div>
-//       </Drawer>
-//     </div>
-//   );
-// }
-import * as React from "react";
-import Box from "@mui/material/Box";
-import Drawer from "@mui/material/Drawer";
-import AppBar from "@mui/material/AppBar";
+import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
+import MuiDrawer from "@mui/material/Drawer";
+import Box from "@mui/material/Box";
+import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import List from "@mui/material/List";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
-import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
-import LeaderboardIcon from "@mui/icons-material/Leaderboard";
-import PrecisionManufacturingIcon from "@mui/icons-material/PrecisionManufacturing";
-import { AccountCircle } from "@mui/icons-material";
-import { InputBase, IconButton } from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
-// import MyCard from "./ProductCard";
-import MyCard from "../Home/ProductCard";
+import IconButton from "@mui/material/IconButton";
+import Badge from "@mui/material/Badge";
+import Container from "@mui/material/Container";
+import Grid from "@mui/material/Grid";
+import { mainListItems } from "./Lists";
+import React from "react";
+import { AccountCircle, Link } from "@mui/icons-material";
+import DashboardCards from "./Cards";
+import ChartCard from "./Charts";
+import PieChartCard from "./PieChart";
+import MenuIcon from "@mui/icons-material/Menu";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import { MenuList, MenuItem, ListItemIcon } from "@mui/material";
+// import { Popover } from "react-bootstrap";
+import { Popover } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
+import PersonIcon from "@mui/icons-material/Person";
+import LogoutIcon from "@mui/icons-material/Logout";
+import { useNavigate } from "react-router-dom";
 
-const drawerWidth = 260;
+const drawerWidth: number = 250;
+
+interface AppBarProps extends MuiAppBarProps {
+  open?: boolean;
+}
+
+const AppBar = styled(MuiAppBar, {
+  shouldForwardProp: (prop) => prop !== "open",
+})<AppBarProps>(({ theme, open }) => ({
+  zIndex: theme.zIndex.drawer + 1,
+  transition: theme.transitions.create(["width", "margin"], {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  ...(open && {
+    marginLeft: drawerWidth,
+    width: `calc(100% - ${drawerWidth}px)`,
+    transition: theme.transitions.create(["width", "margin"], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  }),
+}));
+
+const Drawer = styled(MuiDrawer, {
+  shouldForwardProp: (prop) => prop !== "open",
+})(({ theme, open }) => ({
+  "& .MuiDrawer-paper": {
+    position: "relative",
+    whiteSpace: "nowrap",
+    width: drawerWidth,
+    transition: theme.transitions.create("width", {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    boxSizing: "border-box",
+    backgroundColor: "#f5f5f5", // Set background color of the left side
+    ...(!open && {
+      overflowX: "hidden",
+      transition: theme.transitions.create("width", {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
+      }),
+      width: theme.spacing(7),
+      [theme.breakpoints.up("sm")]: {
+        width: theme.spacing(9),
+      },
+    }),
+  },
+}));
+
+const defaultTheme = createTheme();
 
 export default function Dashboard() {
-  return (
-    <Box sx={{ display: "flex" }}>
-      <CssBaseline />
-      <AppBar
-        position="fixed"
-        sx={{
-          zIndex: (theme) => theme.zIndex.drawer + 1,
-          backgroundColor: "#724C31",
-        }}
-      >
-        <Toolbar>
-          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
-            FashionFleet
-          </Typography>
+  const [open, setOpen] = React.useState(true);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const navigate = useNavigate();
 
-          {/* Search Box with Icon */}
-          <Box
+  const toggleDrawer = () => {
+    setOpen(!open);
+  };
+
+  const handleGoToProfile = () => {
+    setAnchorEl(null); // Close the menu
+    navigate('/profile'); // Navigate to the homepage
+  };
+
+  const handleProfileClick = (event: any) => {
+    setAnchorEl(event.currentTarget); // Open the profile menu
+  };
+
+  const handleProfileClose = () => {
+    setAnchorEl(null); // Close the profile menu
+  };
+
+  const openProfile = Boolean(anchorEl);
+  const profileId = openProfile ? "profile-popover" : undefined;
+
+  return (
+    <ThemeProvider theme={defaultTheme}>
+      <Box sx={{ display: "flex" }}>
+        <CssBaseline />
+
+        <AppBar position="absolute" open={open}>
+          <Toolbar
+            sx={{
+              backgroundColor: "#724C31",
+              pr: "24px", // keep right padding when drawer closed
+            }}
+          >
+            <IconButton
+              edge="start"
+              color="inherit"
+              aria-label="open drawer"
+              onClick={toggleDrawer}
+              sx={{
+                marginRight: "36px",
+
+                ...(open && { display: "none" }),
+              }}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography
+              component="h1"
+              variant="h6"
+              color="inherit"
+              noWrap
+              sx={{ flexGrow: 1 }}
+            >
+              FashionFleet
+            </Typography>
+
+            <IconButton
+              color="inherit"
+              aria-label="profile"
+              edge="end"
+              onClick={handleProfileClick}
+              style={{ marginRight: "10px" }}
+            >
+              <AccountCircle />
+            </IconButton>
+            <Popover
+              id={profileId}
+              open={openProfile}
+              anchorEl={anchorEl}
+              onClose={handleProfileClose}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "right",
+              }}
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+            >
+              <MenuList autoFocusItem={openProfile} id="profile-menu">
+                <MenuItem onClick={handleGoToProfile}>
+                  <ListItemIcon>
+                    <PersonIcon fontSize="small" />
+                  </ListItemIcon>
+                  Profile
+                </MenuItem>
+                
+                <MenuItem onClick={handleProfileClose}>
+                  <ListItemIcon>
+                    <LogoutIcon fontSize="small" />
+                  </ListItemIcon>
+                  Logout
+                </MenuItem>
+              </MenuList>
+            </Popover>
+          </Toolbar>
+        </AppBar>
+
+        <Drawer variant="permanent" open={open}>
+          <Toolbar
             sx={{
               display: "flex",
               alignItems: "center",
-              backgroundColor: "white",
-              borderRadius: 1,
-              marginRight: 2,
+              justifyContent: "flex-end",
+              px: [1],
             }}
           >
-            <InputBase
-              sx={{ ml: 1, flex: 1 }}
-              placeholder="Search..."
-              inputProps={{ "aria-label": "search" }}
-            />
-            <IconButton
-              type="submit"
-              sx={{ p: "10px", color: "gray" }}
-              aria-label="search"
-            >
-              <SearchIcon />
+            <IconButton onClick={toggleDrawer}>
+              <ChevronLeftIcon />
             </IconButton>
-          </Box>
-
-          {/* Profile Option */}
-          <IconButton
-            size="large"
-            edge="end"
-            aria-label="account of current user"
-            aria-haspopup="true"
-            color="inherit"
-          >
-            <AccountCircle />
-          </IconButton>
-        </Toolbar>
-      </AppBar>
-      <Drawer
-        variant="permanent"
-        sx={{
-           
-          width: drawerWidth,
-          
-          flexShrink: 0,
-        //   borderRadius:"16px",
-        //   [`& .MuiDrawer-paper`]: {
-        //     width: drawerWidth,
-        //     boxSizing: "border-box",
-        //     // borderRadius:"40px",
-        //   },
-        }}
-      >
-        <Toolbar />
-        <Box sx={{ overflow: "auto" }}>
-          <List>
-            <ListItem disablePadding   sx={{mb: 2}} >
-              <ListItemButton>
-                <ListItemIcon>
-                  <PrecisionManufacturingIcon />
-                </ListItemIcon>
-                <ListItemText
-                  primary={
-                    <Typography variant="body1" fontWeight="bold">
-                      Manage Production
-                    </Typography>
-                  }
-                />
-              </ListItemButton>
-            </ListItem>
-            <Divider />
-            <ListItem disablePadding sx={{mb: 2}} >
-              <ListItemButton>
-                <ListItemIcon>
-                  <MailIcon />
-                </ListItemIcon>
-                <ListItemText
-                  primary={
-                    <Typography variant="body1" fontWeight="bold">
-                      Total Sales
-                    </Typography>
-                  }
-                />
-              </ListItemButton>
-            </ListItem>
-            <Divider />
-            <ListItem disablePadding sx={{mb: 2}} >
-              <ListItemButton>
-                <ListItemIcon>
-                  <MailIcon />
-                </ListItemIcon>
-                <ListItemText
-                  primary={
-                    <Typography variant="body1" fontWeight="bold">
-                      Top Sales
-                    </Typography>
-                  }
-                />
-              </ListItemButton>
-            </ListItem>
-            <Divider />
-            <ListItem disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  <MailIcon />
-                </ListItemIcon>
-                <ListItemText
-                  primary={
-                    <Typography variant="body1" fontWeight="bold">
-                      Sales Forecasting
-                    </Typography>
-                  }
-                />
-              </ListItemButton>
-            </ListItem>
-            <Divider />
-            <ListItem disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  <AttachMoneyIcon />
-                </ListItemIcon>
-                <ListItemText
-                  primary={
-                    <Typography variant="body1" fontWeight="bold">
-                      Price Forecasting
-                    </Typography>
-                  }
-                />
-              </ListItemButton>
-            </ListItem>
-            <Divider />
-            <ListItem disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  <InboxIcon />
-                </ListItemIcon>
-                <ListItemText
-                  primary={
-                    <Typography variant="body1" fontWeight="bold">
-                      Vendors Comparison
-                    </Typography>
-                  }
-                />
-              </ListItemButton>
-            </ListItem>
-            <Divider />
-            <ListItem disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  <LeaderboardIcon />
-                </ListItemIcon>
-                <ListItemText
-                  primary={
-                    <Typography variant="body1" fontWeight="bold">
-                      Growth Graph
-                    </Typography>
-                  }
-                />
-              </ListItemButton>
-            </ListItem>
-          </List>
+          </Toolbar>
           <Divider />
-        </Box>
-      </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-        <Toolbar />
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-around",
+          <List component="nav">{mainListItems}</List>
+        </Drawer>
+        <Box
+          component="main"
+          sx={{
+            backgroundColor: (theme) =>
+              theme.palette.mode === "light"
+                ? theme.palette.grey[100]
+                : theme.palette.grey[100],
+            flexGrow: 1,
+            height: "100vh",
+            overflow: "auto",
           }}
         >
-          <MyCard image="bbggg.jpg" title="MENAGE PRODUCTION" color="white" />
-          <MyCard image="bbggg.jpg" title="TOTAL SALES" color="white" />
-          <MyCard image="bbggg.jpg" title="TOP SALES" color="white" />
-          <MyCard image="bbggg.jpg" title="SALES FORECASTING" color="white" />
-          {/* <MyCard image="shoes.jpg" title="FOOTWEAR" color="white" /> */}
-        </div>
+          <Toolbar />
 
-        <div
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "space-around",
-          marginTop: "20px", // Adjust the margin as needed
-        }}
-      >
-        <MyCard image="bbggg.jpg" title="PRICE FORECASTING" color="white" />
-        <MyCard image="bbggg.jpg" title="VENDORS COMPARISON" color="white" />
-        <MyCard image="bbggg.jpg" title="GROWTH GRAPH" color="white" />
-        <MyCard image="bbggg.jpg" title="PROFILE" color="white" />
-        {/* <MyCard image="home.jpg" title="HOME" color="white" /> */}
-      </div>
+          <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+            <DashboardCards />
+            <br />
+            <Grid container spacing={3}>
+              <Grid item xs={12} sm={6}>
+                <ChartCard title="Monthly Sale" />
+              </Grid>
+
+              <Grid item xs={12} sm={6}>
+                <PieChartCard
+                  title={"Pie Chart"}
+                  data={[
+                    { name: "Group A", value: 400 },
+                    { name: "Group B", value: 300 },
+                    { name: "Group C", value: 300 },
+                    { name: "Group D", value: 200 },
+                  ]}
+                />
+              </Grid>
+            </Grid>
+          </Container>
+        </Box>
       </Box>
-    </Box>
+    </ThemeProvider>
   );
 }

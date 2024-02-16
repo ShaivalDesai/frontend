@@ -10,6 +10,7 @@ import {
   Box,
   InputBase,
 } from "@mui/material";
+import LogoutIcon from "@mui/icons-material/Logout";
 import {
   ShoppingCart,
   AccountCircle,
@@ -17,6 +18,7 @@ import {
 } from "@mui/icons-material";
 import { Link as RouterLink } from "react-router-dom";
 import { styled, alpha } from "@mui/material/styles";
+import { useNavigate } from "react-router-dom";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -64,9 +66,15 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 const Navbar: React.FC = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const isMenuOpen = Boolean(anchorEl);
+  const navigate = useNavigate();
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/login");
   };
 
   const handleMenuClose = () => {
@@ -156,6 +164,17 @@ const Navbar: React.FC = () => {
             color="inherit"
           >
             <AccountCircle />
+          </IconButton>
+          <IconButton
+            size="large"
+            edge="end"
+            aria-label="account of current user"
+            aria-controls={menuId}
+            aria-haspopup="true"
+            onClick={handleLogout}
+            color="inherit"
+          >
+            <LogoutIcon />
           </IconButton>
         </Toolbar>
       </AppBar>
