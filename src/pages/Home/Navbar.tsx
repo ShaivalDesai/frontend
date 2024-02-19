@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   AppBar,
   Toolbar,
@@ -9,6 +9,13 @@ import {
   MenuItem,
   Box,
   InputBase,
+  ListItemIcon,
+  MenuList,
+  Popover,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
 } from "@mui/material";
 import LogoutIcon from "@mui/icons-material/Logout";
 import {
@@ -19,6 +26,7 @@ import {
 import { Link as RouterLink } from "react-router-dom";
 import { styled, alpha } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
+import PersonIcon from "@mui/icons-material/Person";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -65,6 +73,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 const Navbar: React.FC = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
   const isMenuOpen = Boolean(anchorEl);
   const navigate = useNavigate();
 
@@ -77,9 +86,34 @@ const Navbar: React.FC = () => {
     navigate("/login");
   };
 
+  const handleLogoutConfirm = () => {
+    setLogoutDialogOpen(false);
+    navigate("/login");
+  };
+
+  const handleProfileClick = (event: any) => {
+    setAnchorEl(event.currentTarget); // Open the profile menu
+  };
+
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
+
+  const handleProfileClose = () => {
+    setAnchorEl(null); // Close the profile menu
+  };
+
+  const handleGoToProfile = () => {
+    setAnchorEl(null);
+    navigate("/profile");
+  };
+
+  const handleLogoutCancel = () => {
+    setLogoutDialogOpen(false); // Close the logout confirmation dialog
+  };
+
+  const openProfile = Boolean(anchorEl);
+  const profileId = openProfile ? "profile-popover" : undefined;
 
   const menuId = "primary-search-account-menu";
   const renderMenu = (
@@ -155,17 +189,94 @@ const Navbar: React.FC = () => {
             Contact
           </Button>
           <IconButton
-            size="large"
-            edge="end"
-            aria-label="account of current user"
-            aria-controls={menuId}
-            aria-haspopup="true"
-            onClick={handleProfileMenuOpen}
             color="inherit"
+            aria-label="profile"
+            edge="end"
+            onClick={handleProfileClick}
+            style={{ marginRight: "10px" }}
           >
-            <AccountCircle />
+            <AccountCircle fontSize="large" />
           </IconButton>
-          <IconButton
+          <Popover
+            id={profileId}
+            open={openProfile}
+            anchorEl={anchorEl}
+            onClose={handleProfileClose}
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "right",
+            }}
+            transformOrigin={{
+              vertical: "top",
+              horizontal: "right",
+            }}
+          >
+            <MenuList autoFocusItem={openProfile} id="profile-menu">
+              <MenuItem onClick={handleGoToProfile}>
+                <ListItemIcon>
+                  <PersonIcon fontSize="small" />
+                </ListItemIcon>
+                Profile
+              </MenuItem>
+              <MenuItem onClick={handleLogout}>
+                <ListItemIcon>
+                  <LogoutIcon fontSize="small" />
+                </ListItemIcon>
+                Logout
+              </MenuItem>
+            </MenuList>
+          </Popover>
+
+          {/* Dialog for logout confirmation */}
+          <Dialog
+            open={logoutDialogOpen}
+            onClose={handleLogoutCancel}
+            PaperProps={{
+              style: {
+                borderRadius: "10px",
+                width: "350px",
+                height: "175px",
+              },
+            }}
+          >
+            <DialogTitle sx={{ color: "#724C31" }}>Confirm Logout</DialogTitle>
+            <DialogContent>
+              <Typography variant="body1" sx={{ color: "#724C31" }}>
+                Are you sure you want to logout?
+              </Typography>
+            </DialogContent>
+            <DialogActions>
+              <Button
+                onClick={handleLogoutCancel}
+                color="primary"
+                sx={{
+                  bgcolor: "#724C31",
+                  color: "white",
+                  "&:hover": {
+                    bgcolor: "#724C31",
+                  },
+                }}
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={handleLogoutConfirm}
+                color="primary"
+                autoFocus
+                sx={{
+                  bgcolor: "#724C31",
+                  color: "white",
+                  "&:hover": {
+                    bgcolor: "#724C31",
+                  },
+                }}
+              >
+                Confirm
+              </Button>
+            </DialogActions>
+          </Dialog>
+
+          {/* <IconButton
             size="large"
             edge="end"
             aria-label="account of current user"
@@ -175,7 +286,7 @@ const Navbar: React.FC = () => {
             color="inherit"
           >
             <LogoutIcon />
-          </IconButton>
+          </IconButton> */}
         </Toolbar>
       </AppBar>
       {renderMenu}
@@ -184,3 +295,6 @@ const Navbar: React.FC = () => {
 };
 
 export default Navbar;
+function setLogoutDialogOpen(arg0: boolean) {
+  throw new Error("Function not implemented.");
+}

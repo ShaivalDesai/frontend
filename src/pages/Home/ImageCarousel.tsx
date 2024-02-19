@@ -20,21 +20,21 @@ const ImageCarousel: React.FC = () => {
       <Slider {...settings}>
         <div>
           <img
-            src="p1.jpeg"
+            src="h1.png"
             alt="image1"
             style={{ height: "60vh", width: "100vw" }}
           />
         </div>
         <div>
           <img
-            src="p2.jpg"
+            src="h2.jpg"
             alt="image2"
             style={{ height: "60vh", width: "100vw" }}
           />
         </div>
         <div>
           <img
-            src="p3.jpg"
+            src="h3.jpg"
             alt="image3"
             style={{ height: "60vh", width: "100vw" }}
           />

@@ -99,8 +99,8 @@ export default function Dashboard() {
   };
 
   const handleGoToProfile = () => {
-    setAnchorEl(null); // Close the menu
-    navigate("/profile"); // Navigate to the homepage
+    setAnchorEl(null);
+    navigate("/profile");
   };
 
   const handleProfileClick = (event: any) => {
