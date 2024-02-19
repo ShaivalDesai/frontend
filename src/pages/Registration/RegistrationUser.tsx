@@ -115,14 +115,14 @@ export default function Register() {
           number,
         });
         console.log(response.data);
-        window.alert("Registration Successful");
+        alert(response.data.status);
 
         // Check if the response indicates successful login
         navigate("/login");
       } catch (error: any) {
         if (error.response) {
           if (error.response.status === 400) {
-            window.alert("Email already exists");
+            window.alert(error.response.data.detail);
             setErrors({ ...errors, email: "Email already exists" });
           } else {
             console.error("Error during registration:", error.message);

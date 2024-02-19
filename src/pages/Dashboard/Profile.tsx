@@ -37,6 +37,7 @@ const FormComponent: React.FC = () => {
   const [countryOptions, setCountryOptions] = useState<any[]>([]);
   const [stateOptions, setStateOptions] = useState<any[]>([]);
   const [cityOptions, setCityOptions] = useState<any[]>([]);
+  const [isLocked, setIsLocked] = useState(true);
 
   useEffect(() => {
     const fetchCountries = async () => {
@@ -90,6 +91,10 @@ const FormComponent: React.FC = () => {
     console.log(formData);
   };
 
+  const handleLockToggle = () => {
+    setIsLocked(!isLocked);
+  };
+
   const handleCityChange = (city: string) => {
     setFormData({ ...formData, city });
   };
@@ -97,9 +102,6 @@ const FormComponent: React.FC = () => {
   const handleStateeChange = (state: string) => {
     setFormData({ ...formData, state });
   };
-
-  console.log(Country.getAllCountries());
-  console.log(State.getAllStates());
 
   return (
     <div
@@ -119,7 +121,12 @@ const FormComponent: React.FC = () => {
           <Typography variant="h5" gutterBottom>
             General Information
           </Typography>
-          <form onSubmit={handleSubmit}>
+          <form
+            onSubmit={handleSubmit}
+            style={{
+              backgroundColor: "transparent",
+            }}
+          >
             <Grid container spacing={2}>
               <Grid item xs={6}>
                 <TextField
@@ -128,6 +135,7 @@ const FormComponent: React.FC = () => {
                   label="Name"
                   value={formData.name}
                   onChange={handleChange}
+                  disabled={isLocked} // disable if locked
                 />
               </Grid>
 
@@ -139,6 +147,7 @@ const FormComponent: React.FC = () => {
                   type="email"
                   value={formData.email}
                   onChange={handleChange}
+                  disabled={isLocked} // disable if locked
                 />
               </Grid>
 
@@ -149,6 +158,7 @@ const FormComponent: React.FC = () => {
                   label="Phone Number"
                   // value={formData.phoneNumber}
                   onChange={handleChange}
+                  disabled={isLocked} // disable if locked
                 />
               </Grid>
               <Grid item xs={6}>
@@ -158,6 +168,7 @@ const FormComponent: React.FC = () => {
                   label="Phone Number 2"
                   // value={formData.phoneNumber2}
                   onChange={handleChange}
+                  disabled={isLocked} // disable if locked
                 />
               </Grid>
 
@@ -168,6 +179,7 @@ const FormComponent: React.FC = () => {
                   type="date"
                   // value={formData.establishmentDate}
                   onChange={handleChange}
+                  disabled={isLocked} // disable if locked
                 />
               </Grid>
 
@@ -178,6 +190,7 @@ const FormComponent: React.FC = () => {
                   label="Registration Number"
                   // value={formData.registrationNumber}
                   onChange={handleChange}
+                  disabled={isLocked} // disable if locked
                 />
               </Grid>
 
@@ -193,6 +206,7 @@ const FormComponent: React.FC = () => {
                   name="street"
                   value={formData.street}
                   onChange={handleChange}
+                  disabled={isLocked} // disable if locked
                 />
               </Grid>
               <Grid item xs={6}>
@@ -202,6 +216,7 @@ const FormComponent: React.FC = () => {
                   label="Zip Code"
                   // value={formData.phoneNumber2}
                   onChange={handleChange}
+                  disabled={isLocked} // disable if locked
                 />
               </Grid>
               <Grid item xs={4}>
@@ -215,6 +230,10 @@ const FormComponent: React.FC = () => {
                       backgroundColor: "transparent",
                     }),
                   }}
+                  menuPlacement="auto" // Adjust menu placement dynamically
+                  menuPosition="fixed" // Use "fixed" positioning to attach the menu to the viewport
+                  menuPortalTarget={document.body} // Render the menu within the body element to prevent overflow issues
+                  isDisabled={isLocked} // disable if locked
                 />
               </Grid>
               <Grid item xs={4}>
@@ -228,6 +247,10 @@ const FormComponent: React.FC = () => {
                       backgroundColor: "white",
                     }),
                   }}
+                  menuPlacement="auto" // Dynamically adjust menu placement
+                  menuPosition="fixed" // Attach the menu to the viewport
+                  menuPortalTarget={document.body} // Render the menu within the body element
+                  isDisabled={isLocked} // disable if locked
                 />
               </Grid>
 
@@ -239,15 +262,24 @@ const FormComponent: React.FC = () => {
                   styles={{
                     control: (provided) => ({
                       ...provided,
-                      backgroundColor: "white", // Set background to white
+                      backgroundColor: "white",
                     }),
                   }}
+                  menuPlacement="auto" // Dynamically adjust menu placement
+                  menuPosition="fixed" // Attach the menu to the viewport
+                  menuPortalTarget={document.body} // Render the menu within the body element
+                  isDisabled={isLocked} // disable if locked
                 />
               </Grid>
 
               <Grid item xs={12}>
-                <Button type="submit" variant="contained" color="primary">
-                  Save
+                <Button
+                  type="button" // Use type button to prevent form submission
+                  onClick={handleLockToggle} // Toggle edit mode
+                  variant="contained"
+                  color={isLocked ? "primary" : "secondary"} // Change button color based on edit mode
+                >
+                  {isLocked ? "Update" : "Save"}
                 </Button>
               </Grid>
             </Grid>

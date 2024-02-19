@@ -26,6 +26,14 @@ import EditIcon from "@mui/icons-material/Edit";
 import PersonIcon from "@mui/icons-material/Person";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+} from "@mui/material";
 
 const drawerWidth: number = 250;
 
@@ -83,6 +91,7 @@ const defaultTheme = createTheme();
 export default function Dashboard() {
   const [open, setOpen] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
   const navigate = useNavigate();
 
   const toggleDrawer = () => {
@@ -91,7 +100,7 @@ export default function Dashboard() {
 
   const handleGoToProfile = () => {
     setAnchorEl(null); // Close the menu
-    navigate('/profile'); // Navigate to the homepage
+    navigate("/profile"); // Navigate to the homepage
   };
 
   const handleProfileClick = (event: any) => {
@@ -100,6 +109,19 @@ export default function Dashboard() {
 
   const handleProfileClose = () => {
     setAnchorEl(null); // Close the profile menu
+  };
+
+  const handleLogout = () => {
+    setLogoutDialogOpen(true); // Open logout confirmation dialog
+  };
+
+  const handleLogoutConfirm = () => {
+    setLogoutDialogOpen(false);
+    navigate("/login");
+  };
+
+  const handleLogoutCancel = () => {
+    setLogoutDialogOpen(false); // Close the logout confirmation dialog
   };
 
   const openProfile = Boolean(anchorEl);
@@ -130,15 +152,24 @@ export default function Dashboard() {
             >
               <MenuIcon />
             </IconButton>
-            <Typography
-              component="h1"
-              variant="h6"
+            <IconButton
+              edge="start"
               color="inherit"
-              noWrap
-              sx={{ flexGrow: 1 }}
+              aria-label="open drawer"
+              onClick={toggleDrawer}
+              sx={{
+                marginRight: "36px",
+                ...(open && { display: "none" }),
+              }}
             >
-              FashionFleet
-            </Typography>
+              {/* <MenuIcon /> */}
+            </IconButton>
+            {/* Replace Typography with an img tag */}
+            <img
+              src="ff1.png" // Update this path to your image's location
+              alt="FashionFleet"
+              style={{ height: "50px", marginRight: "auto" }} // Adjust the size as needed
+            />
 
             <IconButton
               color="inherit"
@@ -147,7 +178,7 @@ export default function Dashboard() {
               onClick={handleProfileClick}
               style={{ marginRight: "10px" }}
             >
-              <AccountCircle />
+              <AccountCircle fontSize="large" />
             </IconButton>
             <Popover
               id={profileId}
@@ -170,8 +201,8 @@ export default function Dashboard() {
                   </ListItemIcon>
                   Profile
                 </MenuItem>
-                
-                <MenuItem onClick={handleProfileClose}>
+
+                <MenuItem onClick={handleLogout}>
                   <ListItemIcon>
                     <LogoutIcon fontSize="small" />
                   </ListItemIcon>
@@ -179,6 +210,56 @@ export default function Dashboard() {
                 </MenuItem>
               </MenuList>
             </Popover>
+            <Dialog
+              open={logoutDialogOpen}
+              onClose={handleLogoutCancel}
+              PaperProps={{
+                style: {
+                  borderRadius: "10px",
+                  width: "350px",
+                  height: "175px",
+                },
+              }}
+            >
+              <DialogTitle sx={{ color: "#724C31" }}>
+                Confirm Logout
+              </DialogTitle>
+
+              <DialogContent>
+                <Typography variant="body1" sx={{ color: "#724C31" }}>
+                  Are you sure you want to logout?
+                </Typography>
+              </DialogContent>
+              <DialogActions>
+                <Button
+                  onClick={handleLogoutCancel}
+                  color="primary"
+                  sx={{
+                    bgcolor: "#724C31",
+                    color: "white",
+                    "&:hover": {
+                      bgcolor: "#724C31",
+                    },
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  onClick={handleLogoutConfirm}
+                  color="primary"
+                  autoFocus
+                  sx={{
+                    bgcolor: "#724C31",
+                    color: "white",
+                    "&:hover": {
+                      bgcolor: "#724C31",
+                    },
+                  }}
+                >
+                  Confirm
+                </Button>
+              </DialogActions>
+            </Dialog>
           </Toolbar>
         </AppBar>
 

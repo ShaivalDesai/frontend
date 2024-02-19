@@ -2,13 +2,11 @@ import React, { useEffect, useState } from "react";
 import { Card, CardContent, Typography, Grid } from "@mui/material";
 
 const DashboardCards: React.FC = () => {
-  // Define state variables to store data fetched from local storage
   const [topSales, setTopSales] = useState<number | null>(null);
   const [totalSales, setTotalSales] = useState<number | null>(null);
   const [customers, setCustomers] = useState<number | null>(null);
   const [orders, setOrders] = useState<number | null>(null);
 
-  // Define a function to fetch data from local storage on component mount
   useEffect(() => {
     const storedTopSales = localStorage.getItem("topSales");
     const storedTotalSales = localStorage.getItem("totalSales");
@@ -21,11 +19,12 @@ const DashboardCards: React.FC = () => {
     if (storedOrders) setOrders(Number(storedOrders));
   }, []);
 
-  // Define a function to update local storage when state variables change
   useEffect(() => {
     if (topSales !== null) localStorage.setItem("topSales", String(topSales));
-    if (totalSales !== null) localStorage.setItem("totalSales", String(totalSales));
-    if (customers !== null) localStorage.setItem("customers", String(customers));
+    if (totalSales !== null)
+      localStorage.setItem("totalSales", String(totalSales));
+    if (customers !== null)
+      localStorage.setItem("customers", String(customers));
     if (orders !== null) localStorage.setItem("orders", String(orders));
   }, [topSales, totalSales, customers, orders]);
   return (

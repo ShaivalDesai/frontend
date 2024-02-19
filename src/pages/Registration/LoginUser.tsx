@@ -16,6 +16,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { RadioGroup, Radio } from "@mui/material";
 import { FormControl, FormLabel } from "react-bootstrap";
+import { useEffect } from "react";
 
 const defaultTheme = createTheme();
 
@@ -34,11 +35,22 @@ export default function LoginUser() {
   const [errors, setErrors] = React.useState<Partial<FormData>>({});
   const navigate = useNavigate();
 
+  // useEffect(() => {
+  //   const userType = sessionStorage.getItem("user_type");
+  //   if (sessionStorage.getItem("login") === "true") {
+  //     if (userType === "Customer") {
+  //       navigate("/home");
+  //     } else if (userType === "Vendor") {
+  //       navigate("/dashboard");
+  //     }
+  //   }
+  // }, [navigate]);
+
   const handleRegisterClick = () => {
     setShowRegisterForm(true); // Show the registration form when the link is clicked
   };
 
-  const handleLogin = async () => {
+  const HandleLogin = async () => {
     const validationErrors: Partial<Record<keyof FormData, string>> = {};
 
     if (!email.trim()) {
@@ -81,7 +93,7 @@ export default function LoginUser() {
         console.error("Error during login:", error);
 
         if (error.response && error.response.status === 400) {
-          window.alert("Incorrect credentials");
+          window.alert(error.response.data.detail);
           console.error("Login failed: Incorrect credentials");
         }
       }
@@ -104,16 +116,7 @@ export default function LoginUser() {
             backgroundPosition: "center",
           }}
         />
-        <Grid
-          item
-          xs={12}
-          sm={8}
-          md={4}
-          component={Paper}
-          elevation={6}
-          square
-          
-        >
+        <Grid item xs={12} sm={8} md={4} component={Paper} elevation={6} square>
           <Box
             sx={{
               my: 10,
@@ -132,7 +135,7 @@ export default function LoginUser() {
             <Box
               component="form"
               noValidate
-              onSubmit={handleLogin}
+              onSubmit={HandleLogin}
               sx={{ mt: 1 }}
             >
               <TextField
@@ -167,7 +170,7 @@ export default function LoginUser() {
                 onPaste={(e) => e.preventDefault()}
                 onCopy={(e) => e.preventDefault()}
                 InputLabelProps={{
-                  style: { color: "#724C31" }, 
+                  style: { color: "#724C31" },
                 }}
               />
               <div style={{ color: "red", marginBottom: 14 }}>
@@ -214,7 +217,7 @@ export default function LoginUser() {
                     bgcolor: "#4A2F21",
                   },
                 }}
-                onClick={handleLogin}
+                onClick={HandleLogin}
               >
                 Login
               </Button>
