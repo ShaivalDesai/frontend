@@ -107,7 +107,7 @@ const DashboardCards: React.FC = () => {
         >
           <CardContent>
             <Typography variant="h5" component="h2">
-              Customers
+              Last Month Order
             </Typography>
             <Typography color="text.secondary">50</Typography>
           </CardContent>

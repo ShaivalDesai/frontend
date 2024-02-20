@@ -72,14 +72,14 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 const Navbar: React.FC = () => {
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [anchorEl, setAnchorEl] = React.useState(null);
   const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
   const isMenuOpen = Boolean(anchorEl);
   const navigate = useNavigate();
 
-  const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
+  // const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+  //   setAnchorEl(event.currentTarget);
+  // };
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -94,7 +94,6 @@ const Navbar: React.FC = () => {
   const handleProfileClick = (event: any) => {
     setAnchorEl(event.currentTarget); // Open the profile menu
   };
-
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
@@ -109,7 +108,7 @@ const Navbar: React.FC = () => {
   };
 
   const handleLogoutCancel = () => {
-    setLogoutDialogOpen(false); // Close the logout confirmation dialog
+    setLogoutDialogOpen(false);
   };
 
   const openProfile = Boolean(anchorEl);
@@ -142,9 +141,6 @@ const Navbar: React.FC = () => {
         flexGrow: 1,
         fontStyle: "italic",
         fontSize: "1.5rem",
-        // width: "100vw",
-        // maxWidth:"90%"
-        // height:"100vw"
       }}
     >
       <AppBar
@@ -227,7 +223,6 @@ const Navbar: React.FC = () => {
             </MenuList>
           </Popover>
 
-          {/* Dialog for logout confirmation */}
           <Dialog
             open={logoutDialogOpen}
             onClose={handleLogoutCancel}
