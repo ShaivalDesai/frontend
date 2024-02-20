@@ -49,7 +49,7 @@ const Wishlist: React.FC = () => {
       name: "Product 1",
       description: "Description of Product 1",
       image: "./bg2.jpg",
-    },
+    }, 
     {
       id: 2,
       name: "Product 2",
@@ -62,11 +62,21 @@ const Wishlist: React.FC = () => {
       description: "Description of Product 3",
       image: "./bg4.jpg",
     },
+    {
+      id: 4,
+      name: "Product 3",
+      description: "Description of Product 3",
+      image: "./bg4.jpg",
+    },
+    {
+      id: 5,
+      name: "Product 3",
+      description: "Description of Product 3",
+      image: "./bg4.jpg",
+    },
   ];
 
-  const handleRemoveFromWishlist = (productId: number) => {
-    // Logic to remove the product from the wishlist
-  };
+  const handleRemoveFromWishlist = (productId: number) => {};
 
   return (
     <div style={{ textAlign: "center", paddingTop: "20px" }}>
@@ -81,7 +91,7 @@ const Wishlist: React.FC = () => {
       </Typography>
       <Grid container spacing={2} justifyContent="center">
         {products.map((product) => (
-          <Grid item key={product.id} xs={12} sm={6} md={4}>
+          <Grid item key={product.id} xs={12} sm={6} md={2.4}>
             <ProductCard
               product={product}
               onRemove={handleRemoveFromWishlist}

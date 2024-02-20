@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, CardContent, Typography, Button } from "@mui/material";
+import { Card, CardContent, Typography, Button, Box } from "@mui/material";
 
 export interface Product {
   id: number;
@@ -15,15 +15,16 @@ interface ProductCardProps {
 
 const ProductCard: React.FC<ProductCardProps> = ({ product, onRemove }) => {
   return (
-    <Card style={{ border: "1px solid #ccc", borderRadius: "5px" }}>
+    <Card style={{ border: "1px solid #ccc", borderRadius: "20px" }}>
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
           {product.name}
         </Typography>
+
         <img
           src={product.image}
           alt={product.name}
-          style={{ width: "100%", height:"auto", borderRadius: "5px" }}
+          style={{ width: "100%", maxHeight:"135px", borderRadius: "5px" }}
         />
         <Typography variant="body2" color="text.secondary">
           {product.description}
