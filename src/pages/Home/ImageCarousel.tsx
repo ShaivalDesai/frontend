@@ -135,6 +135,67 @@
 
 // export default ImageCarousel;
 
+// import React, { useState, useEffect } from "react";
+// import Slider from "react-slick";
+// import "slick-carousel/slick/slick.css";
+// import "slick-carousel/slick/slick-theme.css";
+// import axios from "axios";
+
+// interface Image {
+//   id: number;
+//   image: string;
+// }
+
+// const ImageCarousel: React.FC = () => {
+//   const [images, setImages] = useState<Image[]>([]);
+
+//   useEffect(() => {
+//     const fetchImages = async () => {
+//       try {
+//         const response = await axios.get("http://localhost:3000/homeprofile");
+//         setImages(response.data);
+//       } catch (error) {
+//         console.error("Failed to fetch images", error);
+//       }
+//     };
+
+//     fetchImages();
+//   }, []);
+
+//   const settings = {
+//     dots: true,
+//     infinite: true,
+//     speed: 500,
+//     slidesToShow: 1,
+//     slidesToScroll: 1,
+//     autoplay: true,
+//     marginTop: "0",
+//   };
+
+//   return (
+//     <div style={{ maxHeight: "100vh", width: "100vw" }}>
+//       <Slider {...settings}>
+//         {images.map((image) => (
+//           <div key={image.id}>
+//             <img
+//               src={image.image} // Use the image URL from the backend response
+//               alt={`image${image.id}`}
+//               style={{ height: "60vh", width: "100vw" }}
+//             />
+//           </div>
+//         ))}
+//       </Slider>
+//       <img
+//         src="/sbccc.png" // Use the image URL from the backend response
+//         alt="Another image"
+//         style={{ height: "19vh", width: "100%", borderRadius: "10px" }}
+//       />
+//     </div>
+//   );
+// };
+
+// export default ImageCarousel;
+
 import React, { useState, useEffect } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -143,7 +204,7 @@ import axios from "axios";
 
 interface Image {
   id: number;
-  image: string;
+  image: string; // This will hold the URL of the converted image
 }
 
 const ImageCarousel: React.FC = () => {
@@ -153,7 +214,15 @@ const ImageCarousel: React.FC = () => {
     const fetchImages = async () => {
       try {
         const response = await axios.get("http://localhost:3000/homeprofile");
-        setImages(response.data); // Update the state with the fetched images
+        const imageData = response.data;
+
+        // Convert binary data to URLs for images
+        const imageUrls: Image[] = imageData.map((item: any) => ({
+          id: item.id,
+          image: `data:image/jpeg;base64,${item.image}`, // Assuming the image format is JPEG
+        }));
+
+        setImages(imageUrls);
       } catch (error) {
         console.error("Failed to fetch images", error);
       }
@@ -178,7 +247,7 @@ const ImageCarousel: React.FC = () => {
         {images.map((image) => (
           <div key={image.id}>
             <img
-              src={image.image} // Use the image URL from the backend response
+              src={image.image} // Use the converted image URL
               alt={`image${image.id}`}
               style={{ height: "60vh", width: "100vw" }}
             />
@@ -195,6 +264,7 @@ const ImageCarousel: React.FC = () => {
 };
 
 export default ImageCarousel;
+
 
 
 
