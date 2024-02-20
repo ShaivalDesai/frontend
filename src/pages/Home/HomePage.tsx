@@ -6,8 +6,8 @@ import MyCard from "./ProductCard"; // Assuming MyCard is your card component
 
 const HomePage: React.FC = () => {
   useEffect(() => {
-    window.scrollTo(0, 0); 
-  }, []); 
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <>
@@ -24,7 +24,6 @@ const HomePage: React.FC = () => {
         <MyCard image="women2.webp" title="WOMEN" color="white" />
         <MyCard image="kids.jpg" title="KIDS" color="white" />
         <MyCard image="accee.jpg" title="ACCESSORIES" color="white" />
-        {/* <MyCard image="shoes.jpg" title="FOOTWEAR" color="white" /> */}
       </div>
       <div
         style={{
@@ -38,7 +37,6 @@ const HomePage: React.FC = () => {
         <MyCard image="formals.jpg" title="FORMALWEAR" color="white" />
         <MyCard image="jackets.jpg" title="JACKETS" color="white" />
         <MyCard image="bags.jpg" title="BAGS" color="white" />
-        {/* <MyCard image="home.jpg" title="HOME" color="white" /> */}
       </div>
     </>
   );
