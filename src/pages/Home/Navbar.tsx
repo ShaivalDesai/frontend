@@ -91,6 +91,16 @@ const Navbar: React.FC = () => {
     navigate("/login");
   };
 
+  const wishlist = () => {
+    // setLogoutDialogOpen(false);
+    navigate("/whishlist");
+  };
+
+  const cart = () => {
+    // setLogoutDialogOpen(false);
+    navigate("/cart");
+  };
+
   const handleProfileClick = (event: any) => {
     setAnchorEl(event.currentTarget); // Open the profile menu
   };
@@ -175,10 +185,10 @@ const Navbar: React.FC = () => {
               inputProps={{ "aria-label": "search" }}
             />
           </Search>
-          <Button color="inherit" component={RouterLink} to="/products">
-            Whishlist
+          <Button color="inherit" onClick={wishlist}> 
+            Wishlist
           </Button>
-          <Button color="inherit" component={RouterLink} to="/about">
+          <Button color="inherit" onClick={cart}>
             Cart
           </Button>
           <Button color="inherit" component={RouterLink} to="/contact">

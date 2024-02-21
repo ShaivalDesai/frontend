@@ -1,340 +1,3 @@
-// import React from "react";
-// import Slider from "react-slick";
-// import "slick-carousel/slick/slick.css";
-// import "slick-carousel/slick/slick-theme.css";
-
-// const ImageCarousel: React.FC = () => {
-//   const settings = {
-//     dots: true,
-//     infinite: true,
-//     speed: 500,
-//     slidesToShow: 1,
-//     slidesToScroll: 1,
-//     autoplay: true,
-//     marginTop: "0",
-//   };
-
-//   return (
-//     <>
-//     <div style={{ maxHeight: "100vh", width: "100vw"}}>
-//       <Slider {...settings}>
-//         <div>
-//           <img
-//             src="h1.png"
-//             alt="image1"
-//             style={{ height: "60vh", width: "100vw" }}
-//           />
-//         </div>
-//         <div>
-//           <img
-//             src="h2.jpg"
-//             alt="image2"
-//             style={{ height: "60vh", width: "100vw" }}
-//           />
-//         </div>
-//         <div>
-//           <img
-//             src="h3.jpg"
-//             alt="image3"
-//             style={{ height: "60vh", width: "100vw" }}
-//           />
-//         </div>
-//       </Slider>
-//       {/* <h1 style={{
-//   fontFamily: '"Rubik Doodle Shadow", sans-serif',
-//   textAlign: 'center',
-//   marginTop: '20px',
-//   // border: '2px solid #000',
-//   padding: '10px',
-//   // boxShadow: '3px 3px 5px rgba(0,0,0,0.3)',
-//   textShadow: 'brown',
-//   // borderRadius: '10px',
-//   backgroundColor: 'rgba(255, 255, 255, 0.5)',
-//   color: '#724c31',
-//   fontSize:"50px",
-//   // marginBottom:"20px"
-
-// }}>
-//   SHOP BY CATEGORY
-// </h1> */}
-
-//       <img
-//         src="/sbccc.png"
-//         alt="Another image"
-//         style={{ height: "19vh", width: "100%",borderRadius:"10px"}}
-//       />
-//       </div>
-//     </>
-//   );
-// };
-
-// export default ImageCarousel;
-
-// import React, { useState, useEffect } from "react";
-// import Slider from "react-slick";
-// import "slick-carousel/slick/slick.css";
-// import "slick-carousel/slick/slick-theme.css";
-
-// interface Image {
-//   url: string;
-
-// }
-
-// const ImageCarousel: React.FC = () => {
-//   const [images, setImages] = useState<Image[]>([]);
-
-//   useEffect(() => {
-//     const fetchImages = async () => {
-//       try {
-//         const response = await fetch('http://localhost:3000/homeprofile');
-//         const data = await response.json();
-//         setImages(data.images); // Update the state with the fetched images
-//       } catch (error) {
-//         console.error("Failed to fetch images", error);
-//       }
-//     };
-
-//     fetchImages();
-//   }, []);
-
-//   const settings = {
-//     dots: true,
-//     infinite: true,
-//     speed: 500,
-//     slidesToShow: 1,
-//     slidesToScroll: 1,
-//     autoplay: true,
-//     marginTop: "0",
-//   };
-
-//   return (
-//     <>
-//       <div style={{ maxHeight: "100vh", width: "100vw" }}>
-//         <Slider {...settings}>
-//           {images.map((image, index) => (
-//             <div key={index}>
-//               <img
-//                 src={image.url} // Use the URL from the image data
-//                 alt={`image${index + 1}`}
-//                 style={{ height: "60vh", width: "100vw" }}
-//               />
-//             </div>
-//           ))}
-//         </Slider>
-//         <img
-//           src="/sbccc.png"
-//           alt="Another image"
-//           style={{ height: "19vh", width: "100%", borderRadius: "10px" }}
-//         />
-//       </div>
-//     </>
-//   );
-// };
-
-// export default ImageCarousel;
-
-// import React, { useState, useEffect } from "react";
-// import Slider from "react-slick";
-// import "slick-carousel/slick/slick.css";
-// import "slick-carousel/slick/slick-theme.css";
-// import axios from "axios";
-
-// interface Image {
-//   id: number;
-//   image: string;
-// }
-
-// const ImageCarousel: React.FC = () => {
-//   const [images, setImages] = useState<Image[]>([]);
-
-//   useEffect(() => {
-//     const fetchImages = async () => {
-//       try {
-//         const response = await axios.get("http://localhost:3000/homeprofile");
-//         setImages(response.data);
-//       } catch (error) {
-//         console.error("Failed to fetch images", error);
-//       }
-//     };
-
-//     fetchImages();
-//   }, []);
-
-//   const settings = {
-//     dots: true,
-//     infinite: true,
-//     speed: 500,
-//     slidesToShow: 1,
-//     slidesToScroll: 1,
-//     autoplay: true,
-//     marginTop: "0",
-//   };
-
-//   return (
-//     <div style={{ maxHeight: "100vh", width: "100vw" }}>
-//       <Slider {...settings}>
-//         {images.map((image) => (
-//           <div key={image.id}>
-//             <img
-//               src={image.image} // Use the image URL from the backend response
-//               alt={`image${image.id}`}
-//               style={{ height: "60vh", width: "100vw" }}
-//             />
-//           </div>
-//         ))}
-//       </Slider>
-//       <img
-//         src="/sbccc.png" // Use the image URL from the backend response
-//         alt="Another image"
-//         style={{ height: "19vh", width: "100%", borderRadius: "10px" }}
-//       />
-//     </div>
-//   );
-// };
-
-// export default ImageCarousel;
-
-// import React, { useState, useEffect } from "react";
-// import Slider from "react-slick";
-// import "slick-carousel/slick/slick.css";
-// import "slick-carousel/slick/slick-theme.css";
-// import axios from "axios";
-
-// interface Image {
-//   id: number;
-//   image: string;
-// }
-
-// const ImageCarousel: React.FC = () => {
-//   const [images, setImages] = useState<Image[]>([]);
-
-//   useEffect(() => {
-//     const fetchImages = async () => {
-//       try {
-//         const response = await axios.get("http://localhost:3000/homeprofile");
-//         const imageData = response.data;
-
-//         // Convert binary data to URLs for images
-//         const imageUrls: Image[] = imageData.map((item: any) => ({
-//           id: item.id,
-//           image: `data:image/jpeg;base64,${item.image}`, // Assuming the image format is JPEG
-//         }));
-
-//         setImages(imageUrls);
-//       } catch (error) {
-//         console.error("Failed to fetch images", error);
-//       }
-//     };
-
-//     fetchImages();
-//   }, []);
-
-//   const settings = {
-//     dots: true,
-//     infinite: true,
-//     speed: 500,
-//     slidesToShow: 1,
-//     slidesToScroll: 1,
-//     autoplay: true,
-//     marginTop: "0",
-//   };
-
-//   return (
-//     <div style={{ maxHeight: "100vh", width: "100vw" }}>
-//       <Slider {...settings}>
-//         {images.map((image) => (
-//           <div key={image.id}>
-//             <img
-//               src={image.image} // Use the converted image URL
-//               alt={`image${image.id}`}
-//               style={{ height: "60vh", width: "100vw" }}
-//             />
-//           </div>
-//         ))}
-//       </Slider>
-//       <img
-//         src="/sbccc.png" // Use the image URL from the backend response
-//         alt="Another image"
-//         style={{ height: "19vh", width: "100%", borderRadius: "10px" }}
-//       />
-//     </div>
-//   );
-// };
-
-// export default ImageCarousel;
-
-// import React, { useState, useEffect } from "react";
-// import Slider from "react-slick";
-// import "slick-carousel/slick/slick.css";
-// import "slick-carousel/slick/slick-theme.css";
-// import axios from "axios";
-
-// interface Image {
-//   id: number;
-//   image: string; // This will hold the URL of the converted image
-// }
-
-// const ImageCarousel: React.FC = () => {
-//   const [images, setImages] = useState<Image[]>([]);
-
-//   useEffect(() => {
-//     const fetchImages = async () => {
-//       try {
-//         // Assuming the backend API returns image data in the following format:
-//         // [{ id: 1, image: "base64-encoded-image-data" }, ...]
-//         const response = await axios.get("http://127.0.0.1:8000/images?product_ids=1&product_ids=2");
-//         const imageData: any[] = response.data;
-
-//         // Convert binary data to URLs for images
-//         const imageUrls: Image[] = imageData.map((item: any) => ({
-//           id: item.id,
-//           image: `data:image/jpeg;base64,${item.image}`, // Assuming the image format is JPEG
-//         }));
-
-//         setImages(imageUrls);
-//       } catch (error) {
-//         console.error("Failed to fetch images", error);
-//       }
-//     };
-
-//     fetchImages();
-//   }, []);
-
-//   const settings = {
-//     dots: true,
-//     infinite: true,
-//     speed: 500,
-//     slidesToShow: 1,
-//     slidesToScroll: 1,
-//     autoplay: true,
-//     marginTop: "0",
-//   };
-
-//   return (
-//     <div style={{ maxHeight: "100vh", width: "100vw" }}>
-//       <Slider {...settings}>
-//         {images.map((image) => (
-//           <div key={image.id}>
-//             <img
-//               src={image.image} // Use the converted image URL
-//               alt={`image${image.id}`}
-//               style={{ height: "60vh", width: "100%" }} // Adjust the width to fit the carousel
-//             />
-//           </div>
-//         ))}
-//       </Slider>
-//       {/* Placeholder image */}
-//       <img
-//         src="/sbccc.png"
-//         alt="Placeholder image"
-//         style={{ height: "19vh", width: "100%", borderRadius: "10px" }}
-//       />
-//     </div>
-//   );
-// };
-
-// export default ImageCarousel;
-
 import React, { useState, useEffect } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -343,11 +6,11 @@ import axios from "axios";
 
 interface Image {
   id: number;
-  image: string; // This will hold the URL of the converted image
+  image: string;
 }
 
 const ImageCarousel: React.FC = () => {
-  const [images, setImages] = useState<Image[]>([]);
+  const [images, setImages] = useState<Image[]>([]); // Updated to expect an array
 
   useEffect(() => {
     const fetchImages = async () => {
@@ -355,7 +18,7 @@ const ImageCarousel: React.FC = () => {
         const response = await axios.get(
           "http://127.0.0.1:8000/images?product_ids=1&product_ids=2",
           {
-            responseType: "arraybuffer", // Set the response type to arraybuffer
+            responseType: "arraybuffer",
           }
         );
         const imageData: ArrayBuffer = response.data;
@@ -368,10 +31,10 @@ const ImageCarousel: React.FC = () => {
           )
         );
 
-        // Convert binary data to URLs for images
+        // Assuming you want to handle multiple images, adjust this logic accordingly
         const imageUrls: Image[] = [
           { id: 1, image: `data:image/jpeg;base64,${base64String}` },
-        ]; // Replace with your logic for multiple images
+        ];
 
         setImages(imageUrls);
       } catch (error) {
@@ -394,23 +57,28 @@ const ImageCarousel: React.FC = () => {
 
   return (
     <div style={{ maxHeight: "100vh", width: "100vw" }}>
-      <Slider {...settings}>
-        {images.map((image) => (
-          <div key={image.id}>
-            <img
-              src={image.image} // Use the converted image URL
-              alt={`image${image.id}`}
-              style={{ height: "60vh", width: "100%" }} // Adjust the width to fit the carousel
-            />
-          </div>
-        ))}
-      </Slider>
-      {/* Placeholder image */}
-      <img
-        src="/sbccc.png"
-        alt="Placeholder image"
-        style={{ height: "19vh", width: "100%", borderRadius: "10px" }}
-      />
+      {images.length > 0 && (
+        <Slider {...settings}>
+          {images.map((image) => (
+            <div key={image.id}>
+              <img
+                src={image.image}
+                alt={`image${image.id}`}
+                style={{ height: "60vh", width: "100vw" }}
+              />
+            </div>
+          ))}
+        </Slider>
+      )}
+      {images.length === 0 && (
+        <div>
+          <img
+            src="/sbccc.png"
+            alt="Placeholder"
+            style={{ height: "19vh", width: "100%", borderRadius: "10px" }}
+          />
+        </div>
+      )}
     </div>
   );
 };
