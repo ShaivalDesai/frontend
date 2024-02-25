@@ -5,7 +5,6 @@ const MainPage: React.FC = () => {
   return (
     <>
       <Dashboard />
-      {/* <DashboardCards /> */}
     </>
   );
 };

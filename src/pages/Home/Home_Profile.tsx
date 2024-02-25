@@ -6,6 +6,7 @@ import {
   Paper,
   Typography,
   Container,
+  MenuItem,
 } from "@mui/material";
 import { Country, State, City } from "country-state-city";
 import Select from "react-select";
@@ -122,7 +123,11 @@ const Home_Profile: React.FC = () => {
       <Container maxWidth="sm">
         <Paper
           elevation={3}
-          sx={{ padding: 4, backgroundColor: "rgba(255,255,255,0.9)" }}
+          sx={{
+            padding: 4,
+            backgroundColor: "rgba(255,255,255,0.9)",
+            borderRadius: "25px",
+          }}
         >
           <Typography variant="h5" gutterBottom>
             General Information
@@ -189,19 +194,40 @@ const Home_Profile: React.FC = () => {
                 />
               </Grid>
 
-              <Grid item xs={6}>
-                <TextField
-                  fullWidth
-                  name="name"
-                  label="Name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  disabled={isLocked} // disable if locked
-                />
-              </Grid>
+              <Grid item xs={6} style={{ position: "relative" }}>
+  <Select
+    options={[
+      { value: "male", label: "Male" },
+      { value: "female", label: "Female" },
+      { value: "other", label: "Other" },
+    ]}
+    value={gender}
+    onChange={(selectedOption) => setGender(selectedOption)}
+    isDisabled={isLocked} // disable if locked
+    placeholder="Gender"
+    styles={{
+      menu: (provided) => ({
+        ...provided,
+        position: "absolute",
+        zIndex: 9999, // Ensure the dropdown is on top of other elements
+        width: "100%", // Set the width to match the container
+        marginTop: "8px", // Add margin to avoid overlapping with other fields
+      }),
+      control: (provided) => ({
+        ...provided,
+        minHeight: "56px", // Match the height with other text fields
+      }),
+    }}
+  />
+</Grid>
+
 
               <Grid item xs={12}>
-                <Typography variant="h5" style={{ marginBottom: -8 }} gutterBottom>
+                <Typography
+                  variant="h5"
+                  style={{ marginBottom: -8 }}
+                  gutterBottom
+                >
                   Address Details
                 </Typography>
               </Grid>
@@ -212,7 +238,7 @@ const Home_Profile: React.FC = () => {
                   name="street"
                   value={formData.street}
                   onChange={handleChange}
-                  disabled={isLocked} 
+                  disabled={isLocked}
                 />
               </Grid>
 

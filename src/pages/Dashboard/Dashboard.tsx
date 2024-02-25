@@ -11,7 +11,7 @@ import IconButton from "@mui/material/IconButton";
 import Badge from "@mui/material/Badge";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
-import { mainListItems } from "./Lists";
+// import { mainListItems } from "./Lists";
 import React from "react";
 import { AccountCircle, Link } from "@mui/icons-material";
 import DashboardCards from "./Cards";
@@ -20,13 +20,17 @@ import PieChartCard from "./PieChart";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { MenuList, MenuItem, ListItemIcon } from "@mui/material";
-// import { Popover } from "react-bootstrap";
 import { Popover } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import PersonIcon from "@mui/icons-material/Person";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+// import mainListItems from "./Lists";
+// import { mainList } from "./Lists";
+// import { mainListItems } from "./Lists";
+import MainListItems from "./Lists";
+
 import {
   Dialog,
   DialogTitle,
@@ -91,11 +95,20 @@ const defaultTheme = createTheme();
 export default function Dashboard() {
   const [open, setOpen] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [hoverOpen, setHoverOpen] = React.useState(false);
   const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
   const navigate = useNavigate();
 
   const toggleDrawer = () => {
     setOpen(!open);
+  };
+
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
+
+  const handleDrawerClose = () => {
+    setOpen(false);
   };
 
   const handleGoToProfile = () => {
@@ -161,10 +174,8 @@ export default function Dashboard() {
                 marginRight: "36px",
                 ...(open && { display: "none" }),
               }}
-            >
-              {/* <MenuIcon /> */}
-            </IconButton>
-            {/* Replace Typography with an img tag */}
+            ></IconButton>
+
             <img
               src="ff1.png" // Update this path to your image's location
               alt="FashionFleet"
@@ -263,7 +274,7 @@ export default function Dashboard() {
           </Toolbar>
         </AppBar>
 
-        <Drawer variant="permanent" open={open}>
+        {/* <Drawer variant="permanent" open={open}>
           <Toolbar
             sx={{
               display: "flex",
@@ -278,6 +289,28 @@ export default function Dashboard() {
           </Toolbar>
           <Divider />
           <List component="nav">{mainListItems}</List>
+        </Drawer> */}
+
+        <Drawer
+          variant="permanent"
+          open={open}
+          onMouseEnter={handleDrawerOpen}
+          onMouseLeave={handleDrawerClose}
+        >
+          <Toolbar
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "flex-end",
+              px: [1],
+            }}
+          >
+            <IconButton onClick={handleDrawerClose}>
+              <ChevronLeftIcon />
+            </IconButton>
+          </Toolbar>
+          <Divider />
+          <List component="nav">{MainListItems()}</List>
         </Drawer>
         <Box
           component="main"

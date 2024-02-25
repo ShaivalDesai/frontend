@@ -18,6 +18,15 @@ import { RadioGroup, Radio, IconButton } from "@mui/material";
 import { FormControl, FormLabel } from "react-bootstrap";
 import { useState } from "react";
 import { VisibilityOff, Visibility } from "@mui/icons-material";
+import {
+  validateEmail,
+  validatePassword,
+  validateUserType,
+  validateConfirmPassword,
+  validateConfirmEmail,
+  validateName,
+  validatePhoneNumber,
+} from "../../validation";
 
 const defaultTheme = createTheme();
 
@@ -51,57 +60,17 @@ export default function Register() {
     e.preventDefault();
     const validationErrors: Partial<Record<keyof FormData, string>> = {};
 
-    if (!name.trim()) {
-      validationErrors.name = "Name is required";
-    }
+    validationErrors.name = validateName(name);
+    validationErrors.email = validateEmail(email);
+    validationErrors.password = validatePassword(password);
+    validationErrors.confirmupwd = validateConfirmPassword(
+      password,
+      confirmupwd
+    );
+    validationErrors.confirmEmail = validateConfirmEmail(email, confirmEmail);
+    validationErrors.user_type = validateUserType(user_type);
 
-    if (!email.trim()) {
-      validationErrors.email = "Email is required";
-    } else if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
-      validationErrors.email = "Email is invalid";
-    }
-
-    if (!password.trim()) {
-      validationErrors.password = "Password is required";
-    } else if (password.length < 8) {
-      validationErrors.password = "Password must be at least 8 characters long";
-    } else if (!/[A-Z]/.test(password) || !/[a-z]/.test(password)) {
-      validationErrors.password =
-        "Password must contain at least one uppercase and one lowercase letter";
-    } else if (!/\d/.test(password)) {
-      validationErrors.password = "Password must contain at least one number";
-    } else if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
-      validationErrors.password =
-        "Password must contain at least one special character";
-    }
-
-    if (!confirmupwd.trim()) {
-      validationErrors.confirmupwd = "Confirm Password is required";
-    } else if (confirmupwd !== password) {
-      validationErrors.confirmupwd = "Password do not match";
-    }
-
-    if (!confirmEmail.trim()) {
-      validationErrors.confirmEmail = "Confirm Email is required";
-    } else if (confirmEmail !== email) {
-      validationErrors.confirmEmail = "Password do not match";
-    }
-
-    const isValidPhoneNumber = (number: string) => {
-      const phoneRegex = /^[6789]\d{9}$/;
-      // Assumes 10-digit phone number, modify as needed
-      return phoneRegex.test(number);
-    };
-
-    if (!number) {
-      validationErrors.number = "Phone number is required";
-    } else if (!isValidPhoneNumber(number)) {
-      validationErrors.number = "Invalid phone number";
-    }
-
-    if (!user_type.trim()) {
-      validationErrors.user_type = "user_type selection is required";
-    }
+    validationErrors.number = validatePhoneNumber(number);
 
     setErrors(validationErrors);
 
@@ -150,16 +119,7 @@ export default function Register() {
             backgroundPosition: "center",
           }}
         />
-        <Grid
-          item
-          xs={12}
-          sm={8}
-          md={4}
-          component={Paper}
-          elevation={6}
-          square
-          // sx={{backgroundColor:"#f3ead6",}}
-        >
+        <Grid item xs={12} sm={8} md={4} component={Paper} elevation={6} square>
           <Box
             sx={{
               my: 1,
@@ -167,8 +127,6 @@ export default function Register() {
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-              // backgroundImage: `url("/p1.jpeg")`,
-              // backgroundColor:"#c6a27b"
             }}
           >
             <Avatar sx={{ m: 1, bgcolor: "#724C31", height: 65, width: 65 }}>
@@ -316,19 +274,7 @@ export default function Register() {
               <div style={{ color: "red" }}>
                 {errors.confirmupwd && <span>{errors.confirmupwd}</span>}
               </div>
-              {/* <div style={{ color: "red" ,minHeight: '20px', fontSize: '0.75rem'}}>
-                      {errors.confirmupwd && (
-                        <span>{errors.confirmupwd}</span>
-                      )}
-                    </div> */}
 
-              <Typography
-                style={{ color: "#67442b", margin: "normal", fontSize: "20px" }}
-              >
-                Please select an option:
-              </Typography>
-
-              {/* RadioGroup with options aligned horizontally */}
               <RadioGroup
                 row // This prop aligns the radio buttons horizontally
                 aria-label="option"

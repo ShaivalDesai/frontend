@@ -1,28 +1,12 @@
-import React from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import "./App.css";
-// import HomePage from "./pages/HomePage";
-
-import LoginUser from "./pages/Registration/LoginUser";
-
-import Register from "./pages/Registration/Register";
 import RegistrationUser from "./pages/Registration/RegistrationUser";
-
-// import New from "./pages/Neww"
-import Neww from "./pages/Neww";
-import Navbar from "./pages/Home/HomePage";
-// import HomePage from "./pages/Home/HomePage";
 import AuthPage from "./pages/Registration/AuthPage";
-// import { Dashboard } from "@mui/icons-material";
-import Dashboard from "./pages/Dashboard/Dashboard";
 import MainPage from "./pages/Dashboard/MainPage";
 import HomePage from "./pages/Home/HomePage";
 import Profile from "./pages/Dashboard/Profile";
 import Home_Profile from "./pages/Home/Home_Profile";
-import Protected from "./pages/Protected/ProtectedRoute";
-import ProductCard from "./pages/Home/Whishlist/WishlistProductCard";
 import Wishlist from "./pages/Home/Whishlist/Whishlist";
-import CartPage from "./pages/Home/Cart/Cart";
 
 function App() {
   return (

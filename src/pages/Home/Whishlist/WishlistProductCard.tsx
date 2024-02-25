@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Card, CardContent, Typography, Button } from "@mui/material";
 
 export interface Product {
-
   id: number;
   name: string;
   description: string;
@@ -15,8 +14,6 @@ interface ProductCardProps {
   onRemove: (productId: number) => void;
   onAddToCart: (productId: number) => void;
 }
-
-
 
 const ProductCard: React.FC<ProductCardProps> = ({ product, onRemove }) => {
   return (
@@ -107,8 +104,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onRemove }) => {
 };
 export default ProductCard;
 
-
-
 // import React from "react";
 // import { Card, CardContent, Typography, Button } from "@mui/material";
 
@@ -154,7 +149,7 @@ export default ProductCard;
 //           borderTopRightRadius: "8px",
 //         }}
 //       />
-      
+
 //       <CardContent  sx={{ padding: "16px", background: "transparent", height: "100%" }}>
 //         <Typography gutterBottom
 //           variant="h6"
@@ -176,4 +171,3 @@ export default ProductCard;
 // };
 
 // export default ProductCard;
-
