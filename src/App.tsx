@@ -7,6 +7,7 @@ import HomePage from "./pages/Home/HomePage";
 import Profile from "./pages/Dashboard/Profile";
 import Home_Profile from "./pages/Home/Home_Profile";
 import Wishlist from "./pages/Home/Whishlist/Whishlist";
+import SingleProductPage from "./pages/ProductPage/ProductList";
 
 function App() {
   return (
@@ -20,7 +21,8 @@ function App() {
         <Route path="/homeprofile" element={<Home_Profile />} />
         <Route path="/RegisterUser" element={<RegistrationUser />} />
         <Route path="/whishlist" element={<Wishlist />} />
-        {/* <Route path="/cart" element={<CartPage products={[]} />} /> */}
+        <Route path="/product" element={<SingleProductPage />} />
+      
 
         {/* <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/login" element={<AuthPage />} />

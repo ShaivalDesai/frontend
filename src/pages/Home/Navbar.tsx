@@ -146,37 +146,93 @@ const Navbar: React.FC = () => {
   );
 
   return (
-    <Box
-      sx={{
-        flexGrow: 1,
-        fontStyle: "italic",
-        fontSize: "1.5rem",
-      }}
-    >
-      <AppBar
-        position="static"
-        sx={{ backgroundColor: "#724C31", width: "100vw" }}
-      >
-        <Toolbar>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            <RouterLink
-              to="/home"
-              style={{ textDecoration: "none", color: "inherit" }}
-            >
-              FashionFleet
-            </RouterLink>
-            <Button color="inherit" component={RouterLink} to="/contact">
-              Men
-            </Button>
-            <Button color="inherit" component={RouterLink} to="/contact">
-              Women
-            </Button>
-            <Button color="inherit" component={RouterLink} to="/contact">
-              Fashion
-            </Button>
-          </Typography>
+    <>
+      <head>
+        <link
+          href="https://fonts.googleapis.com/css2?family=Protest+Riot&display=swap"
+          rel="stylesheet"
+        />
+      </head>
 
-          <Search>
+      <Box
+        sx={{
+          flexGrow: 1,
+          // fontStyle: "italic",
+          // fontFamily: "'Protest Riot', sans-serif",
+          fontSize: "1.5rem",
+        }}
+      >
+        <AppBar
+          position="static"
+          sx={{ backgroundColor: "#724C31", width: "100vw" }}
+        >
+          <Toolbar>
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+              <RouterLink
+                to="/home"
+                style={{
+                  textDecoration: "none",
+                  fontSize: "1.75em",
+                  color: "inherit",
+                  fontFamily: "'Protest Riot', sans-serif",
+                }}
+              >
+                FashionFleet
+              </RouterLink>
+            </Typography>
+            <Typography sx={{ flexGrow: 50 }}>
+              <Button
+                style={{
+                  textDecoration: "none",
+                  fontSize: "1.10rem",
+                  color: "inherit",
+                  fontFamily: "'Protest Riot', sans-serif",
+                }}
+                color="inherit"
+                component={RouterLink}
+                to="/contact"
+              >
+                Men
+              </Button>
+              <Button
+                style={{
+                  fontSize: "1.10rem",
+                  color: "inherit",
+                  fontFamily: "'Protest Riot', sans-serif",
+                }}
+                color="inherit"
+                component={RouterLink}
+                to="/contact"
+              >
+                Women
+              </Button>
+              <Button
+                style={{
+                  fontSize: "1.10rem",
+                  color: "inherit",
+                  fontFamily: "'Protest Riot', sans-serif",
+                }}
+                color="inherit"
+                component={RouterLink}
+                to="/contact"
+              >
+                Boys
+              </Button>
+              <Button
+                style={{
+                  fontSize: "1.10rem",
+                  color: "inherit",
+                  fontFamily: "'Protest Riot', sans-serif",
+                }}
+                color="inherit"
+                component={RouterLink}
+                to="/contact"
+              >
+                Girls
+              </Button>
+            </Typography>
+
+            <Search>
             <SearchIconWrapper>
               <SearchIcon />
             </SearchIconWrapper>
@@ -185,103 +241,130 @@ const Navbar: React.FC = () => {
               inputProps={{ "aria-label": "search" }}
             />
           </Search>
-          <Button color="inherit" onClick={wishlist}> 
-            Wishlist
-          </Button>
-          <Button color="inherit" onClick={cart}>
-            Cart
-          </Button>
-          <Button color="inherit" component={RouterLink} to="/contact">
-            Contact
-          </Button>
-          <IconButton
-            color="inherit"
-            aria-label="profile"
-            edge="end"
-            onClick={handleProfileClick}
-            style={{ marginRight: "10px" }}
-          >
-            <AccountCircle fontSize="large" />
-          </IconButton>
-          <Popover
-            id={profileId}
-            open={openProfile}
-            anchorEl={anchorEl}
-            onClose={handleProfileClose}
-            anchorOrigin={{
-              vertical: "bottom",
-              horizontal: "right",
-            }}
-            transformOrigin={{
-              vertical: "top",
-              horizontal: "right",
-            }}
-          >
-            <MenuList autoFocusItem={openProfile} id="profile-menu">
-              <MenuItem onClick={handleGoToProfile}>
-                <ListItemIcon>
-                  <PersonIcon fontSize="small" />
-                </ListItemIcon>
-                Profile
-              </MenuItem>
-              <MenuItem onClick={handleLogout}>
-                <ListItemIcon>
-                  <LogoutIcon fontSize="small" />
-                </ListItemIcon>
-                Logout
-              </MenuItem>
-            </MenuList>
-          </Popover>
+            <Button
+              style={{
+                fontSize: "1.10rem",
+                color: "inherit",
+                fontFamily: "'Protest Riot', sans-serif",
+              }}
+              color="inherit"
+              onClick={wishlist}
+            >
+              Wishlist
+            </Button>
+            <Button
+              style={{
+                fontSize: "1.10rem",
+                color: "inherit",
+                fontFamily: "'Protest Riot', sans-serif",
+              }}
+              color="inherit"
+              onClick={cart}
+            >
+              Cart
+            </Button>
+            <Button
+              style={{
+                fontSize: "1.10rem",
+                color: "inherit",
+                fontFamily: "'Protest Riot', sans-serif",
+              }}
+              color="inherit"
+              component={RouterLink}
+              to="/contact"
+            >
+              Contact
+            </Button>
+            <IconButton
+              color="inherit"
+              aria-label="profile"
+              edge="end"
+              onClick={handleProfileClick}
+              style={{ marginRight: "10px" }}
+            >
+              <AccountCircle fontSize="large" />
+            </IconButton>
+            <Popover
+              id={profileId}
+              open={openProfile}
+              anchorEl={anchorEl}
+              onClose={handleProfileClose}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "right",
+              }}
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+            >
+              <MenuList autoFocusItem={openProfile} id="profile-menu">
+                <MenuItem onClick={handleGoToProfile}>
+                  <ListItemIcon>
+                    <PersonIcon fontSize="small" />
+                  </ListItemIcon>
+                  Profile
+                </MenuItem>
+                <MenuItem onClick={handleLogout}>
+                  <ListItemIcon>
+                    <LogoutIcon fontSize="small" />
+                  </ListItemIcon>
+                  Logout
+                </MenuItem>
+              </MenuList>
+            </Popover>
 
-          <Dialog
-            open={logoutDialogOpen}
-            onClose={handleLogoutCancel}
-            PaperProps={{
-              style: {
-                borderRadius: "10px",
-                width: "350px",
-                height: "175px",
-              },
-            }}
-          >
-            <DialogTitle sx={{ color: "#724C31" }}>Confirm Logout</DialogTitle>
-            <DialogContent>
-              <Typography variant="body1" sx={{ color: "#724C31" }}>
-                Are you sure you want to logout?
-              </Typography>
-            </DialogContent>
-            <DialogActions>
-              <Button
-                onClick={handleLogoutCancel}
-                color="primary"
-                sx={{
-                  bgcolor: "#724C31",
-                  color: "white",
-                  "&:hover": {
+            <Dialog
+              open={logoutDialogOpen}
+              onClose={handleLogoutCancel}
+              PaperProps={{
+                style: {
+                  borderRadius: "10px",
+                  width: "350px",
+                  height: "175px",
+                },
+              }}
+            >
+              <DialogTitle sx={{ color: "#724C31" }}>
+                Confirm Logout
+              </DialogTitle>
+              <DialogContent>
+                <Typography variant="body1" sx={{ color: "#724C31" }}>
+                  Are you sure you want to logout?
+                </Typography>
+              </DialogContent>
+              <DialogActions>
+                <Button
+                  onClick={handleLogoutCancel}
+                  color="primary"
+                  sx={{
                     bgcolor: "#724C31",
-                  },
-                }}
-              >
-                Cancel
-              </Button>
-              <Button
-                onClick={handleLogoutConfirm}
-                color="primary"
-                autoFocus
-                sx={{
-                  bgcolor: "#724C31",
-                  color: "white",
-                  "&:hover": {
+                    color: "white",
+                    "&:hover": {
+                      bgcolor: "#724C31",
+                    },
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  onClick={handleLogoutConfirm}
+                  color="primary"
+                  autoFocus
+                  sx={{
                     bgcolor: "#724C31",
-                  },
-                }}
-              >
-                Confirm
-              </Button>
-            </DialogActions>
-          </Dialog>
+                    color: "white",
+                    "&:hover": {
+                      bgcolor: "#724C31",
+                    },
+                  }}
+                >
+                  Confirm
+                </Button>
+              </DialogActions>
+            </Dialog>
 
-          {/* <IconButton
+            {/* <IconButton
             size="large"
             edge="end"
             aria-label="account of current user"
@@ -292,10 +375,11 @@ const Navbar: React.FC = () => {
           >
             <LogoutIcon />
           </IconButton> */}
-        </Toolbar>
-      </AppBar>
-      {renderMenu}
-    </Box>
+          </Toolbar>
+        </AppBar>
+        {renderMenu}
+      </Box>
+    </>
   );
 };
 
