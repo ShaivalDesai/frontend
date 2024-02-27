@@ -387,3 +387,127 @@ export default Navbar;
 function setLogoutDialogOpen(arg0: boolean) {
   throw new Error("Function not implemented.");
 }
+
+
+// import React, { useState } from "react";
+// import {
+//   AppBar,
+//   Toolbar,
+//   Typography,
+//   IconButton,
+//   Drawer,
+//   List,
+//   ListItem,
+//   ListItemText,
+//   Box,
+//   InputBase,
+//   useMediaQuery,
+//   useTheme,
+//   Button,
+// } from "@mui/material";
+// import { Menu as MenuIcon, Search as SearchIcon } from "@mui/icons-material";
+// import { Link as RouterLink } from "react-router-dom";
+// import { styled, alpha } from "@mui/material/styles";
+
+// const Search = styled("div")(({ theme }) => ({
+//   display: "flex",
+//   alignItems: "center",
+//   borderRadius: theme.shape.borderRadius,
+//   backgroundColor: alpha(theme.palette.common.white, 0.15),
+//   "&:hover": {
+//     backgroundColor: alpha(theme.palette.common.white, 0.25),
+//   },
+//   marginLeft: theme.spacing(1),
+//   marginRight: theme.spacing(1),
+//   width: "auto",
+//   [theme.breakpoints.up("sm")]: {
+//     width: "auto",
+//   },
+// }));
+
+// const StyledInputBase = styled(InputBase)(({ theme }) => ({
+//   color: "inherit",
+//   "& .MuiInputBase-input": {
+//     padding: theme.spacing(1, 1, 1, 2),
+//     transition: theme.transitions.create("width"),
+//     width: "120px",
+//     "&:focus": {
+//       width: "200px",
+//     },
+//   },
+// }));
+
+// const Navbar: React.FC = () => {
+//   const [mobileOpen, setMobileOpen] = useState(false);
+//   const theme = useTheme();
+//   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
+//   const handleDrawerToggle = () => {
+//     setMobileOpen(!mobileOpen);
+//   };
+
+//   const drawer = (
+//     <div>
+//       <List>
+//         {["Men", "Women", "Boys", "Girls"].map((text, index) => (
+//           <ListItem button key={text} component={RouterLink} to={`/${text.toLowerCase()}`} onClick={handleDrawerToggle}>
+//             <ListItemText primary={text} />
+//           </ListItem>
+//         ))}
+//       </List>
+//     </div>
+//   );
+
+//   return (
+//     <AppBar position="static" sx={{ backgroundColor: "#724C31" }}>
+//       <Toolbar>
+//         {isMobile ? (
+//           <>
+//             <IconButton
+//               color="inherit"
+//               aria-label="open drawer"
+//               edge="start"
+//               onClick={handleDrawerToggle}
+//               sx={{ mr: 2, display: 'block' }}
+//             >
+//               <MenuIcon />
+//             </IconButton>
+//             <Typography variant="h6" noWrap sx={{ flexGrow: 1, display: 'block' }}>
+//               FashionFleet
+//             </Typography>
+//             <Drawer
+//               variant="temporary"
+//               anchor="left"
+//               open={mobileOpen}
+//               onClose={handleDrawerToggle}
+//               ModalProps={{
+//                 keepMounted: true, // Better open performance on mobile.
+//               }}
+//             >
+//               {drawer}
+//             </Drawer>
+//           </>
+//         ) : (
+//           <>
+//             <Typography variant="h6" noWrap sx={{ flexGrow: 1 }}>
+//               <RouterLink to="/home" style={{ textDecoration: "none", color: "inherit" }}>FashionFleet</RouterLink>
+//             </Typography>
+//             <Search>
+//               <SearchIcon />
+//               <StyledInputBase placeholder="Search…" inputProps={{ "aria-label": "search" }} />
+//             </Search>
+//             <Box sx={{ display: 'flex' }}>
+//               {["Men", "Women", "Boys", "Girls"].map((text) => (
+//                 <Button color="inherit" key={text} component={RouterLink} to={`/${text.toLowerCase()}`}>
+//                   {text}
+//                 </Button>
+//               ))}
+//             </Box>
+//           </>
+//         )}
+//       </Toolbar>
+//     </AppBar>
+//   );
+// };
+
+// export default Navbar;

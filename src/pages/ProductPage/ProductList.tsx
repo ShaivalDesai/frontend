@@ -69,6 +69,15 @@ const dummyProducts: Product[] = [
     ],
   },
   {
+    id: 1,
+    name: "Fashion Jacket",
+
+    price: 1500,
+    images: [
+      "https://rukminim2.flixcart.com/image/612/612/xif0q/kurta/c/2/b/s-ml12108-321-manyavar-original-imagtucmpppv7g6w.jpeg?q=70",
+    ],
+  },
+  {
     id: 3,
     name: "Elegant Hat",
 
@@ -105,7 +114,7 @@ const SingleProductPage = () => {
       <Box sx={{ flexGrow: 1, padding: 3 }}>
         <Grid container spacing={4} justifyContent="center">
           {dummyProducts.map((product) => (
-            <Grid item xs={12} sm={6} md={4} lg={3} key={product.name}>
+            <Grid item xs={12} sm={6} md={4} lg={2.4} key={product.name}>
               <CustomCard>
                 <CardActionArea>
                   <CardMedia

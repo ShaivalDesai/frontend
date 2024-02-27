@@ -13,6 +13,7 @@ import axios from "axios";
 
 interface ChartCardProps {
   title: string;
+  data: { month: string; amount: number }[];
 }
 
 interface ChartData {
