@@ -450,14 +450,6 @@ export default function Dashboard() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [hoverOpen, setHoverOpen] = React.useState(false);
   const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
-  // const [dashboardData, setDashboardData] = useState({
-  //   topSales: null,
-  //   totalSales: null,
-  //   customers: null,
-  //   orders: null,
-  //   chartData: [],
-  //   pieChartData: [],
-  // });
 
   const [dashboardData, setDashboardData] = useState({
     product_ids: null,
@@ -686,7 +678,7 @@ export default function Dashboard() {
             </IconButton>
           </Toolbar>
           <Divider />
-          <List component="nav">{/* Add your drawer items here */}</List>
+          <List component="nav">{MainListItems()}</List>
         </Drawer>
         <Box
           component="main"
@@ -703,12 +695,6 @@ export default function Dashboard() {
           <Toolbar />
 
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-            {/* <DashboardCards
-              topSales={dashboardData.topSales ?? 0}
-              totalSales={dashboardData.totalSales ?? 0}
-              customers={dashboardData.customers ?? 0}
-              orders={dashboardData.orders ?? 0}
-            /> */}
             <DashboardCards
               topSales={dashboardData.highest_sale_value ?? 0}
               totalSales={dashboardData.total_sale ?? 0}
