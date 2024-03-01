@@ -6,31 +6,62 @@ import {
   Paper,
   Typography,
   Container,
+  MenuItem,
 } from "@mui/material";
+import axios from "axios";
 import { Country, State, City } from "country-state-city";
 import Select from "react-select";
+import {
+  validatezip,
+  validateEmail,
+  validatePassword,
+  validateUserType,
+  validateConfirmPassword,
+  validateConfirmEmail,
+  validateName,
+  validateDate,
+  validatePhoneNumber,
+  validateGender,
+  validateState,
+  validateAddress,
+  validateCountry,
+  validateCity,
+  validatereg,
+} from "../../validation";
 
 interface FormData {
   name: string;
   email: string;
-  street: string;
-  city: string;
+  number: string;
+  address: string;
+  country: string;
   state: string;
-  zip: string;
+  city: string;
+  pincode: string;
+  address_2: string;
+  number_2: string;
+  reg_number: string;
+  est_date: string;
 }
 
 const initialFormData: FormData = {
   name: "",
   email: "",
-  street: "",
-  city: "",
+  number: "",
+  address: "",
+  country: "",
   state: "",
-  zip: "",
+  city: "",
+  pincode: "",
+  address_2: "",
+  number_2: "",
+  reg_number: "",
+  est_date: "",
 };
 
-const FormComponent: React.FC = () => {
+const Vendor_Profile: React.FC = () => {
   const [formData, setFormData] = useState<FormData>(initialFormData);
-  const [country, setCountry] = useState<string>("");
+
   const [selectedCountry, setSelectedCountry] = useState<any>(null);
   const [selectedState, setSelectedState] = useState<any>(null);
   const [selectedCity, setSelectedCity] = useState<any>(null);
@@ -38,6 +69,12 @@ const FormComponent: React.FC = () => {
   const [stateOptions, setStateOptions] = useState<any[]>([]);
   const [cityOptions, setCityOptions] = useState<any[]>([]);
   const [isLocked, setIsLocked] = useState(true);
+
+  const [number2, setNumber2] = useState<string>("");
+  const [address, setAddress] = useState<string>("");
+
+  const [reg_number, setReg_number] = useState<string>("");
+  const [errors, setErrors] = React.useState<Partial<FormData>>({});
 
   useEffect(() => {
     const fetchCountries = async () => {
@@ -48,7 +85,36 @@ const FormComponent: React.FC = () => {
       }));
       setCountryOptions(formattedCountries);
     };
+    // fetchData();
     fetchCountries();
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("YOUR_API_ENDPOINT");
+        const userData = response.data;
+
+        setFormData({
+          name: userData.user_update.name,
+          email: userData.user_update.email,
+          number: String(userData.user_update.number),
+          number_2: String(userData.vendor_update.number_2),
+          est_date: userData.vendor_update.est_date,
+          address: userData.vendor_update.address,
+          pincode: String(userData.vendor_update.pincode),
+          address_2: userData.vendor_update.address_2,
+          country: userData.vendor_update.country,
+          state: userData.vendor_update.state,
+          city: userData.vendor_update.city,
+          reg_number: String(userData.vendor_update.reg_number),
+        });
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
   }, []);
 
   const handleCountryChange = async (selectedOption: any) => {
@@ -62,28 +128,79 @@ const FormComponent: React.FC = () => {
     setSelectedState(null);
     setCityOptions([]);
     setSelectedCity(null);
+
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      country: selectedOption.label, // Assuming you want to store the label
+      state: "",
+      city: "",
+    }));
+
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      country: "",
+      state: "",
+      city: "",
+    }));
   };
 
   const handleStateChange = async (selectedOption: any) => {
     setSelectedState(selectedOption);
     console.log("Selected State:", selectedOption);
-    console.log("Selected Country:", selectedCountry); // Make sure selectedCountry is not null
-    const cities: any = City.getCitiesOfState(
-      selectedCountry.isoCode,
-      selectedOption.value
-    );
-    console.log("Cities:", cities); // Check the cities received from the API
-    const formattedCities = cities.map((city: any) => ({
-      value: city.name,
-      label: city.name,
+    console.log("Selected Country:", selectedCountry);
+
+    if (selectedCountry && selectedOption) {
+      const cities: any = await City.getCitiesOfState(
+        selectedCountry.value,
+        selectedOption.value
+      );
+      console.log("Cities:", cities);
+      const formattedCities = cities.map((city: any) => ({
+        value: city.name,
+        label: city.name,
+      }));
+      setCityOptions(formattedCities);
+      setSelectedCity(null);
+    }
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      state: selectedOption.label,
+
+      city: "",
     }));
-    setCityOptions(formattedCities);
-    setSelectedCity(null);
+
+    // Reset errors for country, state, and city
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      country: "",
+      state: "",
+      city: "",
+    }));
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+  const handleCityChange = (selectedOption: any) => {
+    setSelectedCity(selectedOption);
+
+    // Clear city related validation error
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      city: selectedOption.label, // Assuming you want to store the label
+      // state: "", // Reset state
+      // Reset city
+    }));
+
+    // Reset errors for country, state, and city
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      country: "",
+      state: "",
+      city: "",
+    }));
+  };
+
+  const handleChange = (event: any) => {
+    const { name, value } = event.target;
+    setFormData({ ...formData, [name]: String(value) });
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -95,12 +212,53 @@ const FormComponent: React.FC = () => {
     setIsLocked(!isLocked);
   };
 
-  const handleCityChange = (city: string) => {
-    setFormData({ ...formData, city });
-  };
+  const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
-  const handleStateeChange = (state: string) => {
-    setFormData({ ...formData, state });
+    const validationErrors: Partial<FormData> = {
+      name: validateName(formData.name),
+      email: validateEmail(formData.email),
+      number: validatePhoneNumber(formData.number),
+      est_date: validateDate(formData.est_date),
+      state: validateState(formData.state),
+      pincode: validatezip(formData.pincode),
+      address: validateAddress(formData.address),
+      country: validateCountry(formData.country),
+      city: validateCity(formData.city),
+      reg_number: validatereg(formData.reg_number),
+    };
+
+    setErrors(validationErrors);
+
+    const hasErrors = Object.values(validationErrors).some((error) => !!error);
+
+    if (!hasErrors) {
+      try {
+        await axios.put("YOUR_API_ENDPOINT", {
+          user_update: {
+            name: formData.name,
+            email: formData.email,
+            number: parseInt(formData.number), // Assuming number is a string
+          },
+          vendor_update: {
+            address: formData.address,
+            city: formData.city,
+            state: formData.state,
+            country: formData.country,
+            pincode: parseInt(formData.pincode), // Assuming pincode is a string
+            address_2: formData.address_2,
+            number_2: parseInt(formData.pincode),
+            reg_number: parseInt(formData.reg_number), // Assuming number_2 is a string
+            est_date: formData.est_date,
+          },
+        });
+        console.log("Data updated successfully");
+        // Optionally show a success message to the user
+      } catch (error) {
+        console.error("Error updating data:", error);
+        // Optionally show an error message to the user
+      }
+    }
   };
 
   return (
@@ -113,181 +271,239 @@ const FormComponent: React.FC = () => {
         backgroundSize: "cover",
         backgroundPosition: "center",
         minHeight: "100vh",
-        //   paddingTop: "50px",
       }}
     >
       <Container maxWidth="sm">
-        <Paper elevation={3} sx={{ padding: 4 }}>
+        <Paper
+          elevation={3}
+          sx={{
+            padding: 4,
+            backgroundColor: "rgba(255,255,255,0.9)",
+            borderRadius: "25px",
+          }}
+        >
           <Typography variant="h5" gutterBottom>
             General Information
           </Typography>
-          <form
-            onSubmit={handleSubmit}
-            style={{
-              backgroundColor: "transparent",
-            }}
-          >
-            <Grid container spacing={2}>
-              <Grid item xs={6}>
-                <TextField
-                  fullWidth
-                  name="name"
-                  label="Name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  disabled={isLocked} // disable if locked
-                />
-              </Grid>
 
-              <Grid item xs={6}>
-                <TextField
-                  fullWidth
-                  name="email"
-                  label="Email"
-                  type="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  disabled={isLocked} // disable if locked
-                />
-              </Grid>
+          <Grid container spacing={2}>
+            <Grid item xs={6}>
+              <TextField
+                fullWidth
+                name="name"
+                label="Name"
+                value={formData.name}
+                onChange={handleChange}
+                // disabled={isLocked}
+              />
+              <div style={{ color: "red" }}>
+                {errors.name && <span>{errors.name}</span>}
+              </div>
+            </Grid>
 
-              <Grid item xs={6}>
-                <TextField
-                  fullWidth
-                  name="phoneNumber"
-                  label="Phone Number"
-                  // value={formData.phoneNumber}
-                  onChange={handleChange}
-                  disabled={isLocked} // disable if locked
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <TextField
-                  fullWidth
-                  name="phoneNumber2"
-                  label="Phone Number 2"
-                  // value={formData.phoneNumber2}
-                  onChange={handleChange}
-                  disabled={isLocked} // disable if locked
-                />
-              </Grid>
+            <Grid item xs={6}>
+              <TextField
+                fullWidth
+                name="email"
+                label="Email"
+                type="email"
+                value={formData.email}
+                onChange={handleChange}
+                // disabled={isLocked}
+              />
+              <div style={{ color: "red" }}>
+                {errors.email && <span>{errors.email}</span>}
+              </div>
+            </Grid>
 
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  name="establishmentDate"
-                  type="date"
-                  // value={formData.establishmentDate}
-                  onChange={handleChange}
-                  disabled={isLocked} // disable if locked
-                />
-              </Grid>
+            <Grid item xs={6}>
+              <TextField
+                fullWidth
+                label="Phone Number 1"
+                name="number"
+                value={formData.number}
+                onChange={handleChange}
+                inputProps={{ maxLength: 10 }}
+              />
+              <div style={{ color: "red" }}>
+                {errors.number && <span>{errors.number}</span>}
+              </div>
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                // required
+                fullWidth
+                id="number2"
+                label="Phone Number 2"
+                name="number2"
+                value={number2}
+                // disabled={isLocked}
+                onChange={(e) => setNumber2(e.target.value)}
+                inputProps={{ maxLength: 10 }}
+              />
+            </Grid>
 
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  name="registrationNumber"
-                  label="Registration Number"
-                  // value={formData.registrationNumber}
-                  onChange={handleChange}
-                  disabled={isLocked} // disable if locked
-                />
-              </Grid>
+            <Grid item xs={6}>
+              <TextField
+                fullWidth
+                name="est_date"
+                type="date"
+                value={formData.est_date}
+                onChange={handleChange}
+                // disabled={isLocked}
+              />
+              <div style={{ color: "red" }}>
+                {errors.est_date && <span>{errors.est_date}</span>}
+              </div>
+            </Grid>
 
-              <Grid item xs={12}>
-                <Typography variant="h5" gutterBottom>
-                  Address Details
-                </Typography>
-              </Grid>
-              <Grid item xs={6}>
-                <TextField
-                  fullWidth
-                  label="Street"
-                  name="street"
-                  value={formData.street}
-                  onChange={handleChange}
-                  disabled={isLocked} // disable if locked
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <TextField
-                  fullWidth
-                  name="phoneNumber2"
-                  label="Zip Code"
-                  // value={formData.phoneNumber2}
-                  onChange={handleChange}
-                  disabled={isLocked} // disable if locked
-                />
-              </Grid>
-              <Grid item xs={4}>
-                <Select
-                  options={countryOptions}
-                  value={selectedCountry}
-                  onChange={handleCountryChange}
-                  styles={{
-                    control: (provided) => ({
-                      ...provided,
-                      backgroundColor: "transparent",
-                    }),
-                  }}
-                  menuPlacement="auto" // Adjust menu placement dynamically
-                  menuPosition="fixed" // Use "fixed" positioning to attach the menu to the viewport
-                  menuPortalTarget={document.body} // Render the menu within the body element to prevent overflow issues
-                  isDisabled={isLocked} // disable if locked
-                />
-              </Grid>
-              <Grid item xs={4}>
-                <Select
-                  options={stateOptions}
-                  value={selectedState}
-                  onChange={handleStateChange}
-                  styles={{
-                    control: (provided) => ({
-                      ...provided,
-                      backgroundColor: "white",
-                    }),
-                  }}
-                  menuPlacement="auto" // Dynamically adjust menu placement
-                  menuPosition="fixed" // Attach the menu to the viewport
-                  menuPortalTarget={document.body} // Render the menu within the body element
-                  isDisabled={isLocked} // disable if locked
-                />
-              </Grid>
+            <Grid item xs={6}>
+              <TextField
+                // required
+                fullWidth
+                // id="reg_number"
+                label="Registration Number"
+                name="reg_number"
+                value={formData.reg_number}
+                onChange={handleChange}
+                inputProps={{ maxLength: 8 }}
+              />
+              <div style={{ color: "red" }}>
+                {errors.reg_number && <span>{errors.reg_number}</span>}
+              </div>
+            </Grid>
 
-              <Grid item xs={4}>
-                <Select
-                  options={cityOptions}
-                  value={selectedCity}
-                  onChange={setSelectedCity}
-                  styles={{
-                    control: (provided) => ({
-                      ...provided,
-                      backgroundColor: "white",
-                    }),
-                  }}
-                  menuPlacement="auto" // Dynamically adjust menu placement
-                  menuPosition="fixed" // Attach the menu to the viewport
-                  menuPortalTarget={document.body} // Render the menu within the body element
-                  isDisabled={isLocked} // disable if locked
-                />
-              </Grid>
+            <Grid item xs={12}>
+              <Typography
+                variant="h5"
+                style={{ marginBottom: -8 }}
+                gutterBottom
+              >
+                Address Details
+              </Typography>
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                fullWidth
+                name="address"
+                label="Address 1"
+                value={formData.address}
+                onChange={handleChange}
+                // disabled={isLocked}
+              />
+              <div style={{ color: "red" }}>
+                {errors.address && <span>{errors.address}</span>}
+              </div>
+            </Grid>
 
-              <Grid item xs={12}>
-                <Button
-                  type="button" // Use type button to prevent form submission
-                  onClick={handleLockToggle} // Toggle edit mode
+            <Grid item xs={6}>
+              <TextField
+                fullWidth
+                name="pincode"
+                label="Pincode"
+                value={formData.pincode}
+                onChange={handleChange}
+                inputProps={{ maxLength: 6 }}
+                // disabled={isLocked}
+              />
+              <div style={{ color: "red" }}>
+                {errors.pincode && <span>{errors.pincode}</span>}
+              </div>
+            </Grid>
+
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                label="Address 2"
+                name="address_2"
+                value={formData.address_2}
+                onChange={handleChange}
+                // disabled={isLocked}
+              />
+            </Grid>
+
+            <Grid item xs={4}>
+              <Select
+                options={countryOptions}
+                value={selectedCountry}
+                onChange={handleCountryChange}
+                styles={{
+                  control: (provided) => ({
+                    ...provided,
+                    backgroundColor: "transparent",
+                  }),
+                }}
+                menuPlacement="auto"
+                menuPosition="fixed"
+                menuPortalTarget={document.body}
+                // isDisabled={isLocked}
+              />
+              <div style={{ color: "red" }}>
+                {errors.country && <span>{errors.country}</span>}
+              </div>
+            </Grid>
+            <Grid item xs={4}>
+              <Select
+                options={stateOptions}
+                value={selectedState}
+                onChange={handleStateChange}
+                styles={{
+                  control: (provided) => ({
+                    ...provided,
+                    backgroundColor: "white",
+                  }),
+                }}
+                menuPlacement="auto"
+                menuPosition="fixed"
+                menuPortalTarget={document.body}
+                // isDisabled={isLocked}
+              />
+              <div style={{ color: "red" }}>
+                {errors.state && <span>{errors.state}</span>}
+              </div>
+            </Grid>
+
+            <Grid item xs={4}>
+              <Select
+                options={cityOptions}
+                value={selectedCity}
+                onChange={handleCityChange}
+                styles={{
+                  control: (provided) => ({
+                    ...provided,
+                    backgroundColor: "white",
+                  }),
+                }}
+                menuPlacement="auto"
+                menuPosition="fixed"
+                menuPortalTarget={document.body}
+                // isDisabled={isLocked}
+              />
+              <div style={{ color: "red" }}>
+                {errors.city && <span>{errors.city}</span>}
+              </div>
+            </Grid>
+
+            <Grid item xs={12}>
+              {/* <Button
+                  type="submit"
+                  onClick={handleLockToggle}
                   variant="contained"
-                  color={isLocked ? "primary" : "secondary"} // Change button color based on edit mode
+                  color={isLocked ? "primary" : "secondary"}
                 >
                   {isLocked ? "Update" : "Save"}
+                </Button> */}
+              <form onSubmit={handleRegister}>
+                <Button type="submit" variant="contained" color="primary">
+                  Save
                 </Button>
-              </Grid>
+              </form>
             </Grid>
-          </form>
+          </Grid>
         </Paper>
       </Container>
     </div>
   );
 };
 
-export default FormComponent;
+export default Vendor_Profile;

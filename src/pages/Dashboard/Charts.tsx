@@ -13,38 +13,22 @@ import axios from "axios";
 
 interface ChartCardProps {
   title: string;
-  data: { month: string; amount: number }[];
+  data: { month: string; quantity: number }[];
 }
 
-interface ChartData {
+export interface ChartData {
   month: string;
-  amount: number;
+  quantity: number;
 }
 
-const ChartCard: React.FC<ChartCardProps> = ({ title }) => {
-  const [data, setData] = useState<ChartData[]>([]);
+const ChartCard: React.FC<ChartCardProps> = ({ title, data }) => {
+  // State to hold the chart data
+  const [chartData, setChartData] = useState<ChartData[]>([]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const id = 16;
-        const response = await axios.get(
-          "http://127.0.0.1:8000/display_sales/" + id
-        );
-        const formattedData: ChartData[] = Object.keys(response.data).map(
-          (key) => ({
-            month: key,
-            amount: response.data[key],
-          })
-        );
-        setData(formattedData);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
+    // Set the chart data when the component mounts or when the data prop changes
+    setChartData(data);
+  }, [data]);
 
   return (
     <Box sx={{ maxWidth: 550, margin: "auto", marginTop: 2 }}>
@@ -66,10 +50,11 @@ const ChartCard: React.FC<ChartCardProps> = ({ title }) => {
           </Typography>
           <br />
           <div style={{ width: "100%", height: 300 }}>
+           
             <LineChart
               width={500}
               height={250}
-              data={data}
+              data={chartData}
               margin={{ top: 5, right: 20, left: 0, bottom: 5 }}
             >
               <XAxis dataKey="month" />
@@ -77,7 +62,7 @@ const ChartCard: React.FC<ChartCardProps> = ({ title }) => {
               <CartesianGrid strokeDasharray="3 3" />
               <Tooltip />
               <Legend />
-              <Line type="monotone" dataKey="amount" stroke="#82ca9d" />
+              <Line type="monotone" dataKey="quantity" stroke="#00008B" />
             </LineChart>
           </div>
         </CardContent>
@@ -87,3 +72,4 @@ const ChartCard: React.FC<ChartCardProps> = ({ title }) => {
 };
 
 export default ChartCard;
+

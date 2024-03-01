@@ -58,6 +58,7 @@ export default function Register() {
 
   const handleRegister = async (e: any) => {
     e.preventDefault();
+    console.log("Inside");
     const validationErrors: Partial<Record<keyof FormData, string>> = {};
 
     validationErrors.name = validateName(name);
@@ -73,8 +74,9 @@ export default function Register() {
     validationErrors.number = validatePhoneNumber(number);
 
     setErrors(validationErrors);
+    console.log("validationErrors");
 
-    if (Object.keys(validationErrors).length === 0) {
+    if (Object.values(validationErrors).every((error) => !error)) {
       try {
         const response = await axios.post("http://127.0.0.1:8000/register", {
           name,
@@ -85,13 +87,11 @@ export default function Register() {
         });
         console.log(response.data);
         alert(response.data.status);
-
-        // Check if the response indicates successful login
         navigate("/login");
       } catch (error: any) {
         if (error.response) {
           if (error.response.status === 400) {
-            window.alert(error.response.data.detail);
+            window.alert(error.response.status);
             setErrors({ ...errors, email: "Email already exists" });
           } else {
             console.error("Error during registration:", error.message);

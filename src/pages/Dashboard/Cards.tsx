@@ -126,6 +126,8 @@
 
 // export default DashboardCards;
 
+
+
 import React, { useEffect, useState } from "react";
 import { Card, CardContent, Typography, Grid } from "@mui/material";
 
@@ -133,14 +135,14 @@ interface DashboardCardsProps {
   topSales: number;
   totalSales: number;
   customers: number;
-  orders: number;
+  last_month_order: number;
 }
 
 const DashboardCards: React.FC<DashboardCardsProps> = ({
   topSales,
   totalSales,
   customers,
-  orders,
+  last_month_order,
 }) => {
   // Remove local state and useEffect related to fetching and storing data
 
@@ -226,7 +228,7 @@ const DashboardCards: React.FC<DashboardCardsProps> = ({
             <Typography variant="h5" component="h2">
               Last Month Order
             </Typography>
-            <Typography color="text.secondary">{orders}</Typography>
+            <Typography color="text.secondary">{last_month_order}</Typography>
           </CardContent>
         </Card>
       </Grid>
