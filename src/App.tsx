@@ -33,24 +33,24 @@ function App() {
   return (
     <>
       <Routes>
-        {/* <Route path="/" element={<Navigate to="/login" replace />} />
+        <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/login" element={<AuthPage />} />
         <Route path="/vendorprofile" element={<Vendor_Profile />} />
         <Route path="/product" element={<SingleProductPage />} />
         <Route path="/home" element={<HomePage />} />
         <Route path="/dashboard" element={<MainPage />} />
-        <Route path="/homeprofile" element={<Home_Profile />} />
+        <Route path="/profile" element={<Home_Profile />} />
         <Route path="/RegisterUser" element={<RegistrationUser />} />
-        <Route path="/whishlist" element={<Wishlist />} /> */}
-        {/* <Route path="/cart" element={<CartPage products={[]} />} /> */}
+        <Route path="/whishlist" element={<Wishlist />} /> 
+        {/* <Route path="/cart" element={<CartPage products={[]} />} />
 
-        <Route path="/" element={<Navigate to="/login" replace />} />
+        {/* <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/login" element={<AuthPage />} />
         <Route path="/homeprofile" element={<Protected Component={Home_Profile} />} />
         <Route path="/home" element={<Protected Component={HomePage} />} />
         <Route path="/dashboard" element={<Protected Component={MainPage} />} />
         <Route path="/RegisterUser" element={<RegistrationUser />} /> 
-        <Route path="/RegisterUser" element={<Protected Component={RegistrationUser} />}/>
+        <Route path="/RegisterUser" element={<Protected Component={RegistrationUser} />}/> */}
       </Routes>
     </>
   );

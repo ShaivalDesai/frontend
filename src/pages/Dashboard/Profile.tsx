@@ -92,7 +92,16 @@ const Vendor_Profile: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("YOUR_API_ENDPOINT");
+        let vid: number;
+        const vidstring = sessionStorage.getItem("v_id");
+
+        if (vidstring !== null) {
+          vid = parseInt(vidstring);
+
+          var API_URL = `http://127.0.0.1:8000/vendor_dashboard/` + vid;
+        }
+
+        const response = await axios.get("API_URL");
         const userData = response.data;
 
         setFormData({

@@ -35,8 +35,14 @@ import {
 } from "@mui/material";
 import axios from "axios";
 
-const id = 1;
-const API_URL = "http://127.0.0.1:8000/vendor_dashboard/" + id;
+let vid: number;
+const vidstring = sessionStorage.getItem("v_id");
+
+if (vidstring !== null) {
+  vid = parseInt(vidstring);
+
+  var API_URL = `http://127.0.0.1:8000/vendor_dashboard/` + vid;
+}
 
 const defaultTheme = createTheme();
 
