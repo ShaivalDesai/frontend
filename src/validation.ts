@@ -144,3 +144,4 @@ export const validatereg = (reg:string) => {
   
   return ""; // Return an empty string if there's no error
 };
+

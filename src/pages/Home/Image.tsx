@@ -1,26 +1,33 @@
-import React, { useState, useEffect } from "react";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import axios from "axios";
-import { log } from "console";
-import { Container, Typography } from "@mui/material";
 
-interface Image {
+
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { CardContent, Typography } from "@mui/material";
+import { Card } from "react-bootstrap";
+
+interface Product {
   id: number;
-  image: string;
+  title: string;
+  price: number;
+  image_data: string;
+}
+
+interface ProductState {
+  recommendations: Product[];
+  trending: Product[];
 }
 
 const ImageCarousel: React.FC = () => {
-  const [images, setImages] = useState<Image[]>([]); 
+  const [products, setProducts] = useState<ProductState>({
+    recommendations: [],
+    trending: [],
+  });
 
   useEffect(() => {
     const fetchImages = async () => {
       try {
-        const id = 1;
-
         const response = await axios.get(
-          `http://127.0.0.1:8000/products/images/?product_ids=1%2C2%2C3`,
+          "http://127.0.0.1:8000/combined_data/1",
           {
             headers: {
               "Content-Type": "application/json",
@@ -28,23 +35,39 @@ const ImageCarousel: React.FC = () => {
           }
         );
 
-        const imageData: ArrayBuffer = response.data;
+        console.log("API Response:", response.data);
 
-        // Convert the arraybuffer to a base64 string
-        const base64String = btoa(
-          new Uint8Array(imageData).reduce(
-            (data, byte) => data + String.fromCharCode(byte),
-            ""
-          )
-        );
+        const recommendations: Product[] = Object.values(
+          response.data.recommendation.recommendations_and_images
+            .recommendations
+        )
+          .slice(0, 5) // Limit to maximum of 5 products
+          .map((productData: any, index: number) => {
+            return {
+              id: productData.product_id,
+              title: productData.title,
+              price: productData.price,
+              image_data: `data:image/jpeg;base64,${productData.image}`,
+            };
+          });
 
-        const imageUrls: Image[] = [
-          { id: 1, image: `data:image/jpeg;base64,${response.data[1]}` },
-          { id: 2, image: `data:image/jpeg;base64,${response.data[2]}` },
-          { id: 3, image: `data:image/jpeg;base64,${response.data[3]}` },
-        ];
+        const trending: Product[] = Object.values(
+          response.data.trending.trending_products
+        )
+          .slice(0, 5) // Limit to maximum of 5 products
+          .map((productData: any, index: number) => {
+            return {
+              id: productData.top_product.product_id,
+              title: productData.top_product.title,
+              price: productData.top_product.price,
+              image_data: `data:image/jpeg;base64,${productData.top_product.image}`,
+            };
+          });
 
-        setImages(imageUrls);
+        console.log("Recommendations:", recommendations);
+        console.log("Trending:", trending);
+
+        setProducts({ recommendations, trending });
       } catch (error) {
         console.error("Failed to fetch images", error);
       }
@@ -53,77 +76,153 @@ const ImageCarousel: React.FC = () => {
     fetchImages();
   }, []);
 
-  const settings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    autoplay: true,
-    marginTop: "0",
-  };
-
   return (
-    <div style={{ maxHeight: "100vh", width: "100vw" }}>
-      {images.length > 0 && (
-        <>
-          {images.map((image) => (
-            <div key={image.id}>
-              <img
-                src={image.image}
-                alt={`image${image.id}`}
-                style={{ height: "60vh", width: "100vw" }}
-              />
-            </div>
-          ))}
-        </>
-      )}
-
-      <head>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Protest+Riot&display=swap"
-          rel="stylesheet"
-        />
-      </head>
-
-      <Container
-        maxWidth="sm"
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center", 
-          justifyContent: "center", 
-          // minHeight: "100vh",
+    <>
+      <Typography
+        variant="h4"
+        sx={{
+          textAlign: "center",
+          fontFamily: "'Protest Riot', sans-serif",
+          fontWeight: "bold",
+          fontSize: "60px",
+          color: "red",
+          background:
+            "linear-gradient(45deg, #8B4513 30%, #5D4037 60%, #BCAAA4 90%)",
+          WebkitBackgroundClip: "text",
+          WebkitTextFillColor: "transparent",
         }}
       >
-        <Typography
-          variant="h4"
-          sx={{
-            fontFamily: "'Protest Riot', sans-serif",
-            fontWeight: "bold",
-            fontSize: "60px",
-            marginBottom: "2rem",
-            color: "red",
-            background:
-              "linear-gradient(45deg, #8B4513 30%, #5D4037 60%, #BCAAA4 90%)",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-          }}
-        >
-          Shop by Brand
-        </Typography>
-      </Container>
+        Recommended Products
+      </Typography>
+      <div
+        style={{
+          display: "flex",
+          overflowX: "auto",
+          gap: "20px",
+          padding: "20px",
+          height: "480px", // Adjusted height
+        }}
+      >
+        {products.recommendations.map((product) => (
+          <Card
+            key={product.id}
+            style={{
+              width: "250px",
+              height: "100%", // Adjusted height
+              boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
+            }}
+          >
+            <img
+              src={product.image_data}
+              alt={product.title}
+              style={{ height: "320px", width: "100%", objectFit: "cover" }}
+            />
+            <CardContent style={{ textAlign: "left", height: "120px" }}>
+              <Typography
+                variant="h6"
+                component="h3"
+                style={{
+                  marginBottom: "5px",
+                  fontWeight: "bold",
+                  height: "60px",
+                  overflow: "hidden",
+                }}
+              >
+                {product.title}
+              </Typography>
+              <Typography
+                variant="body1"
+                style={{ height: "40px", overflow: "hidden" }}
+              >
+                Price: ₹{product.price}
+              </Typography>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
 
-      {/* {images.length === 0 && (
-        <div>
-          <img
-            src="/sbccc.png"
-            alt="Placeholder"
-            style={{ height: "19vh", width: "100%", borderRadius: "10px" }}
-          />
-        </div>
-      )} */}
-    </div>
+      <Typography
+        variant="h4"
+        sx={{
+          textAlign: "center",
+          fontFamily: "'Protest Riot', sans-serif",
+          fontWeight: "bold",
+          fontSize: "60px",
+          marginBottom: "1rem",
+          color: "red",
+          background:
+            "linear-gradient(45deg, #8B4513 30%, #5D4037 60%, #BCAAA4 90%)",
+          WebkitBackgroundClip: "text",
+          WebkitTextFillColor: "transparent",
+        }}
+      >
+        Trending Products
+      </Typography>
+      <div
+        style={{
+          display: "flex",
+          overflowX: "auto",
+          gap: "20px",
+          padding: "20px",
+          height: "480px", // Adjusted height
+        }}
+      >
+        {products.trending.map((product) => (
+          <Card
+            key={product.id}
+            style={{
+              width: "250px",
+              height: "100%", // Adjusted height
+              boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
+            }}
+          >
+            <img
+              src={product.image_data}
+              alt={product.title}
+              style={{ height: "320px", width: "100%", objectFit: "cover" }}
+            />
+            <CardContent style={{ textAlign: "left", height: "120px" }}>
+              <Typography
+                variant="h6"
+                component="h3"
+                style={{
+                  marginBottom: "5px",
+                  fontWeight: "bold",
+                  height: "60px",
+                  overflow: "hidden",
+                }}
+              >
+                {product.title}
+              </Typography>
+              <Typography
+                variant="body1"
+                style={{ height: "40px", overflow: "hidden" }}
+              >
+                Price: ₹{product.price}
+              </Typography>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      <Typography
+        variant="h4"
+        sx={{
+          textAlign: "center",
+          fontFamily: "'Protest Riot', sans-serif",
+          fontWeight: "bold",
+          fontSize: "60px",
+          marginBottom: "1rem",
+          color: "red",
+          background:
+            "linear-gradient(45deg, #8B4513 30%, #5D4037 60%, #BCAAA4 90%)",
+          WebkitBackgroundClip: "text",
+          WebkitTextFillColor: "transparent",
+        }}
+      >
+        Order By Brands
+      </Typography>
+    </>
   );
 };
 

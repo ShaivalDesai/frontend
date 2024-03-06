@@ -1,61 +1,19 @@
-// import React, { useEffect } from "react";
-// import ProductCard from "./ProductCard";
-// import ImageCarousel from "./ImageCarousel";
-// import Navbar from "./Navbar";
-// import MyCard from "./ProductCard"; // Assuming MyCard is your card component
-
-// const HomePage: React.FC = () => {
-//   useEffect(() => {
-//     window.scrollTo(0, 0);
-//   }, []);
-
-//   return (
-//     <>
-//       <Navbar />
-//       <ImageCarousel />
-//       <div
-//         style={{
-//           display: "flex",
-//           flexDirection: "row",
-//           justifyContent: "space-around",
-//         }}
-//       >
-//         <MyCard image="men1.avif" title="MEN" color="white" />
-//         <MyCard image="women2.webp" title="WOMEN" color="white" />
-//         <MyCard image="kids.jpg" title="KIDS" color="white" />
-//         <MyCard image="accee.jpg" title="ACCESSORIES" color="white" />
-//       </div>
-//       <div
-//         style={{
-//           display: "flex",
-//           flexDirection: "row",
-//           justifyContent: "space-around",
-//           marginTop: "20px", // Adjust the margin as needed
-//         }}
-//       >
-//         <MyCard image="bottomwear.jpg" title="BOTTOMWEAR" color="white" />
-//         <MyCard image="formals.jpg" title="FORMALWEAR" color="white" />
-//         <MyCard image="jackets.jpg" title="JACKETS" color="white" />
-//         <MyCard image="bags.jpg" title="BAGS" color="white" />
-//       </div>
-//     </>
-//   );
-// };
-
-// export default HomePage;
 import React, { useEffect } from "react";
 import ProductCard from "./ProductCard";
-import ImageCarousel from "./ImageCarousel";
+import ImageCarousel from "./Image";
 import Navbar from "./Navbar";
 import MyCard from "./ProductCard"; // Assuming MyCard is your card component
+import ImageCarousel1 from "./ImageCarousel";
+import PopupOffer from "./Popup";
 
 const HomePage: React.FC = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
+  const images = ["ic1.jpg", "ic5.avif", "h2.jpg", "ic7.jpg"];
+
   useEffect(() => {
-    // Fetch data and then set session storage
     fetchDataAndSetSessionStorage();
   }, []);
 
@@ -78,20 +36,21 @@ const HomePage: React.FC = () => {
 
   const fetchData = async () => {
     try {
-      // Implement your data fetching logic here
-      // Example: Fetch data from an API
       const response = await fetch("your-api-endpoint");
-      const responseData = await response.json(); // Parse JSON response
-      return responseData; // Return the fetched data
+      const responseData = await response.json();
+      return responseData;
     } catch (error) {
       console.error("Error fetching data:", error);
-      throw error; // Throw error to be caught by the calling function
+      throw error;
     }
   };
 
   return (
     <>
       <Navbar />
+      <PopupOffer />
+      <ImageCarousel1 images={images} />
+
       <ImageCarousel />
       <div
         style={{
@@ -100,23 +59,25 @@ const HomePage: React.FC = () => {
           justifyContent: "space-around",
         }}
       >
-        <MyCard image="men1.avif" title="MEN" color="white" />
-        <MyCard image="women2.webp" title="WOMEN" color="white" />
-        <MyCard image="kids.jpg" title="KIDS" color="white" />
-        <MyCard image="accee.jpg" title="ACCESSORIES" color="white" />
+        <MyCard image="anouk2.jpg" title="ANOUK" color="white" />
+        <MyCard image="biba.png" title="BIBA" color="white" />
+        <MyCard image="libas.jpg" title="LIBAS" color="white" />
+        <MyCard image="gd.jpg" title="GLOBAL DESI" color="white" />
+        <MyCard image="shree.png" title="SHREE" color="white" />
       </div>
       <div
         style={{
           display: "flex",
           flexDirection: "row",
           justifyContent: "space-around",
-          marginTop: "20px", // Adjust the margin as needed
+          marginTop: "20px",
         }}
       >
-        <MyCard image="bottomwear.jpg" title="BOTTOMWEAR" color="white" />
-        <MyCard image="formals.jpg" title="FORMALWEAR" color="white" />
-        <MyCard image="jackets.jpg" title="JACKETS" color="white" />
-        <MyCard image="bags.jpg" title="BAGS" color="white" />
+        <MyCard image="fi.png" title="FABINDIA" color="white" />
+        <MyCard image="s2.jpg" title="SOJANYA" color="white" />
+        <MyCard image="sangria.jpg" title="SANGRIA" color="white" />
+        <MyCard image="vastramay2.webp" title="VASTRAMAY " color="white" />
+        <MyCard image="deyan2.png" title="DEYANN " color="white" />
       </div>
     </>
   );

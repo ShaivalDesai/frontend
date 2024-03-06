@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import {
   AppBar,
   Toolbar,
@@ -22,10 +22,13 @@ import {
   ShoppingCart,
   AccountCircle,
   Search as SearchIcon,
+  Cancel as CancelIcon,
 } from "@mui/icons-material";
 import { Link as RouterLink } from "react-router-dom";
+import axios from "axios";
 import { styled, alpha } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 import PersonIcon from "@mui/icons-material/Person";
 
 const Search = styled("div")(({ theme }) => ({
@@ -74,12 +77,66 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 const Navbar: React.FC = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState<any[]>([]);
   const isMenuOpen = Boolean(anchorEl);
+  const [showDropdown, setShowDropdown] = useState(false);
   const navigate = useNavigate();
+  const searchRef = useRef<HTMLDivElement | null>(null);
 
-  // const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-  //   setAnchorEl(event.currentTarget);
-  // };
+  const handleSearch = async () => {
+    try {
+      const response = await axios.get(
+        `http://127.0.0.1:8000/search/?query=${searchQuery}`
+      );
+      setSearchResults(response.data);
+    } catch (error) {
+      console.error("Error fetching search results:", error);
+    }
+  };
+
+  const handleSearchInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setSearchQuery(event.target.value);
+  };
+
+  const handleSearchResultClick = (result: any) => {
+    setSearchQuery(result.title);
+    setSearchResults([]);
+  };
+
+  const handleSearchIconClick = () => {
+    if (searchQuery.trim()) {
+      handleSearch(); // Trigger the search action if there is a search query
+    }
+    setShowDropdown(true); // Open the dropdown
+  };
+
+  const handleCancelSearch = () => {
+    setSearchQuery(""); // Clear search query
+    setShowDropdown(false); // Close dropdown
+  };
+
+  // Inside Navbar component
+
+  useEffect(() => {
+    // Close dropdown when clicking outside of it
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        searchRef.current &&
+        !searchRef.current.contains(event.target as Node)
+      ) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -190,7 +247,7 @@ const Navbar: React.FC = () => {
                 }}
                 color="inherit"
                 component={RouterLink}
-                to="/contact"
+                to="/product"
               >
                 Men
               </Button>
@@ -202,7 +259,7 @@ const Navbar: React.FC = () => {
                 }}
                 color="inherit"
                 component={RouterLink}
-                to="/contact"
+                to="/product"
               >
                 Women
               </Button>
@@ -214,7 +271,7 @@ const Navbar: React.FC = () => {
                 }}
                 color="inherit"
                 component={RouterLink}
-                to="/contact"
+                to="/product"
               >
                 Boys
               </Button>
@@ -226,21 +283,71 @@ const Navbar: React.FC = () => {
                 }}
                 color="inherit"
                 component={RouterLink}
-                to="/contact"
+                to="/product"
               >
                 Girls
               </Button>
             </Typography>
 
             <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ "aria-label": "search" }}
-            />
-          </Search>
+              <IconButton
+                style={{ color: "white" }}
+                onClick={handleSearchIconClick}
+              >
+                <SearchIcon />
+              </IconButton>
+              <StyledInputBase
+                placeholder="Search…"
+                inputProps={{ "aria-label": "search" }}
+                value={searchQuery}
+                onChange={handleSearchInputChange}
+                onFocus={() => setShowDropdown(true)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleSearch();
+                  }
+                }}
+              />
+
+              {searchQuery && (
+                <IconButton
+                  style={{ color: "white" }}
+                  onClick={handleCancelSearch}
+                >
+                  <CancelIcon />
+                </IconButton>
+              )}
+            </Search>
+            {/* Render search results */}
+            {showDropdown && searchResults.length > 0 && (
+              <Box
+                sx={{
+                  position: "absolute",
+                  top: "100%",
+                  // Adjust this value if necessary
+                  left: 0,
+                  zIndex: 1,
+                  width: "100%",
+                  backgroundColor: "rgba(139, 69, 19, 0.5)",
+                  borderRadius: "4px",
+                  boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
+                  maxHeight: "300px",
+                  overflowY: "auto",
+                }}
+              >
+                {searchResults.map((result: any, index: number) => (
+                  <MenuItem
+                    key={index}
+                    onClick={() => {
+                      handleSearchResultClick(result);
+                      setShowDropdown(false); // Close dropdown after selecting an item
+                    }}
+                  >
+                    {result.title}
+                  </MenuItem>
+                ))}
+              </Box>
+            )}
             <Button
               style={{
                 fontSize: "1.10rem",
@@ -363,18 +470,6 @@ const Navbar: React.FC = () => {
                 </Button>
               </DialogActions>
             </Dialog>
-
-            {/* <IconButton
-            size="large"
-            edge="end"
-            aria-label="account of current user"
-            aria-controls={menuId}
-            aria-haspopup="true"
-            onClick={handleLogout}
-            color="inherit"
-          >
-            <LogoutIcon />
-          </IconButton> */}
           </Toolbar>
         </AppBar>
         {renderMenu}
@@ -387,127 +482,3 @@ export default Navbar;
 function setLogoutDialogOpen(arg0: boolean) {
   throw new Error("Function not implemented.");
 }
-
-
-// import React, { useState } from "react";
-// import {
-//   AppBar,
-//   Toolbar,
-//   Typography,
-//   IconButton,
-//   Drawer,
-//   List,
-//   ListItem,
-//   ListItemText,
-//   Box,
-//   InputBase,
-//   useMediaQuery,
-//   useTheme,
-//   Button,
-// } from "@mui/material";
-// import { Menu as MenuIcon, Search as SearchIcon } from "@mui/icons-material";
-// import { Link as RouterLink } from "react-router-dom";
-// import { styled, alpha } from "@mui/material/styles";
-
-// const Search = styled("div")(({ theme }) => ({
-//   display: "flex",
-//   alignItems: "center",
-//   borderRadius: theme.shape.borderRadius,
-//   backgroundColor: alpha(theme.palette.common.white, 0.15),
-//   "&:hover": {
-//     backgroundColor: alpha(theme.palette.common.white, 0.25),
-//   },
-//   marginLeft: theme.spacing(1),
-//   marginRight: theme.spacing(1),
-//   width: "auto",
-//   [theme.breakpoints.up("sm")]: {
-//     width: "auto",
-//   },
-// }));
-
-// const StyledInputBase = styled(InputBase)(({ theme }) => ({
-//   color: "inherit",
-//   "& .MuiInputBase-input": {
-//     padding: theme.spacing(1, 1, 1, 2),
-//     transition: theme.transitions.create("width"),
-//     width: "120px",
-//     "&:focus": {
-//       width: "200px",
-//     },
-//   },
-// }));
-
-// const Navbar: React.FC = () => {
-//   const [mobileOpen, setMobileOpen] = useState(false);
-//   const theme = useTheme();
-//   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-
-//   const handleDrawerToggle = () => {
-//     setMobileOpen(!mobileOpen);
-//   };
-
-//   const drawer = (
-//     <div>
-//       <List>
-//         {["Men", "Women", "Boys", "Girls"].map((text, index) => (
-//           <ListItem button key={text} component={RouterLink} to={`/${text.toLowerCase()}`} onClick={handleDrawerToggle}>
-//             <ListItemText primary={text} />
-//           </ListItem>
-//         ))}
-//       </List>
-//     </div>
-//   );
-
-//   return (
-//     <AppBar position="static" sx={{ backgroundColor: "#724C31" }}>
-//       <Toolbar>
-//         {isMobile ? (
-//           <>
-//             <IconButton
-//               color="inherit"
-//               aria-label="open drawer"
-//               edge="start"
-//               onClick={handleDrawerToggle}
-//               sx={{ mr: 2, display: 'block' }}
-//             >
-//               <MenuIcon />
-//             </IconButton>
-//             <Typography variant="h6" noWrap sx={{ flexGrow: 1, display: 'block' }}>
-//               FashionFleet
-//             </Typography>
-//             <Drawer
-//               variant="temporary"
-//               anchor="left"
-//               open={mobileOpen}
-//               onClose={handleDrawerToggle}
-//               ModalProps={{
-//                 keepMounted: true, // Better open performance on mobile.
-//               }}
-//             >
-//               {drawer}
-//             </Drawer>
-//           </>
-//         ) : (
-//           <>
-//             <Typography variant="h6" noWrap sx={{ flexGrow: 1 }}>
-//               <RouterLink to="/home" style={{ textDecoration: "none", color: "inherit" }}>FashionFleet</RouterLink>
-//             </Typography>
-//             <Search>
-//               <SearchIcon />
-//               <StyledInputBase placeholder="Search…" inputProps={{ "aria-label": "search" }} />
-//             </Search>
-//             <Box sx={{ display: 'flex' }}>
-//               {["Men", "Women", "Boys", "Girls"].map((text) => (
-//                 <Button color="inherit" key={text} component={RouterLink} to={`/${text.toLowerCase()}`}>
-//                   {text}
-//                 </Button>
-//               ))}
-//             </Box>
-//           </>
-//         )}
-//       </Toolbar>
-//     </AppBar>
-//   );
-// };
-
-// export default Navbar;

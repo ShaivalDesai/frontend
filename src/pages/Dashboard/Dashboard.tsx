@@ -169,7 +169,7 @@ export default function Dashboard() {
 
   const handleGoToProfile = () => {
     setAnchorEl(null);
-    navigate("/profile");
+    navigate("/vendorprofile");
   };
 
   const handleProfileClick = (event: any) => {

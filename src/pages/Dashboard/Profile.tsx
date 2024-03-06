@@ -7,9 +7,13 @@ import {
   Typography,
   Container,
   MenuItem,
+  Avatar,
 } from "@mui/material";
 import axios from "axios";
 import { Country, State, City } from "country-state-city";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import Select from "react-select";
 import {
   validatezip,
@@ -68,11 +72,11 @@ const Vendor_Profile: React.FC = () => {
   const [countryOptions, setCountryOptions] = useState<any[]>([]);
   const [stateOptions, setStateOptions] = useState<any[]>([]);
   const [cityOptions, setCityOptions] = useState<any[]>([]);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isLocked, setIsLocked] = useState(true);
-
+  const [avatarImage, setAvatarImage] = useState<string>("");
   const [number2, setNumber2] = useState<string>("");
   const [address, setAddress] = useState<string>("");
-
   const [reg_number, setReg_number] = useState<string>("");
   const [errors, setErrors] = React.useState<Partial<FormData>>({});
 
@@ -212,13 +216,37 @@ const Vendor_Profile: React.FC = () => {
     setFormData({ ...formData, [name]: String(value) });
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log(formData);
-  };
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
 
-  const handleLockToggle = () => {
-    setIsLocked(!isLocked);
+    if (file) {
+      // Check file size (1MB = 1024 * 1024 bytes)
+      if (file.size > 1024 * 1024) {
+        toast.error("File size should be less than 1MB");
+        return;
+      }
+
+      const allowedTypes = [
+        "image/jpeg",
+        "image/heic",
+        "image/avif",
+        "image/png",
+      ];
+      if (!allowedTypes.includes(file.type)) {
+        toast.error("Only JPG, HEIC, and AVIF file types are allowed");
+        return;
+      }
+
+      setSelectedFile(file);
+      // Set the selected file as the source of the avatar image
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (reader.readyState === 2) {
+          setAvatarImage(reader.result as string);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -242,259 +270,290 @@ const Vendor_Profile: React.FC = () => {
     const hasErrors = Object.values(validationErrors).some((error) => !!error);
 
     if (!hasErrors) {
+      if (!selectedFile) {
+        toast.error("Please select a file");
+        return;
+      }
+
+      // Check file size (1MB = 1024 * 1024 bytes)
+      if (selectedFile.size > 1024 * 1024) {
+        toast.error("File size should be less than 1MB");
+        return;
+      }
+
+      // Check file type
+      const allowedTypes = ["image/jpeg", "image/heic", "image/avif"];
+      if (!allowedTypes.includes(selectedFile.type)) {
+        toast.error("Only JPG, HEIC, and AVIF file types are allowed");
+        return;
+      }
+
       try {
-        await axios.put("YOUR_API_ENDPOINT", {
-          user_update: {
-            name: formData.name,
-            email: formData.email,
-            number: parseInt(formData.number), // Assuming number is a string
-          },
-          vendor_update: {
-            address: formData.address,
-            city: formData.city,
-            state: formData.state,
-            country: formData.country,
-            pincode: parseInt(formData.pincode), // Assuming pincode is a string
-            address_2: formData.address_2,
-            number_2: parseInt(formData.pincode),
-            reg_number: parseInt(formData.reg_number), // Assuming number_2 is a string
-            est_date: formData.est_date,
+        const formDataToSubmit = new FormData();
+        formDataToSubmit.append("file", selectedFile);
+
+        // Add other form data fields if needed
+        Object.entries(formData).forEach(([key, value]) => {
+          formDataToSubmit.append(key, value);
+        });
+
+        await axios.put("YOUR_API_ENDPOINT", formDataToSubmit, {
+          headers: {
+            "Content-Type": "multipart/form-data",
           },
         });
         console.log("Data updated successfully");
-        // Optionally show a success message to the user
+        toast.success("Data updated successfully");
       } catch (error) {
         console.error("Error updating data:", error);
-        // Optionally show an error message to the user
+        toast.error("Failed to update data. Please try again later.");
       }
     }
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundImage: `url('p2.jpg')`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        minHeight: "100vh",
-      }}
-    >
-      <Container maxWidth="sm">
-        <Paper
-          elevation={3}
-          sx={{
-            padding: 4,
-            backgroundColor: "rgba(255,255,255,0.9)",
-            borderRadius: "25px",
-          }}
-        >
-          <Typography variant="h5" gutterBottom>
-            General Information
-          </Typography>
+    <>
+      <ToastContainer />
 
-          <Grid container spacing={2}>
-            <Grid item xs={6}>
-              <TextField
-                fullWidth
-                name="name"
-                label="Name"
-                value={formData.name}
-                onChange={handleChange}
-                // disabled={isLocked}
-              />
-              <div style={{ color: "red" }}>
-                {errors.name && <span>{errors.name}</span>}
-              </div>
-            </Grid>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundImage: `url('p2.jpg')`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          minHeight: "100vh",
+        }}
+      >
+        <Container maxWidth="sm">
+          <Paper
+            elevation={3}
+            sx={{
+              padding: 4,
+              backgroundColor: "rgba(255,255,255,0.9)",
+              borderRadius: "25px",
+            }}
+          >
+            <Avatar
+              alt="Profile Picture"
+              src={avatarImage}
+              sx={{
+                width: 100,
+                height: 100,
+                margin: "auto",
+                marginBottom: 2,
+              }}
+            />
 
-            <Grid item xs={6}>
-              <TextField
-                fullWidth
-                name="email"
-                label="Email"
-                type="email"
-                value={formData.email}
-                onChange={handleChange}
-                // disabled={isLocked}
-              />
-              <div style={{ color: "red" }}>
-                {errors.email && <span>{errors.email}</span>}
-              </div>
-            </Grid>
+            <Typography variant="h5" gutterBottom>
+              General Information
+            </Typography>
 
-            <Grid item xs={6}>
-              <TextField
-                fullWidth
-                label="Phone Number 1"
-                name="number"
-                value={formData.number}
-                onChange={handleChange}
-                inputProps={{ maxLength: 10 }}
-              />
-              <div style={{ color: "red" }}>
-                {errors.number && <span>{errors.number}</span>}
-              </div>
-            </Grid>
-            <Grid item xs={6}>
-              <TextField
-                // required
-                fullWidth
-                id="number2"
-                label="Phone Number 2"
-                name="number2"
-                value={number2}
-                // disabled={isLocked}
-                onChange={(e) => setNumber2(e.target.value)}
-                inputProps={{ maxLength: 10 }}
-              />
-            </Grid>
+            <Grid container spacing={2}>
+              <Grid item xs={6}>
+                <TextField
+                  fullWidth
+                  name="name"
+                  label="Name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  // disabled={isLocked}
+                />
+                <div style={{ color: "red" }}>
+                  {errors.name && <span>{errors.name}</span>}
+                </div>
+              </Grid>
 
-            <Grid item xs={6}>
-              <TextField
-                fullWidth
-                name="est_date"
-                type="date"
-                value={formData.est_date}
-                onChange={handleChange}
-                // disabled={isLocked}
-              />
-              <div style={{ color: "red" }}>
-                {errors.est_date && <span>{errors.est_date}</span>}
-              </div>
-            </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  fullWidth
+                  name="email"
+                  label="Email"
+                  type="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  // disabled={isLocked}
+                />
+                <div style={{ color: "red" }}>
+                  {errors.email && <span>{errors.email}</span>}
+                </div>
+              </Grid>
 
-            <Grid item xs={6}>
-              <TextField
-                // required
-                fullWidth
-                // id="reg_number"
-                label="Registration Number"
-                name="reg_number"
-                value={formData.reg_number}
-                onChange={handleChange}
-                inputProps={{ maxLength: 8 }}
-              />
-              <div style={{ color: "red" }}>
-                {errors.reg_number && <span>{errors.reg_number}</span>}
-              </div>
-            </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  fullWidth
+                  label="Phone Number 1"
+                  name="number"
+                  value={formData.number}
+                  onChange={handleChange}
+                  inputProps={{ maxLength: 10 }}
+                />
+                <div style={{ color: "red" }}>
+                  {errors.number && <span>{errors.number}</span>}
+                </div>
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  // required
+                  fullWidth
+                  id="number2"
+                  label="Phone Number 2"
+                  name="number2"
+                  value={number2}
+                  // disabled={isLocked}
+                  onChange={(e) => setNumber2(e.target.value)}
+                  inputProps={{ maxLength: 10 }}
+                />
+              </Grid>
 
-            <Grid item xs={12}>
-              <Typography
-                variant="h5"
-                style={{ marginBottom: -8 }}
-                gutterBottom
-              >
-                Address Details
-              </Typography>
-            </Grid>
-            <Grid item xs={6}>
-              <TextField
-                fullWidth
-                name="address"
-                label="Address 1"
-                value={formData.address}
-                onChange={handleChange}
-                // disabled={isLocked}
-              />
-              <div style={{ color: "red" }}>
-                {errors.address && <span>{errors.address}</span>}
-              </div>
-            </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  fullWidth
+                  name="est_date"
+                  type="date"
+                  value={formData.est_date}
+                  onChange={handleChange}
+                  // disabled={isLocked}
+                />
+                <div style={{ color: "red" }}>
+                  {errors.est_date && <span>{errors.est_date}</span>}
+                </div>
+              </Grid>
 
-            <Grid item xs={6}>
-              <TextField
-                fullWidth
-                name="pincode"
-                label="Pincode"
-                value={formData.pincode}
-                onChange={handleChange}
-                inputProps={{ maxLength: 6 }}
-                // disabled={isLocked}
-              />
-              <div style={{ color: "red" }}>
-                {errors.pincode && <span>{errors.pincode}</span>}
-              </div>
-            </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  // required
+                  fullWidth
+                  // id="reg_number"
+                  label="Registration Number"
+                  name="reg_number"
+                  value={formData.reg_number}
+                  onChange={handleChange}
+                  inputProps={{ maxLength: 8 }}
+                />
+                <div style={{ color: "red" }}>
+                  {errors.reg_number && <span>{errors.reg_number}</span>}
+                </div>
+              </Grid>
 
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                label="Address 2"
-                name="address_2"
-                value={formData.address_2}
-                onChange={handleChange}
-                // disabled={isLocked}
-              />
-            </Grid>
+              <Grid item xs={12}>
+                <Typography
+                  variant="h5"
+                  style={{ marginBottom: -8 }}
+                  gutterBottom
+                >
+                  Address Details
+                </Typography>
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  fullWidth
+                  name="address"
+                  label="Address 1"
+                  value={formData.address}
+                  onChange={handleChange}
+                  // disabled={isLocked}
+                />
+                <div style={{ color: "red" }}>
+                  {errors.address && <span>{errors.address}</span>}
+                </div>
+              </Grid>
 
-            <Grid item xs={4}>
-              <Select
-                options={countryOptions}
-                value={selectedCountry}
-                onChange={handleCountryChange}
-                styles={{
-                  control: (provided) => ({
-                    ...provided,
-                    backgroundColor: "transparent",
-                  }),
-                }}
-                menuPlacement="auto"
-                menuPosition="fixed"
-                menuPortalTarget={document.body}
-                // isDisabled={isLocked}
-              />
-              <div style={{ color: "red" }}>
-                {errors.country && <span>{errors.country}</span>}
-              </div>
-            </Grid>
-            <Grid item xs={4}>
-              <Select
-                options={stateOptions}
-                value={selectedState}
-                onChange={handleStateChange}
-                styles={{
-                  control: (provided) => ({
-                    ...provided,
-                    backgroundColor: "white",
-                  }),
-                }}
-                menuPlacement="auto"
-                menuPosition="fixed"
-                menuPortalTarget={document.body}
-                // isDisabled={isLocked}
-              />
-              <div style={{ color: "red" }}>
-                {errors.state && <span>{errors.state}</span>}
-              </div>
-            </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  fullWidth
+                  name="pincode"
+                  label="Pincode"
+                  value={formData.pincode}
+                  onChange={handleChange}
+                  inputProps={{ maxLength: 6 }}
+                  // disabled={isLocked}
+                />
+                <div style={{ color: "red" }}>
+                  {errors.pincode && <span>{errors.pincode}</span>}
+                </div>
+              </Grid>
 
-            <Grid item xs={4}>
-              <Select
-                options={cityOptions}
-                value={selectedCity}
-                onChange={handleCityChange}
-                styles={{
-                  control: (provided) => ({
-                    ...provided,
-                    backgroundColor: "white",
-                  }),
-                }}
-                menuPlacement="auto"
-                menuPosition="fixed"
-                menuPortalTarget={document.body}
-                // isDisabled={isLocked}
-              />
-              <div style={{ color: "red" }}>
-                {errors.city && <span>{errors.city}</span>}
-              </div>
-            </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  label="Address 2"
+                  name="address_2"
+                  value={formData.address_2}
+                  onChange={handleChange}
+                  // disabled={isLocked}
+                />
+              </Grid>
 
-            <Grid item xs={12}>
-              {/* <Button
+              <Grid item xs={4}>
+                <Select
+                  options={countryOptions}
+                  value={selectedCountry}
+                  onChange={handleCountryChange}
+                  styles={{
+                    control: (provided) => ({
+                      ...provided,
+                      backgroundColor: "transparent",
+                    }),
+                  }}
+                  menuPlacement="auto"
+                  menuPosition="fixed"
+                  menuPortalTarget={document.body}
+                  // isDisabled={isLocked}
+                />
+                <div style={{ color: "red" }}>
+                  {errors.country && <span>{errors.country}</span>}
+                </div>
+              </Grid>
+              <Grid item xs={4}>
+                <Select
+                  options={stateOptions}
+                  value={selectedState}
+                  onChange={handleStateChange}
+                  styles={{
+                    control: (provided) => ({
+                      ...provided,
+                      backgroundColor: "white",
+                    }),
+                  }}
+                  menuPlacement="auto"
+                  menuPosition="fixed"
+                  menuPortalTarget={document.body}
+                  // isDisabled={isLocked}
+                />
+                <div style={{ color: "red" }}>
+                  {errors.state && <span>{errors.state}</span>}
+                </div>
+              </Grid>
+
+              <Grid item xs={4}>
+                <Select
+                  options={cityOptions}
+                  value={selectedCity}
+                  onChange={handleCityChange}
+                  styles={{
+                    control: (provided) => ({
+                      ...provided,
+                      backgroundColor: "white",
+                    }),
+                  }}
+                  menuPlacement="auto"
+                  menuPosition="fixed"
+                  menuPortalTarget={document.body}
+                  // isDisabled={isLocked}
+                />
+                <div style={{ color: "red" }}>
+                  {errors.city && <span>{errors.city}</span>}
+                </div>
+              </Grid>
+
+              <Grid item xs={12}>
+                <input type="file" onChange={handleFileChange} />
+              </Grid>
+
+              <Grid item xs={12}>
+                {/* <Button
                   type="submit"
                   onClick={handleLockToggle}
                   variant="contained"
@@ -502,16 +561,17 @@ const Vendor_Profile: React.FC = () => {
                 >
                   {isLocked ? "Update" : "Save"}
                 </Button> */}
-              <form onSubmit={handleRegister}>
-                <Button type="submit" variant="contained" color="primary">
-                  Save
-                </Button>
-              </form>
+                <form onSubmit={handleRegister}>
+                  <Button type="submit" variant="contained" color="primary">
+                    Save
+                  </Button>
+                </form>
+              </Grid>
             </Grid>
-          </Grid>
-        </Paper>
-      </Container>
-    </div>
+          </Paper>
+        </Container>
+      </div>
+    </>
   );
 };
 
