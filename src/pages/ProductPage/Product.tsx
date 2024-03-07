@@ -1,14 +1,13 @@
-import React from 'react';
-import './App.css';
+import React from "react";
+import "./App.css";
 // import SingleProductPage from '../ProductPage/SingleProduct';
-import SingleProductPage from './ProductList';
-import Navbar from '../Home/Navbar';
+import ProductPage from "./ProductList";
+import Navbar from "../Home/Navbar";
 
 function App() {
   return (
     <div>
-    
-      <SingleProductPage />
+      <ProductPage />
     </div>
   );
 }

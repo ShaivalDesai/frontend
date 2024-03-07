@@ -89,7 +89,7 @@ const dummyProducts: Product[] = [
   },
 ];
 
-const SingleProductPage = () => {
+const ProductPage = () => {
   const [likedProducts, setLikedProducts] = useState<number[]>([]);
   const navigate = useNavigate(); 
   const toggleLike = (productId: number) => {
@@ -154,5 +154,5 @@ const SingleProductPage = () => {
   );
 };
 
-export default SingleProductPage;
+export default ProductPage;
 

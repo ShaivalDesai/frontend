@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import ProductCard from "./ProductCard";
 import ImageCarousel from "./Image";
 import Navbar from "./Navbar";
-import MyCard from "./ProductCard"; // Assuming MyCard is your card component
+import MyCard from "./ProductCard"; 
 import ImageCarousel1 from "./ImageCarousel";
 import PopupOffer from "./Popup";
 
