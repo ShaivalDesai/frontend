@@ -87,7 +87,7 @@ const Navbar: React.FC = () => {
   const handleSearch = async () => {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8000/search/?query=${searchQuery}`
+        `http://127.0.0.1:8000/products/?category=${searchQuery}`
       );
       setSearchResults(response.data);
     } catch (error) {
@@ -247,7 +247,7 @@ const Navbar: React.FC = () => {
                 }}
                 color="inherit"
                 component={RouterLink}
-                to="/product"
+                to={{ pathname: "/product", search: "?category=men" }} 
               >
                 Men
               </Button>
@@ -259,7 +259,7 @@ const Navbar: React.FC = () => {
                 }}
                 color="inherit"
                 component={RouterLink}
-                to="/product"
+                to={{ pathname: "/product", search: "?category=women" }} 
               >
                 Women
               </Button>
@@ -271,7 +271,7 @@ const Navbar: React.FC = () => {
                 }}
                 color="inherit"
                 component={RouterLink}
-                to="/product"
+                to={{ pathname: "/product", search: "?category=boys" }} 
               >
                 Boys
               </Button>
@@ -283,7 +283,7 @@ const Navbar: React.FC = () => {
                 }}
                 color="inherit"
                 component={RouterLink}
-                to="/product"
+                to={{ pathname: "/product", search: "?category=girls" }} 
               >
                 Girls
               </Button>

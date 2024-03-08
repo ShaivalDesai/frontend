@@ -59,11 +59,11 @@ const HomePage: React.FC = () => {
           justifyContent: "space-around",
         }}
       >
-        <MyCard image="anouk2.jpg" title="ANOUK" color="white" />
-        <MyCard image="biba.png" title="BIBA" color="white" />
-        <MyCard image="libas.jpg" title="LIBAS" color="white" />
-        <MyCard image="gd.jpg" title="GLOBAL DESI" color="white" />
-        <MyCard image="shree.png" title="SHREE" color="white" />
+        <MyCard image_base64="anouk2.jpg" title="ANOUK" color="white" />
+        <MyCard image_base64="biba.png" title="BIBA" color="white" />
+        <MyCard image_base64="libas.jpg" title="LIBAS" color="white" />
+        <MyCard image_base64="gd.jpg" title="GLOBAL DESI" color="white" />
+        <MyCard image_base64="shree.png" title="SHREE" color="white" />
       </div>
       <div
         style={{
@@ -73,11 +73,11 @@ const HomePage: React.FC = () => {
           marginTop: "20px",
         }}
       >
-        <MyCard image="fi.png" title="FABINDIA" color="white" />
-        <MyCard image="s2.jpg" title="SOJANYA" color="white" />
-        <MyCard image="sangria.jpg" title="SANGRIA" color="white" />
-        <MyCard image="vastramay2.webp" title="VASTRAMAY " color="white" />
-        <MyCard image="deyan2.png" title="DEYANN " color="white" />
+        <MyCard image_base64="fi.png" title="FABINDIA" color="white" />
+        <MyCard image_base64="s2.jpg" title="SOJANYA" color="white" />
+        <MyCard image_base64="sangria.jpg" title="SANGRIA" color="white" />
+        <MyCard image_base64="vastramay2.webp" title="VASTRAMAY " color="white" />
+        <MyCard image_base64="deyan2.png" title="DEYANN " color="white" />
       </div>
     </>
   );

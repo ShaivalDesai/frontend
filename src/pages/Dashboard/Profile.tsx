@@ -251,7 +251,7 @@ const Vendor_Profile: React.FC = () => {
 
   const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+  
     const validationErrors: Partial<FormData> = {
       name: validateName(formData.name),
       email: validateEmail(formData.email),
@@ -264,39 +264,38 @@ const Vendor_Profile: React.FC = () => {
       city: validateCity(formData.city),
       reg_number: validatereg(formData.reg_number),
     };
-
+  
     setErrors(validationErrors);
-
+  
     const hasErrors = Object.values(validationErrors).some((error) => !!error);
-
+  
     if (!hasErrors) {
-      if (!selectedFile) {
-        toast.error("Please select a file");
-        return;
-      }
-
-      // Check file size (1MB = 1024 * 1024 bytes)
-      if (selectedFile.size > 1024 * 1024) {
-        toast.error("File size should be less than 1MB");
-        return;
-      }
-
-      // Check file type
-      const allowedTypes = ["image/jpeg", "image/heic", "image/avif"];
-      if (!allowedTypes.includes(selectedFile.type)) {
-        toast.error("Only JPG, HEIC, and AVIF file types are allowed");
-        return;
-      }
-
       try {
         const formDataToSubmit = new FormData();
-        formDataToSubmit.append("file", selectedFile);
-
-        // Add other form data fields if needed
+  
+        // Add file if selected
+        if (selectedFile) {
+          // Check file size (1MB = 1024 * 1024 bytes)
+          if (selectedFile.size > 1024 * 1024) {
+            toast.error("File size should be less than 1MB");
+            return;
+          }
+  
+          // Check file type
+          const allowedTypes = ["image/jpeg", "image/heic", "image/avif"];
+          if (!allowedTypes.includes(selectedFile.type)) {
+            toast.error("Only JPG, HEIC, and AVIF file types are allowed");
+            return;
+          }
+  
+          formDataToSubmit.append("file", selectedFile);
+        }
+  
+        // Add other form data fields
         Object.entries(formData).forEach(([key, value]) => {
           formDataToSubmit.append(key, value);
         });
-
+  
         await axios.put("YOUR_API_ENDPOINT", formDataToSubmit, {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -310,6 +309,7 @@ const Vendor_Profile: React.FC = () => {
       }
     }
   };
+  
 
   return (
     <>

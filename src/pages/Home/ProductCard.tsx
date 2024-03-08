@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 interface MyCardProps {
-  image: string; // Image URL
+  image_base64: string; // Image URL
   title: string; // Title text
   color: string; // Color for text and background
 }
@@ -34,10 +34,10 @@ const overlayStyle: React.CSSProperties = {
   transition: "opacity 0.3s ease-in-out",
 };
 
-const MyCard: React.FC<MyCardProps> = ({ image, title, color }) => {
+const MyCard: React.FC<MyCardProps> = ({ image_base64, title, color }) => {
   const dynamicCardStyle: React.CSSProperties = {
     ...cardStyle,
-    backgroundImage: `url(${image})`,
+    backgroundImage: `url(${image_base64})`,
     backgroundColor: color,
   };
 
