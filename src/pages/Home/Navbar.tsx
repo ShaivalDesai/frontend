@@ -87,7 +87,7 @@ const Navbar: React.FC = () => {
   const handleSearch = async () => {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8000/products/?category=${searchQuery}`
+        `http://127.0.0.1:8000/products/?brand=${searchQuery}`
       );
       setSearchResults(response.data);
     } catch (error) {

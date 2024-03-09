@@ -9,10 +9,11 @@ import Vendor_Profile from "./pages/Dashboard/Profile";
 import Home_Profile from "./pages/Home/Home_Profile";
 import Wishlist from "./pages/Home/Whishlist/Whishlist";
 import SingleProductPage from "./pages/ProductPage/ProductList";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Protected from "./pages/Protected/ProtectedRoute";
 import SingleProduct from "./pages/ProductPage/SingleProduct";
+// import BrandProduct from "./pages/Home/BrandProduct";
 
 function App() {
   const navigate = useNavigate();
@@ -38,12 +39,13 @@ function App() {
         <Route path="/login" element={<AuthPage />} />
         <Route path="/vendorprofile" element={<Vendor_Profile />} />
         <Route path="/product" element={<SingleProductPage />} />
+        <Route path="/brand" element={<SingleProductPage />} />
         <Route path="/home" element={<HomePage />} />
         <Route path="/dashboard" element={<MainPage />} />
         <Route path="/profile" element={<Home_Profile />} />
         <Route path="/RegisterUser" element={<RegistrationUser />} />
-        <Route path="/whishlist" element={<Wishlist />} /> 
-        <Route path="/single" element={<SingleProduct />} /> 
+        <Route path="/whishlist" element={<Wishlist />} />
+        <Route path="/single" element={<SingleProduct />} />
         {/* <Route path="/cart" element={<CartPage products={[]} />} />
 
         {/* <Route path="/" element={<Navigate to="/login" replace />} />
