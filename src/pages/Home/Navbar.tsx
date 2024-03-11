@@ -10,12 +10,12 @@ import {
   Box,
   InputBase,
   ListItemIcon,
-  MenuList,
   Popover,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
+  MenuList,
 } from "@mui/material";
 import LogoutIcon from "@mui/icons-material/Logout";
 import {
@@ -29,6 +29,7 @@ import axios from "axios";
 import { styled, alpha } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import CallIcon from "@mui/icons-material/Call";
 import PersonIcon from "@mui/icons-material/Person";
 
 const Search = styled("div")(({ theme }) => ({
@@ -76,7 +77,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 const Navbar: React.FC = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
+  const [logoutDialogOpen, setLogoutDialogOpen] = useState(false); // State variable for controlling logout dialog visibility
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const isMenuOpen = Boolean(anchorEl);
@@ -87,7 +88,7 @@ const Navbar: React.FC = () => {
   const handleSearch = async () => {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8000/products/?brand=${searchQuery}`
+        `http://127.0.0.1:8000/products/?search=${searchQuery}`
       );
       setSearchResults(response.data);
     } catch (error) {
@@ -140,12 +141,16 @@ const Navbar: React.FC = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    navigate("/login");
+    setLogoutDialogOpen(true); // Open logout dialog when the user clicks logout
   };
 
   const handleLogoutConfirm = () => {
-    setLogoutDialogOpen(false);
+    setLogoutDialogOpen(false); // Close logout dialog
     navigate("/login");
+  };
+
+  const handleLogoutCancel = () => {
+    setLogoutDialogOpen(false); // Close logout dialog when the user cancels
   };
 
   const wishlist = () => {
@@ -174,10 +179,6 @@ const Navbar: React.FC = () => {
     navigate("/profile");
   };
 
-  const handleLogoutCancel = () => {
-    setLogoutDialogOpen(false);
-  };
-
   const openProfile = Boolean(anchorEl);
   const profileId = openProfile ? "profile-popover" : undefined;
 
@@ -198,7 +199,7 @@ const Navbar: React.FC = () => {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+      <MenuItem onClick={handleMenuClose}></MenuItem>
     </Menu>
   );
 
@@ -247,7 +248,7 @@ const Navbar: React.FC = () => {
                 }}
                 color="inherit"
                 component={RouterLink}
-                to={{ pathname: "/product", search: "?category=men" }} 
+                to={{ pathname: "/product", search: "?category=men" }}
               >
                 Men
               </Button>
@@ -259,7 +260,7 @@ const Navbar: React.FC = () => {
                 }}
                 color="inherit"
                 component={RouterLink}
-                to={{ pathname: "/product", search: "?category=women" }} 
+                to={{ pathname: "/product", search: "?category=women" }}
               >
                 Women
               </Button>
@@ -271,7 +272,7 @@ const Navbar: React.FC = () => {
                 }}
                 color="inherit"
                 component={RouterLink}
-                to={{ pathname: "/product", search: "?category=boys" }} 
+                to={{ pathname: "/product", search: "?category=boys" }}
               >
                 Boys
               </Button>
@@ -283,7 +284,7 @@ const Navbar: React.FC = () => {
                 }}
                 color="inherit"
                 component={RouterLink}
-                to={{ pathname: "/product", search: "?category=girls" }} 
+                to={{ pathname: "/product", search: "?category=girls" }}
               >
                 Girls
               </Button>
@@ -340,7 +341,7 @@ const Navbar: React.FC = () => {
                     key={index}
                     onClick={() => {
                       handleSearchResultClick(result);
-                      setShowDropdown(false); // Close dropdown after selecting an item
+                      setShowDropdown(false);
                     }}
                   >
                     {result.title}
@@ -348,6 +349,7 @@ const Navbar: React.FC = () => {
                 ))}
               </Box>
             )}
+
             <Button
               style={{
                 fontSize: "1.10rem",
@@ -370,27 +372,17 @@ const Navbar: React.FC = () => {
             >
               Cart
             </Button>
-            <Button
-              style={{
-                fontSize: "1.10rem",
-                color: "inherit",
-                fontFamily: "'Protest Riot', sans-serif",
-              }}
-              color="inherit"
-              component={RouterLink}
-              to="/contact"
-            >
-              Contact
-            </Button>
+
             <IconButton
               color="inherit"
-              aria-label="profile"
+              title=""
               edge="end"
               onClick={handleProfileClick}
               style={{ marginRight: "10px" }}
             >
               <AccountCircle fontSize="large" />
             </IconButton>
+
             <Popover
               id={profileId}
               open={openProfile}
@@ -411,6 +403,12 @@ const Navbar: React.FC = () => {
                     <PersonIcon fontSize="small" />
                   </ListItemIcon>
                   Profile
+                </MenuItem>
+                <MenuItem onClick={handleGoToProfile}>
+                  <ListItemIcon>
+                    <CallIcon fontSize="small" />
+                  </ListItemIcon>
+                  Contact
                 </MenuItem>
                 <MenuItem onClick={handleLogout}>
                   <ListItemIcon>
@@ -472,13 +470,9 @@ const Navbar: React.FC = () => {
             </Dialog>
           </Toolbar>
         </AppBar>
-        {renderMenu}
       </Box>
     </>
   );
 };
 
 export default Navbar;
-function setLogoutDialogOpen(arg0: boolean) {
-  throw new Error("Function not implemented.");
-}
