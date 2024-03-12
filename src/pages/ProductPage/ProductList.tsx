@@ -907,11 +907,10 @@
 //   );
 // };
 
-// export default ProductPag
-
+// export default ProductPage
 
 import React, { useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import {
   Card,
@@ -964,6 +963,12 @@ const CustomCardMedia = styled(CardMedia)({
   },
 });
 
+
+
+
+
+
+
 const ProductNameTypography = styled(Typography)({
   whiteSpace: "nowrap",
   overflow: "hidden",
@@ -979,6 +984,10 @@ const ProductPage: React.FC<ProductPageProps> = ({ cart, setCart }) => {
   const productsPerPage = 16;
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+
+  const handleCardClick = (productId: number) => {
+    navigate("/single", { state: { productId } });
+  };
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -1033,19 +1042,6 @@ const ProductPage: React.FC<ProductPageProps> = ({ cart, setCart }) => {
     });
   };
 
-  // const handleAddToCart = (productId: number) => {
-  //   const selectedProduct = products.find((product) => product.id === productId);
-  //   if (selectedProduct) {
-  //     setCart((prevCart: Product[]) => [...prevCart, selectedProduct]);
-  //     console.log("Added product to cart:", selectedProduct);
-  //   }
-  // };
-
-  // const handleAddToCart = (selectedProduct: Product) => {
-  //   setCart((prevCart: Product[]) => [...prevCart, selectedProduct]);
-  //   console.log("Added product to cart:", selectedProduct);
-  // };
-
   const handleAddToCart = (selectedProduct: Product) => {
     const isProductInCart = cart.some(
       (item) =>
@@ -1070,7 +1066,8 @@ const ProductPage: React.FC<ProductPageProps> = ({ cart, setCart }) => {
           {currentProducts.map((product, index) => (
             <Grid item xs={12} sm={6} md={4} lg={3} key={product.id}>
               <CustomCard>
-                <CardActionArea>
+                <CardActionArea  onClick={() => handleCardClick(product.id)}>
+                {/* to="/single<Link " style={{ textDecoration: 'none' }}> */}
                   <CardMedia
                     component="img"
                     src={`data:image/jpeg;base64,${product.image_base64}`}
@@ -1094,7 +1091,12 @@ const ProductPage: React.FC<ProductPageProps> = ({ cart, setCart }) => {
                     <Typography variant="body1" color="text.secondary">
                       Price: ₹{product.price.toFixed(2)}
                     </Typography>
-                    <Box mt={2} textAlign="center">
+                   
+                  </CardContent>
+                 
+                   {/* </Link> */}
+                </CardActionArea>
+                <Box mt={2} textAlign="center">
                       <Button
                         variant="contained"
                         color="primary"
@@ -1104,8 +1106,6 @@ const ProductPage: React.FC<ProductPageProps> = ({ cart, setCart }) => {
                         Add to Cart
                       </Button>
                     </Box>
-                  </CardContent>
-                </CardActionArea>
               </CustomCard>
             </Grid>
           ))}
