@@ -89,6 +89,7 @@ import ProductPage from "./pages/ProductPage/ProductList";
 import { useNavigate } from "react-router-dom";
 import CartPage from "./pages/Home/Cart/Cartpage";
 import SingleProduct from "./pages/ProductPage/SingleProduct";
+import Vendor_Profile from "./pages/Dashboard/Profile";
 
 interface Product {
   id: number;
@@ -111,6 +112,7 @@ function App() {
         {/* <Route path="/product" element={<ProductPage />} /> */}
         <Route path="/home" element={<HomePage />} />
         <Route path="/dashboard" element={<MainPage />} />
+        <Route path="/vendorprofile" element={<Vendor_Profile />} />
         <Route
           path="/brand"
           element={<SingleProductPage cart={cart} setCart={setCart} />}

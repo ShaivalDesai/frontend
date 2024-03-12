@@ -73,7 +73,7 @@ const MainListItems = () => {
       item.onClick();
     }
     if (item.primaryText === "Profile") {
-      navigate("/profile");
+      navigate("/vendorprofile");
     }
   };
 
