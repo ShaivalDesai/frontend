@@ -83,16 +83,16 @@ import MainPage from "./pages/Dashboard/MainPage";
 import HomePage from "./pages/Home/HomePage";
 import Home_Profile from "./pages/Home/Home_Profile";
 import Wishlist from "./pages/Home/Whishlist/Whishlist";
-// import ProductPage from "./pages/ProductPage/ProductPage";
-// Import the modified ProductPage
+
 import ProductPage from "./pages/ProductPage/ProductList";
 import { useNavigate } from "react-router-dom";
 import CartPage from "./pages/Home/Cart/Cartpage";
+import WishlistPage from "./pages/Home/Whishlist/WishlistPage";
 import SingleProduct from "./pages/ProductPage/SingleProduct";
 import Vendor_Profile from "./pages/Dashboard/Profile";
 
 interface Product {
-  id: number;
+  product_id: number;
   product_type: string;
   brand: string;
   price: number;
@@ -102,36 +102,32 @@ interface Product {
 
 function App() {
   const navigate = useNavigate();
+  const [wishlist, setWishlist] = useState<Product[]>([]);
   const [cart, setCart] = useState<Product[]>([]);
-
   return (
     <>
       <Routes>
         <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/login" element={<AuthPage />} />
-        {/* <Route path="/product" element={<ProductPage />} /> */}
+
         <Route path="/home" element={<HomePage />} />
         <Route path="/dashboard" element={<MainPage />} />
         <Route path="/vendorprofile" element={<Vendor_Profile />} />
         <Route
           path="/brand"
-          element={<SingleProductPage cart={cart} setCart={setCart} />}
+          element={<SingleProductPage wishlist={wishlist} setWishlist={setWishlist} />}
         />
         <Route path="/single" element={<SingleProduct />} />
         <Route path="/profile" element={<Home_Profile />} />
         <Route path="/RegisterUser" element={<RegistrationUser />} />
-        <Route path="/whishlist" element={<Wishlist />} />
+
         <Route
           path="/product"
-          element={<ProductPage cart={cart} setCart={setCart} />}
-        />{" "}
-        Pass cart and setCart to ProductPage
-        {/* <Route path="/cart" element={<CartPage cart={cart} />} /> */}
-        {/* <Route path="/cart" element={<CartPage />} /> */}
-        <Route path="/cart" element={<CartPage cart={cart} />} />
+          element={<ProductPage wishlist={wishlist} setWishlist={setWishlist} />}
+        />
 
-
-
+<Route path="/wishlist" element={<WishlistPage wishlist={wishlist} />} />
+        <Route path="/cart" element={<CartPage/>} />
       </Routes>
     </>
   );

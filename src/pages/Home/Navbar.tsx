@@ -155,7 +155,7 @@ const Navbar: React.FC = () => {
 
   const wishlist = () => {
     // setLogoutDialogOpen(false);
-    navigate("/whishlist");
+    navigate("/wishlist");
   };
 
   const cart = () => {

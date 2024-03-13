@@ -1,65 +1,16 @@
-import React, { useState } from "react";
-import { Button, Grid, Typography } from "@mui/material";
-import ProductCard, { Product } from "./WishlistProductCard";
-import { Link, useNavigate } from "react-router-dom";
-import WishlistNavbar from "./WishlistNavbar";
+import React from "react";
+import { Grid, Typography } from "@mui/material";
+import ProductCard, { Product } from "./WhishlistProductCard";
 
-const Wishlist: React.FC = () => {
-  const [wishlist, setWishlist] = useState<Product[]>([
-    {
-      id: 1,
-      name: "Product 1",
-      description: "Description of Product 1",
-      image: "./bg2.jpg",
-      price: 500,
-    },
-    {
-      id: 2,
-      name: "Product 2",
-      description: "Description of Product 2",
-      image: "./bg4.jpg",
-      price: 500,
-    },
-    {
-      id: 3,
-      name: "Product 3",
-      description: "Description of Product 3",
-      image: "./bg4.jpg",
-      price: 500,
-    },
-    {
-      id: 4,
-      name: "Product 3",
-      description: "Description of Product 3",
-      image: "./bg4.jpg",
-      price: 500,
-    },
-  ]);
+interface CartProps {
+  wishlist: Product[];
+}
 
-  const [cart, setCart] = useState<Product[]>([]);
-  const navigate = useNavigate();
+const handleRemove = (productId: number) => {};
 
-  const handleRemoveFromWishlist = (productId: number) => {
-    // Filter out the product with the given productId from the wishlist
-    const updatedWishlist = wishlist.filter(
-      (product) => product.id !== productId
-    );
-    setWishlist(updatedWishlist);
-  };
+const handleAddToWishlist = (productId: number) => {};
 
-  const handleAddToCart = (productId: number) => {
-    // Find the product with the given productId in the wishlist
-    const productToAdd = wishlist.find((product) => product.id === productId);
-    if (productToAdd) {
-      // Update cart state
-      setCart([...cart, productToAdd]);
-      // Remove product from wishlist
-      handleRemoveFromWishlist(productId);
-      // Navigate to Cart page
-      navigate("/cart");
-    }
-  };
-
+const wishlist: React.FC<CartProps> = ({ wishlist }) => {
   return (
     <>
       <head>
@@ -68,7 +19,6 @@ const Wishlist: React.FC = () => {
           rel="stylesheet"
         />
       </head>
-      {/* <WishlistNavbar /> */}
       <div
         style={{
           textAlign: "center",
@@ -95,43 +45,24 @@ const Wishlist: React.FC = () => {
               WebkitTextFillColor: "transparent",
             }}
           >
-            My Wishlist
+            My wishlist
           </Typography>
 
           <Grid container spacing={3} justifyContent="center">
             {wishlist.map((product) => (
-              <Grid item key={product.id} xs={12} sm={6} md={4} lg={3}>
+              <Grid item key={product.product_id} xs={12} sm={6} md={4} lg={3}>
                 <ProductCard
                   product={product}
-                  onRemove={handleRemoveFromWishlist}
-                  onAddToCart={handleAddToCart} // Pass the addToCart function as prop
+                  onRemove={handleRemove}
+                  onAdd={handleAddToWishlist}
                 />
               </Grid>
             ))}
           </Grid>
-
-          <Button
-            component={Link}
-            to="/home"
-            variant="contained"
-            color="primary"
-            sx={{
-              marginTop: "20px",
-              background:
-                "linear-gradient(45deg, #8B4513 30%, #5D4037 60%, #BCAAA4 90%)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-            }}
-          >
-            Add Product
-          </Button>
         </div>
       </div>
     </>
   );
 };
 
-export default Wishlist;
-
-
-
+export default wishlist;

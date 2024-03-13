@@ -341,7 +341,7 @@ const ImageCarousel: React.FC = () => {
           overflowX: "auto",
           gap: "20px",
           padding: "20px",
-          height: "480px", 
+          height: "480px",
         }}
       >
         {products.recommendations.map((product) => (
@@ -395,7 +395,7 @@ const ImageCarousel: React.FC = () => {
 
       {/* Trending Products section */}
 
-      <Typography 
+      <Typography
         variant="h4"
         sx={{
           textAlign: "center",

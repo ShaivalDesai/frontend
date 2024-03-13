@@ -1,6 +1,9 @@
 import React from "react";
 import { Grid, Typography } from "@mui/material";
-import ProductCard, { Product } from "../Whishlist/WishlistProductCard";
+import ProductCard, { Product } from "../Whishlist/WhishlistProductCard";
+// import Product from "../../ProductPage/Product";
+// import ProductCard, { Product } from "../Whishlist/WishlistProductCard";
+
 
 interface CartProps {
   cart: Product[];
@@ -54,11 +57,11 @@ const Cart: React.FC<CartProps> = ({ cart }) => {
 
           <Grid container spacing={3} justifyContent="center">
             {cart.map((product) => (
-              <Grid item key={product.id} xs={12} sm={6} md={4} lg={3}>
+              <Grid item key={product.product_id} xs={12} sm={6} md={4} lg={3}>
                 <ProductCard 
                 product={product}
                 onRemove={handleRemove}
-                onAddToCart={handleAddToCart}
+                onAdd={handleAddToCart}
                 />
               </Grid>
             ))}

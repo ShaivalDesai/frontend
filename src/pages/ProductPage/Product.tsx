@@ -5,7 +5,7 @@ import ProductPage from "./ProductList";
 import Navbar from "../Home/Navbar";
 
 interface Product {
-  id: number;
+  product_id: number;
   product_type: string;
   brand: string;
   price: number;
@@ -16,7 +16,7 @@ const [cart, setCart] = useState<Product[]>([]);
 function App() {
   return (
     <div>
-      <ProductPage cart={cart} setCart={setCart} />
+      <ProductPage wishlist={cart} setWishlist={setCart} />
       {/* <ProductPage/> */}
     </div>
   );
