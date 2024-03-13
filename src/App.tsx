@@ -90,6 +90,9 @@ import CartPage from "./pages/Home/Cart/Cartpage";
 import WishlistPage from "./pages/Home/Whishlist/WishlistPage";
 import SingleProduct from "./pages/ProductPage/SingleProduct";
 import Vendor_Profile from "./pages/Dashboard/Profile";
+import { ThemeProvider } from "./Components/DarkMode";
+import ManageProduction from "./pages/Dashboard/ManageProduction";
+
 
 interface Product {
   product_id: number;
@@ -106,9 +109,11 @@ function App() {
   const [cart, setCart] = useState<Product[]>([]);
   return (
     <>
+     <ThemeProvider>
       <Routes>
         <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/login" element={<AuthPage />} />
+        <Route path="/manage" element={<ManageProduction />} />
 
         <Route path="/home" element={<HomePage />} />
         <Route path="/dashboard" element={<MainPage />} />
@@ -129,6 +134,7 @@ function App() {
 <Route path="/wishlist" element={<WishlistPage wishlist={wishlist} />} />
         <Route path="/cart" element={<CartPage/>} />
       </Routes>
+      </ThemeProvider>
     </>
   );
 }
