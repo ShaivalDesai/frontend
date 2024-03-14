@@ -18,6 +18,18 @@ import {
   DialogActions,
   Button,
 } from "@mui/material";
+import DashboardCards from "./Cards2";
+import ProductGrid from "../../Components/ProductGrid";
+// import ProductGrid from "../../Components/ProductGrid";
+// import ProductCard from "../../Components/ProductGrid";
+
+interface Product {
+  product_id: number;
+  product_type: string;
+  brand: string;
+  price: number;
+  photo: string[];
+}
 
 const defaultTheme = createTheme();
 
@@ -49,8 +61,16 @@ const ManageProduction = () => {
   const [open, setOpen] = useState(true);
   const [anchorEl, setAnchorEl] = useState(null);
   const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
+
+  const [selectedAction, setSelectedAction] = useState<string | null>(null);
+  const [productList, setProductList] = useState<Product[]>([]);
+
+  const handleCardClick = (action: string) => {
+    setSelectedAction(action);
+  };
 
   const toggleDrawer = () => {
     setOpen(!open);
@@ -82,11 +102,43 @@ const ManageProduction = () => {
     setLogoutDialogOpen(false);
   };
 
+  const handleViewProduct = async () => {
+    try {
+      const id = 1;
+      const response = await fetch("http://127.0.0.1:8000/view/" + id);
+      const data = await response.json();
+
+      if (typeof data === "object") {
+        // Convert object to array of products
+        const formattedData = Object.values(data).map((product: any) => ({
+          product_id: product.product_id,
+          product_type: product.product_type,
+          brand: product.brand,
+          price: product.price,
+          photo: [product.photo], // Assuming 'photo' is the base64 encoded image
+        }));
+        setProductList(formattedData);
+        setSelectedAction("View Product");
+      } else {
+        console.error("Invalid response format:", data);
+      }
+    } catch (error) {
+      console.error("Error fetching product list:", error);
+    }
+  };
+
   const openProfile = Boolean(anchorEl);
   const profileId = openProfile ? "profile-popover" : undefined;
 
   return (
     <>
+      <head>
+        <link
+          href="https://fonts.googleapis.com/css2?family=Protest+Riot:wght@400;700&display=swap"
+          rel="stylesheet"
+        />
+      </head>
+
       <ThemeProvider theme={defaultTheme}>
         <StyledAppBar open={open}>
           <Toolbar
@@ -207,9 +259,56 @@ const ManageProduction = () => {
             </Dialog>
           </Toolbar>
         </StyledAppBar>
-        <div style={{ flexGrow: 1, marginTop: "64px" }}>
-          {/* Your content here */}
+
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "center", // Center horizontally
+            alignItems: "center", // Center vertically (if applicable)
+            gap: "20px",
+            flexWrap: "wrap", // Allow wrapping
+            paddingTop: "80px", // Adjust based on AppBar height
+            margin: "0 auto", // Center the container itself
+            maxWidth: "90%", 
+          }}
+        >
+          <DashboardCards name="View Product" onClick={handleViewProduct} />
+          <DashboardCards name="Add Product" />
+          <DashboardCards
+            name="Update Product"
+            onClick={() => handleCardClick("Update Product")}
+          />
+          <DashboardCards
+            name="Delete Product"
+            onClick={() => handleCardClick("Delete Product")}
+          />
         </div>
+        {selectedAction && selectedAction === "View Product" && (
+          <div style={{ marginTop: "20px" }}>
+            <Typography
+              variant="h4"
+              sx={{
+                textAlign: "center",
+                fontFamily: "'Protest Riot', sans-serif",
+                fontWeight: "bold",
+                fontSize: "60px",
+                color: "red",
+                background:
+                  "linear-gradient(45deg, #8B4513 30%, #5D4037 60%, #BCAAA4 90%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+            >
+              View Products
+            </Typography>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "20px" }}>
+              {productList.map((product, index) => (
+                <ProductGrid key={index} product={product} />
+              ))}
+            </div>
+          </div>
+        )}
       </ThemeProvider>
     </>
   );

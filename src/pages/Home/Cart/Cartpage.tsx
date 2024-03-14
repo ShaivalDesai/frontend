@@ -201,7 +201,7 @@ const CartPage = () => {
     <>
       <Navbar />
       <Box sx={{ flexGrow: 1, padding: 3 }}>
-        <Grid container spacing={4} justifyContent="center">
+        <Grid container spacing={5} justifyContent="center">
           {cartState.map((product) => (
             <Grid item xs={12} sm={6} md={4} lg={3} key={product.product_id}>
               <CustomCard>
