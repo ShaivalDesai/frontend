@@ -67,7 +67,7 @@
 //         console.log("Recommendations:", recommendations);
 //         console.log("Trending:", trending);
 
-//         setProducts({ recommendations, trending });
+//         setrw     s({ recommendations, trending });
 //       } catch (error) {
 //         console.error("Failed to fetch images", error);
 //       }
