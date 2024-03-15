@@ -92,7 +92,7 @@ import SingleProduct from "./pages/ProductPage/SingleProduct";
 import Vendor_Profile from "./pages/Dashboard/Profile";
 import { ThemeProvider } from "./Components/DarkMode";
 import ManageProduction from "./pages/Dashboard/ManageProduction";
-
+import SalesForecasting from "./pages/Dashboard/SalesForecasting";
 
 interface Product {
   product_id: number;
@@ -109,31 +109,41 @@ function App() {
   const [cart, setCart] = useState<Product[]>([]);
   return (
     <>
-     <ThemeProvider>
-      <Routes>
-        <Route path="/" element={<Navigate to="/login" replace />} />
-        <Route path="/login" element={<AuthPage />} />
-        <Route path="/manage" element={<ManageProduction />} />
+      <ThemeProvider>
+        <Routes>
+          <Route path="/" element={<Navigate to="/login" replace />} />
+          <Route path="/login" element={<AuthPage />} />
+          <Route path="/manage" element={<ManageProduction />} />
 
-        <Route path="/home" element={<HomePage />} />
-        <Route path="/dashboard" element={<MainPage />} />
-        <Route path="/vendorprofile" element={<Vendor_Profile />} />
-        <Route
-          path="/brand"
-          element={<SingleProductPage wishlist={wishlist} setWishlist={setWishlist} />}
-        />
-        <Route path="/single" element={<SingleProduct />} />
-        <Route path="/profile" element={<Home_Profile />} />
-        <Route path="/RegisterUser" element={<RegistrationUser />} />
+          <Route path="/home" element={<HomePage />} />
+          <Route path="/dashboard" element={<MainPage />} />
+          <Route path="/vendorprofile" element={<Vendor_Profile />} />
+          <Route
+            path="/brand"
+            element={
+              <SingleProductPage
+                wishlist={wishlist}
+                setWishlist={setWishlist}
+              />
+            }
+          />
+          <Route path="/single" element={<SingleProduct />} />
+          <Route path="/profile" element={<Home_Profile />} />
+          <Route path="/RegisterUser" element={<RegistrationUser />} />
+          <Route path="/sales" element={<SalesForecasting />} />
+          <Route
+            path="/product"
+            element={
+              <ProductPage wishlist={wishlist} setWishlist={setWishlist} />
+            }
+          />
 
-        <Route
-          path="/product"
-          element={<ProductPage wishlist={wishlist} setWishlist={setWishlist} />}
-        />
-
-<Route path="/wishlist" element={<WishlistPage wishlist={wishlist} />} />
-        <Route path="/cart" element={<CartPage/>} />
-      </Routes>
+          <Route
+            path="/wishlist"
+            element={<WishlistPage wishlist={wishlist} />}
+          />
+          <Route path="/cart" element={<CartPage />} />
+        </Routes>
       </ThemeProvider>
     </>
   );

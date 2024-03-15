@@ -75,6 +75,10 @@ const MainListItems = () => {
     if (item.primaryText === "Profile") {
       navigate("/vendorprofile");
     }
+
+    if (item.primaryText === "Manage Production") {
+      navigate("/manage");
+    }
   };
 
   return (
