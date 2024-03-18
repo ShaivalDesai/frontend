@@ -307,7 +307,7 @@ const ProductInsight: React.FC = () => {
               <Grid container spacing={2}>
                 <Grid item xs={12} sm={6} md={4}>
                   <CustomCard
-                    title="Product Quantity"
+                    title="Product Quantity:"
                     content={backendData.product_quantity}
                   />
                 </Grid>
