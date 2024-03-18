@@ -77,7 +77,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 const Navbar: React.FC = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [logoutDialogOpen, setLogoutDialogOpen] = useState(false); // State variable for controlling logout dialog visibility
+  const [logoutDialogOpen, setLogoutDialogOpen] = useState(false); 
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const isMenuOpen = Boolean(anchorEl);

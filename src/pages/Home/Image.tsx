@@ -233,7 +233,7 @@
 
 // export default ImageCarousel;
 
-// ImageCarousel.tsx
+
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { CardContent, Typography } from "@mui/material";

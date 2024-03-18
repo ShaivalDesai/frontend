@@ -4,7 +4,7 @@ import DashboardCards from "./Cards";
 import DashboardN from "../../Components/DashboardNavbar";
 // import { LineChart } from "recharts/types/chart/LineChart";
 import LineGraph from "../../Components/LineGraph";
-const SalesForecasting: React.FC = () => {
+const PriceForecasting: React.FC = () => {
 
 
     
@@ -18,4 +18,4 @@ const SalesForecasting: React.FC = () => {
   );
 };
 
-export default SalesForecasting;
+export default PriceForecasting;
