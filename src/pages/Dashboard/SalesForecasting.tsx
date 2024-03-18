@@ -12,7 +12,7 @@ const SalesForecasting: React.FC = () => {
     <>
      <DashboardN/>
      <div  style={{ marginTop: "100px" }}>
-     <LineGraph />
+     {/* <LineGraph /> */}
      </div>
     </>
   );

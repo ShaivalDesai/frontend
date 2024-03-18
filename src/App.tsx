@@ -94,6 +94,7 @@ import { ThemeProvider } from "./Components/DarkMode";
 import ManageProduction from "./pages/Dashboard/ManageProduction";
 import SalesForecasting from "./pages/Dashboard/SalesForecasting";
 import PriceForecasting from "./pages/Dashboard/PriceForecasting";
+import ProductInsight from "./pages/Dashboard/Product_Insight";
 
 interface Product {
   product_id: number;
@@ -115,6 +116,7 @@ function App() {
           <Route path="/" element={<Navigate to="/login" replace />} />
           <Route path="/login" element={<AuthPage />} />
           <Route path="/manage" element={<ManageProduction />} />
+          <Route path="/insight" element={<ProductInsight />} />
 
           <Route path="/home" element={<HomePage />} />
           <Route path="/price" element={<PriceForecasting />} />

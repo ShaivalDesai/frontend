@@ -537,71 +537,7 @@ export default function Dashboard() {
     fetchData();
   }, []);
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await axios.get(API_URL);
-  //       const data = response.data;
-
-  //       const productTitlesResponse = await axios.get(API_URL);
-  //       const productTitles = productTitlesResponse.data; // Adjust based on your actual data structure
-
-  //       const monthlySalesData = Object.entries(data.monthly_sales ?? {}).map(
-  //         ([month, value]) => ({
-  //           month,
-  //           quantity: value as number,
-  //         })
-  //       );
-
-  //       const formattedData = Object.entries(
-  //         data.all_product_quantity ?? {}
-  //       ).map(([productId, productData]) => ({
-  //         name: productId,
-  //         value:
-  //           (productData as { "total quantity": number })["total quantity"] ||
-  //           0,
-  //       }));
-
-  //       const formattedPieData = Object.entries(
-  //         data.all_product_quantity ?? {}
-  //       ).map(([productId, productData]) => ({
-  //         name: productTitles[productId] || productId, // Fallback to productId if title is not found
-  //         value:
-  //           (productData as { "total quantity": number })["total quantity"] ||
-  //           0,
-  //       }));
-
-  //       setDashboardData((prevState) => ({
-  //         ...prevState, // Preserve any existing state that you're not updating
-
-  //         // Directly spread the fields from data that don't need transformation
-  //         product_ids: data.product_ids,
-  //         highest_sale_product_id: data.highest_sale_product_id,
-  //         highest_sale_value: data.highest_sale_value,
-  //         total_sale: data.total_sale,
-  //         last_month_sales: data.last_month_sales,
-  //         all_product_quantity: data.all_product_quantity,
-
-  //         // Assuming monthly_sales requires some transformation similar to pieChartData
-  //         monthly_sales: monthlySalesData,
-
-  //         // Transform and update the pieChartData
-  //        pieChartData: formattedData.map(({ name, value }) => {
-  //   const product = product.find((product: { id: string; }) => product.id === name);
-  //   return {
-  //     name: product ? product.product_title : name, // Use product title if found; otherwise, use the product ID
-  //     value,
-  //   };
-  // }),
-  //       }));
-  //     } catch (error) {
-  //       console.error("Error fetching data:", error);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, []);
-
+  
   const toggleDrawer = () => {
     setOpen(!open);
   };
