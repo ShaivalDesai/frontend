@@ -77,7 +77,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 const Navbar: React.FC = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [logoutDialogOpen, setLogoutDialogOpen] = useState(false); 
+  const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const isMenuOpen = Boolean(anchorEl);
@@ -207,7 +207,7 @@ const Navbar: React.FC = () => {
     <>
       <head>
         <link
-          href="https://fonts.googleapis.com/css2?family=Protest+Riot&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Roboto&display=swap"
           rel="stylesheet"
         />
       </head>
@@ -230,9 +230,9 @@ const Navbar: React.FC = () => {
                 to="/home"
                 style={{
                   textDecoration: "none",
-                  fontSize: "1.75em",
+                  fontSize: "1.65em",
                   color: "inherit",
-                  fontFamily: "'Protest Riot', sans-serif",
+                  fontFamily: "'Roboto', sans-serif",
                 }}
               >
                 FashionFleet
@@ -242,9 +242,9 @@ const Navbar: React.FC = () => {
               <Button
                 style={{
                   textDecoration: "none",
-                  fontSize: "1.10rem",
+                  fontSize: "1.05rem",
                   color: "inherit",
-                  fontFamily: "'Protest Riot', sans-serif",
+                  fontFamily: "'Roboto', sans-serif",
                 }}
                 color="inherit"
                 component={RouterLink}
@@ -254,9 +254,9 @@ const Navbar: React.FC = () => {
               </Button>
               <Button
                 style={{
-                  fontSize: "1.10rem",
+                  fontSize: "1.05rem",
                   color: "inherit",
-                  fontFamily: "'Protest Riot', sans-serif",
+                  fontFamily: "'Roboto', sans-serif",
                 }}
                 color="inherit"
                 component={RouterLink}
@@ -266,9 +266,9 @@ const Navbar: React.FC = () => {
               </Button>
               <Button
                 style={{
-                  fontSize: "1.10rem",
+                  fontSize: "1.05rem",
                   color: "inherit",
-                  fontFamily: "'Protest Riot', sans-serif",
+                  fontFamily: "'Roboto', sans-serif",
                 }}
                 color="inherit"
                 component={RouterLink}
@@ -278,9 +278,9 @@ const Navbar: React.FC = () => {
               </Button>
               <Button
                 style={{
-                  fontSize: "1.10rem",
+                  fontSize: "1.05rem",
                   color: "inherit",
-                  fontFamily: "'Protest Riot', sans-serif",
+                  fontFamily: "'Roboto', sans-serif",
                 }}
                 color="inherit"
                 component={RouterLink}
@@ -352,9 +352,9 @@ const Navbar: React.FC = () => {
 
             <Button
               style={{
-                fontSize: "1.10rem",
+                fontSize: "1.05rem",
                 color: "inherit",
-                fontFamily: "'Protest Riot', sans-serif",
+                fontFamily: "'Roboto', sans-serif",
               }}
               color="inherit"
               onClick={wishlist}
@@ -363,9 +363,9 @@ const Navbar: React.FC = () => {
             </Button>
             <Button
               style={{
-                fontSize: "1.10rem",
+                fontSize: "1.05rem",
                 color: "inherit",
-                fontFamily: "'Protest Riot', sans-serif",
+                fontFamily: "'Roboto', sans-serif",
               }}
               color="inherit"
               onClick={cart}
@@ -408,7 +408,7 @@ const Navbar: React.FC = () => {
                   <ListItemIcon>
                     <CallIcon fontSize="small" />
                   </ListItemIcon>
-                  Contact
+                  Contact Us
                 </MenuItem>
                 <MenuItem onClick={handleLogout}>
                   <ListItemIcon>

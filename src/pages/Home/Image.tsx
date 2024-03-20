@@ -322,9 +322,10 @@ const ImageCarousel: React.FC = () => {
       <Typography
         variant="h4"
         sx={{
+          marginTop:"10px",
           textAlign: "center",
-          fontFamily: "'Protest Riot', sans-serif",
-          fontWeight: "bold",
+          fontFamily: "'Roboto', sans-serif",
+          // fontWeight: "bold",
           fontSize: "60px",
           color: "red",
           background:
@@ -399,8 +400,8 @@ const ImageCarousel: React.FC = () => {
         variant="h4"
         sx={{
           textAlign: "center",
-          fontFamily: "'Protest Riot', sans-serif",
-          fontWeight: "bold",
+          fontFamily: "'Roboto', sans-serif",
+          // fontWeight: "bold",
           fontSize: "60px",
           marginBottom: "1rem",
           color: "red",
@@ -474,8 +475,8 @@ const ImageCarousel: React.FC = () => {
         variant="h4"
         sx={{
           textAlign: "center",
-          fontFamily: "'Protest Riot', sans-serif",
-          fontWeight: "bold",
+          fontFamily: "'Roboto', sans-serif",
+          // fontWeight: "bold",
           fontSize: "60px",
           marginBottom: "1rem",
           color: "red",

@@ -21,7 +21,7 @@ import { JSX } from "react/jsx-runtime";
 const listItemData = [
   {
     icon: <PrecisionManufacturingIcon />,
-    primaryText: "Manage Production",
+    primaryText: "Manage Products",
     onClick: () => {
       console.log("Clicked on: Manage Production");
     },
@@ -42,14 +42,14 @@ const listItemData = [
   },
   {
     icon: <BarChartIcon />,
-    primaryText: "Vendor Comparison",
+    primaryText: "View Competition",
     onClick: () => {
       console.log("Clicked on: Vendor Comparison");
     },
   },
   {
     icon: <LayersIcon />,
-    primaryText: "Growth Graph",
+    primaryText: "Product Insights",
     onClick: () => {
       console.log("Clicked on: Growth Graph");
     },
@@ -76,8 +76,20 @@ const MainListItems = () => {
       navigate("/vendorprofile");
     }
 
-    if (item.primaryText === "Manage Production") {
+    if (item.primaryText === "Manage Products") {
       navigate("/manage");
+    }
+
+    if (item.primaryText === "Product Insights") {
+      navigate("/insight");
+    }
+
+    if (item.primaryText === "Sales Forecasting") {
+      navigate("/sales");
+    }
+
+    if (item.primaryText === "Price Forecasting") {
+      navigate("/price");
     }
   };
 

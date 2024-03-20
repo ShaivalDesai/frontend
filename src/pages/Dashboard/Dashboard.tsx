@@ -708,8 +708,7 @@ export default function Dashboard() {
         <Drawer
           variant="permanent"
           open={open}
-          onMouseEnter={handleDrawerOpen}
-          onMouseLeave={handleDrawerClose}
+          
         >
           <Toolbar
             sx={{

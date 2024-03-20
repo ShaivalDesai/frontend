@@ -105,7 +105,7 @@ const HomePage: React.FC = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  const images = ["ic1.jpg", "ic5.avif", "h2.jpg", "ic7.jpg"];
+  const images = ["ic11.avif", "ic9.avif", "h2.jpg", "ic12.avif"];
 
   useEffect(() => {
     fetchDataAndSetSessionStorage();
@@ -150,34 +150,10 @@ const HomePage: React.FC = () => {
     }
   };
 
-  // const handleSearch = async (brand:any) => {
-  //   try {
-  //     const response = await axios.get(
-  //       `http://127.0.0.1:8000/products/?brand=${brand}`
-  //     );
-  //     setSearchResults(response.data);
-  //   } catch (error) {
-  //     console.error("Error fetching search results:", error);
-  //   }
-  // };
-
-  // const handleSearch = async (brand: string) => {
-  //   try {
-  //     const response = await axios.get(
-  //       `http://127.0.0.1:8000/products/?brand=${brand}`
-  //     );
-  //     setSearchResults(response.data);
-  //     // Use navigate to go to the desired route
-  //     navigate(`/products/?brand=${brand}`);
-  //   } catch (error) {
-  //     console.error("Error fetching search results:", error);
-  //   }
-  // };
-
   return (
     <>
       <Navbar />
-      <PopupOffer />
+
       <ImageCarousel1 images={images} />
 
       <ImageCarousel />
