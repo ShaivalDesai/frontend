@@ -337,62 +337,63 @@ const ImageCarousel: React.FC = () => {
         Recommended Products
       </Typography>
       <div
-        style={{
-          display: "flex",
-          overflowX: "auto",
-          gap: "20px",
-          padding: "20px",
-          height: "480px",
-        }}
-      >
-        {products.recommendations.map((product) => (
-          <Card
-            key={product.id}
-            style={{
-              width: "250px",
-              height: "100%", // Adjusted height
-              boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
-              cursor: "pointer", // Add cursor pointer
-              transition: "transform 0.2s ease", // Add transition for transform property
-            }}
-            onClick={() => handleCardClick(product.id)}
-            onMouseDown={(e) => {
-              // Scale down the card slightly when clicked
-              e.currentTarget.style.transform = "scale(0.95)";
-            }}
-            onMouseUp={(e) => {
-              // Restore the original scale when mouse is released
-              e.currentTarget.style.transform = "scale(1)";
-            }}
-          >
-            <img
-              src={product.image_data}
-              alt={product.title}
-              style={{ height: "320px", width: "100%", objectFit: "cover" }}
-            />
-            <CardContent style={{ textAlign: "left", height: "120px" }}>
-              <Typography
-                variant="h6"
-                component="h3"
-                style={{
-                  marginBottom: "5px",
-                  fontWeight: "bold",
-                  height: "60px",
-                  overflow: "hidden",
-                }}
-              >
-                {product.title}
-              </Typography>
-              <Typography
-                variant="body1"
-                style={{ height: "40px", overflow: "hidden" }}
-              >
-                Price: ₹{product.price}
-              </Typography>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+  style={{
+    display: "flex",
+    overflowX: "auto",
+    gap: "20px",
+    padding: "20px",
+    height: "480px",
+  }}
+>
+  {products.recommendations.map((product) => (
+    <Card
+      key={product.id}
+      style={{
+        width: "250px",
+        height: "100%", // Adjusted height
+        boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
+        cursor: "pointer", // Add cursor pointer
+        transition: "transform 0.2s ease", // Add transition for transform property
+      }}
+      onClick={() => handleCardClick(product.id)}
+      onMouseEnter={(e) => {
+        // Scale up the card slightly when hovered
+        e.currentTarget.style.transform = "scale(1.05)";
+      }}
+      onMouseLeave={(e) => {
+        // Restore the original scale when mouse leaves
+        e.currentTarget.style.transform = "scale(1)";
+      }}
+    >
+      <img
+        src={product.image_data}
+        alt={product.title}
+        style={{ height: "320px", width: "100%", objectFit: "cover" }}
+      />
+      <CardContent style={{ textAlign: "left", height: "120px" }}>
+        <Typography
+          variant="h6"
+          component="h3"
+          style={{
+            marginBottom: "5px",
+            fontWeight: "bold",
+            height: "60px",
+            overflow: "hidden",
+          }}
+        >
+          {product.title}
+        </Typography>
+        <Typography
+          variant="body1"
+          style={{ height: "40px", overflow: "hidden" }}
+        >
+          Price: ₹{product.price}
+        </Typography>
+      </CardContent>
+    </Card>
+  ))}
+</div>
+
 
       {/* Trending Products section */}
 
@@ -413,64 +414,78 @@ const ImageCarousel: React.FC = () => {
       >
         Trending Products
       </Typography>
+     
+     
+     
+     
+     
+     
       <div
-        style={{
-          display: "flex",
-          overflowX: "auto",
-          gap: "20px",
-          padding: "20px",
-          height: "480px", // Adjusted height
-        }}
-      >
-        {products.trending.map((product) => (
-          <Card
-            key={product.id}
-            style={{
-              width: "250px",
-              height: "100%", // Adjusted height
-              boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
-              cursor: "pointer", // Add cursor pointer
-              transition: "transform 0.2s ease", // Add transition for transform property
-            }}
-            onClick={() => handleCardClick(product.id)}
-            onMouseDown={(e) => {
-              // Scale down the card slightly when clicked
-              e.currentTarget.style.transform = "scale(0.95)";
-            }}
-            onMouseUp={(e) => {
-              // Restore the original scale when mouse is released
-              e.currentTarget.style.transform = "scale(1)";
-            }}
-          >
-            <img
-              src={product.image_data}
-              alt={product.title}
-              style={{ height: "320px", width: "100%", objectFit: "cover" }}
-            />
-            <CardContent style={{ textAlign: "left", height: "120px" }}>
-              <Typography
-                variant="h6"
-                component="h3"
-                style={{
-                  marginBottom: "5px",
-                  fontWeight: "bold",
-                  height: "60px",
-                  overflow: "hidden",
-                }}
-              >
-                {product.title}
-              </Typography>
-              <Typography
-                variant="body1"
-                style={{ height: "40px", overflow: "hidden" }}
-              >
-                Price: ₹{product.price}
-              </Typography>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+  style={{
+    display: "flex",
+    overflowX: "auto",
+    gap: "20px",
+    padding: "20px",
+    height: "480px", // Adjusted height
+  }}
+>
+  {products.trending.map((product) => (
+    <Card
+      key={product.id}
+      style={{
+        width: "250px",
+        height: "100%", // Adjusted height
+        boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
+        cursor: "pointer", // Add cursor pointer
+        transition: "transform 0.2s ease", // Add transition for transform property
+      }}
+      onClick={() => handleCardClick(product.id)}
+      onMouseEnter={(e) => {
+        // Scale up the card slightly when hovered
+        e.currentTarget.style.transform = "scale(1.05)";
+      }}
+      onMouseLeave={(e) => {
+        // Restore the original scale when mouse leaves
+        e.currentTarget.style.transform = "scale(1)";
+      }}
+    >
+      <img
+        src={product.image_data}
+        alt={product.title}
+        style={{ height: "320px", width: "100%", objectFit: "cover" }}
+      />
+      <CardContent style={{ textAlign: "left", height: "120px" }}>
+        <Typography
+          variant="h6"
+          component="h3"
+          style={{
+            marginBottom: "5px",
+            fontWeight: "bold",
+            height: "60px",
+            overflow: "hidden",
+          }}
+        >
+          {product.title}
+        </Typography>
+        <Typography
+          variant="body1"
+          style={{ height: "40px", overflow: "hidden" }}
+        >
+          Price: ₹{product.price}
+        </Typography>
+      </CardContent>
+    </Card>
+  ))}
+</div>
 
+
+      
+      
+      
+      
+      
+      
+      
       <Typography
         variant="h4"
         sx={{

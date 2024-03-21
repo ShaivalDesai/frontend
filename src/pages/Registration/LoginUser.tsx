@@ -41,84 +41,30 @@ export default function LoginUser() {
     setShowRegisterForm(true); // Show the registration form when the link is clicked
   };
 
-//   const HandleLogin = async () => {
-//     const validationErrors: Partial<Record<keyof FormData, string>> = {};
-
-//     if (!email.trim()) {
-//       validationErrors.email = "Email is required";
-//     } else if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
-//       validationErrors.email = "Email is invalid";
-//     }
-
-//     if (!password.trim()) {
-//       validationErrors.password = "Password is required";
-//     }
-
-//     if (!user_type.trim()) {
-//       validationErrors.user_type = "User Type selection is required";
-//     }
-//     setErrors(validationErrors);
-
-//     if (Object.keys(validationErrors).length === 0) {
-//       try {
-//         const response = await axios.post("http://127.0.0.1:8000/login", {
-//           email,
-//           password,
-//           user_type,
-//         });
-
-//         if (response.status === 200) {
-//           console.log("Login successful");
-//           //   alert(response.data.status);
-//           toast.success("Login Successful", { autoClose: 5000 });
-
-
-//           if (user_type === "Customer") {
-//             const uid = response.data.user_id;
-//             const cid = response.data.customer_id;
-//             sessionStorage.setItem("u_id", uid);
-//             sessionStorage.setItem("c_id", cid);
-//             navigate("/home");
-//           } else if (user_type === "Vendor") {
-//             const uid = response.data.user_id;
-//             const vid = response.data.vendor_id;
-//             sessionStorage.setItem("u_id", uid);
-//             sessionStorage.setItem("v_id", vid);
-
-//             navigate("/dashboard");
-//           }
-//         } else {
-//           //   alert(response.data.detail);
-//           console.error("Login failed: Incorrect password");
-//           toast.error("Login Failed");
-//         }
-//       } catch (error: any) {
-//         console.error("Error during login:", error);
-
-//         if (error.response && error.response.status === 400) {
-//           //   window.alert(error.response.data.detail);
-//           toast.error("Login failed: Incorrect credentials");
-//           console.error("Login failed: Incorrect credentials");
-//         }
-//       }
-//     }
-//   };
-
-
   const HandleLogin = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault(); // Prevent default form submission
-    const validationErrors: Partial<{ email: string; password: string; user_type: string; }> = {};
+    const validationErrors: Partial<{
+      email: string;
+      password: string;
+      user_type: string;
+    }> = {};
 
     if (!email.trim()) validationErrors.email = "Email is required";
-    else if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) validationErrors.email = "Email is invalid";
+    else if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email))
+      validationErrors.email = "Email is invalid";
 
     if (!password.trim()) validationErrors.password = "Password is required";
-    if (!user_type.trim()) validationErrors.user_type = "User Type selection is required";
+    if (!user_type.trim())
+      validationErrors.user_type = "User Type selection is required";
     setErrors(validationErrors);
 
     if (Object.keys(validationErrors).length === 0) {
       try {
-        const response = await axios.post("http://127.0.0.1:8000/login", { email, password, user_type });
+        const response = await axios.post("http://127.0.0.1:8000/login", {
+          email,
+          password,
+          user_type,
+        });
         if (response.status === 200) {
           toast.success("Login successful");
           // Navigate based on user_type
@@ -175,7 +121,7 @@ export default function LoginUser() {
             <Box
               component="form"
               noValidate
-            //   onSubmit={HandleLogin}
+              //   onSubmit={HandleLogin}
               sx={{ mt: 1 }}
             >
               <TextField
@@ -261,7 +207,12 @@ export default function LoginUser() {
               >
                 Login
               </Button>
-              <Grid container justifyContent="space-between">
+              <Grid
+                container
+                justifyContent="space-between"
+                spacing={2}
+                sx={{ marginTop: "-25px" }}
+              >
                 <Grid item xs>
                   <Link href="#" variant="body2">
                     Forgot password?
@@ -273,7 +224,7 @@ export default function LoginUser() {
                     variant="body2"
                     onClick={handleRegisterClick}
                   >
-                    {"Don't have an account?"}
+                    Don't have an account?
                   </Link>
                 </Grid>
               </Grid>
@@ -284,166 +235,3 @@ export default function LoginUser() {
     </ThemeProvider>
   );
 }
-
-// import * as React from "react";
-// import Avatar from "@mui/material/Avatar";
-// import Button from "@mui/material/Button";
-// import CssBaseline from "@mui/material/CssBaseline";
-// import TextField from "@mui/material/TextField";
-// import Link from "@mui/material/Link";
-// import Paper from "@mui/material/Paper";
-// import Box from "@mui/material/Box";
-// import Grid from "@mui/material/Grid";
-// import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-// import Typography from "@mui/material/Typography";
-// import { createTheme, ThemeProvider } from "@mui/material/styles";
-// import axios from "axios";
-// import { useNavigate } from "react-router-dom";
-// import { RadioGroup, FormControlLabel, Radio, FormControl, FormLabel } from "@mui/material";
-// // Import react-toastify
-// import { ToastContainer, toast } from 'react-toastify';
-// import 'react-toastify/dist/ReactToastify.css';
-
-// const defaultTheme = createTheme();
-
-// export default function LoginUser() {
-//   const [email, setEmail] = React.useState("");
-//   const [password, setPassword] = React.useState("");
-//   const [user_type, setUser_type] = React.useState<string>("");
-//   const navigate = useNavigate();
-
-//   const [errors, setErrors] = React.useState<Partial<{ email: string; password: string; user_type: string; }>>({});
-
-//   const HandleLogin = async (e: React.MouseEvent<HTMLButtonElement>) => {
-//     e.preventDefault(); // Prevent default form submission
-//     const validationErrors: Partial<{ email: string; password: string; user_type: string; }> = {};
-
-//     if (!email.trim()) validationErrors.email = "Email is required";
-//     else if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) validationErrors.email = "Email is invalid";
-
-//     if (!password.trim()) validationErrors.password = "Password is required";
-//     if (!user_type.trim()) validationErrors.user_type = "User Type selection is required";
-//     setErrors(validationErrors);
-
-//     if (Object.keys(validationErrors).length === 0) {
-//       try {
-//         const response = await axios.post("http://127.0.0.1:8000/login", { email, password, user_type });
-//         if (response.status === 200) {
-//           toast.success("Login successful");
-//           // Navigate based on user_type
-//           if (user_type === "Customer") {
-//             sessionStorage.setItem("u_id", response.data.user_id);
-//             sessionStorage.setItem("c_id", response.data.customer_id);
-//             navigate("/home");
-//           } else if (user_type === "Vendor") {
-//             sessionStorage.setItem("u_id", response.data.user_id);
-//             sessionStorage.setItem("v_id", response.data.vendor_id);
-//             navigate("/dashboard");
-//           }
-//         }
-//       } catch (error) {
-//         toast.error("Login failed: Incorrect credentials or server error");
-//         console.error("Login error:", error);
-//       }
-//     }
-//   };
-
-//   return (
-//     <ThemeProvider theme={defaultTheme}>
-//       <ToastContainer />
-//       <Grid container component="main" sx={{ height: "100vh" }}>
-//         <CssBaseline />
-//         <Grid
-//           item
-//           xs={false}
-//           sm={4}
-//           md={7}
-//           sx={{
-//             backgroundImage: 'url("/p11.jpeg")',
-//             backgroundRepeat: "no-repeat",
-//             backgroundSize: "cover",
-//             backgroundPosition: "center",
-//           }}
-//         />
-//         <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-//           <Box
-//             sx={{
-//               my: 8,
-//               mx: 4,
-//               display: "flex",
-//               flexDirection: "column",
-//               alignItems: "center",
-//             }}
-//           >
-//             <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-//               <LockOutlinedIcon />
-//             </Avatar>
-//             <Typography component="h1" variant="h5">
-//               Sign in
-//             </Typography>
-//             <Box component="form" noValidate sx={{ mt: 1 }}>
-//               <TextField
-//                 margin="normal"
-//                 required
-//                 fullWidth
-//                 id="email"
-//                 label="Email Address"
-//                 name="email"
-//                 autoComplete="email"
-//                 autoFocus
-//                 value={email}
-//                 onChange={(e) => setEmail(e.target.value)}
-//               />
-//               <TextField
-//                 margin="normal"
-//                 required
-//                 fullWidth
-//                 name="password"
-//                 label="Password"
-//                 type="password"
-//                 id="password"
-//                 autoComplete="current-password"
-//                 value={password}
-//                 onChange={(e) => setPassword(e.target.value)}
-//               />
-//               <FormControl component="fieldset" style={{ marginTop: '20px' }}>
-//                 <FormLabel component="legend">User Type</FormLabel>
-//                 <RadioGroup
-//                   row
-//                   aria-label="user_type"
-//                   name="user_type"
-//                   value={user_type}
-//                   onChange={(e) => setUser_type(e.target.value)}
-//                 >
-//                   <FormControlLabel value="Customer" control={<Radio />} label="Customer" />
-//                   <FormControlLabel value="Vendor" control={<Radio />} label="Vendor" />
-//                 </RadioGroup>
-//               </FormControl>
-//               <Button
-//                 type="submit"
-//                 fullWidth
-//                 variant="contained"
-//                 sx={{ mt: 3, mb: 2 }}
-//                 onClick={HandleLogin}
-//               >
-//                 Sign In
-//               </Button>
-//               <Grid container>
-//                 <Grid item xs>
-//                   <Link href="#" variant="body2">
-//                     Forgot password?
-//                   </Link>
-//                 </Grid>
-//                 <Grid item>
-//                   <Link href="#" variant="body2">
-//                     {"Don't have an account? Sign Up"}
-//                   </Link>
-//                 </Grid>
-//               </Grid>
-//             </Box>
-//           </Box>
-//         </Grid>
-//       </Grid>
-//     </ThemeProvider>
-//   );
-// }

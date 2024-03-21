@@ -313,11 +313,10 @@ export default function Register() {
               >
                 Register
               </Button>
-              <Grid container>
-                <Grid item xs></Grid>
+              <Grid container justifyContent="center" sx={{marginTop:"-10px"}}>
                 <Grid item>
                   <Link href="/login" variant="body2">
-                    {"Already have an account? Login"}
+                    Already have an account? Login
                   </Link>
                 </Grid>
               </Grid>

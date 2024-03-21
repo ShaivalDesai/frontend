@@ -179,6 +179,11 @@ const Navbar: React.FC = () => {
     navigate("/profile");
   };
 
+  const handleGoToContact = () => {
+    setAnchorEl(null);
+    navigate("/contact");
+  };
+
   const openProfile = Boolean(anchorEl);
   const profileId = openProfile ? "profile-popover" : undefined;
 
@@ -404,7 +409,7 @@ const Navbar: React.FC = () => {
                   </ListItemIcon>
                   Profile
                 </MenuItem>
-                <MenuItem onClick={handleGoToProfile}>
+                <MenuItem onClick={handleGoToContact}>
                   <ListItemIcon>
                     <CallIcon fontSize="small" />
                   </ListItemIcon>

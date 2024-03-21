@@ -95,6 +95,8 @@ import ManageProduction from "./pages/Dashboard/ManageProduction";
 import SalesForecasting from "./pages/Dashboard/SalesForecasting";
 import PriceForecasting from "./pages/Dashboard/PriceForecasting";
 import ProductInsight from "./pages/Dashboard/Product_Insight";
+import ContactUs from "./pages/Home/Contact";
+import ProductTable from "./pages/Dashboard/Manage";
 
 interface Product {
   product_id: number;
@@ -117,6 +119,8 @@ function App() {
           <Route path="/login" element={<AuthPage />} />
           <Route path="/manage" element={<ManageProduction />} />
           <Route path="/insight" element={<ProductInsight />} />
+          <Route path="/contact" element={<ContactUs />} />
+          <Route path="/manage1" element={<ProductTable />} />
 
           <Route path="/home" element={<HomePage />} />
           <Route path="/price" element={<PriceForecasting />} />
@@ -144,8 +148,15 @@ function App() {
 
           <Route
             path="/wishlist"
-            element={<WishlistPage wishlist={wishlist} />}
+            element={<WishlistPage wishlist={[]} />}
           />
+
+
+{/* 
+<Route
+            path="/wishlist"
+            element={<WishlistPage wishlist={wishlist} />}
+          /> */}
           <Route path="/cart" element={<CartPage />} />
         </Routes>
       </ThemeProvider>

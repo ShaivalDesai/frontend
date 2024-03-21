@@ -421,7 +421,7 @@ import {
   Button,
 } from "@mui/material";
 import axios from "axios";
-
+import CustomTypography from "../../Components/TypographyPR";
 
 const id = 2;
 const API_URL = "http://127.0.0.1:8000/vendor_dashboard/" + id;
@@ -537,7 +537,6 @@ export default function Dashboard() {
     fetchData();
   }, []);
 
-  
   const toggleDrawer = () => {
     setOpen(!open);
   };
@@ -609,10 +608,6 @@ export default function Dashboard() {
               alt="FashionFleet"
               style={{ height: "50px", marginRight: "auto" }}
             />
-
-            
-
-           
 
             <IconButton
               color="inherit"
@@ -705,11 +700,8 @@ export default function Dashboard() {
             </Dialog>
           </Toolbar>
         </StyledAppBar>
-        <Drawer
-          variant="permanent"
-          open={open}
-          
-        >
+
+        <Drawer variant="permanent" open={open}>
           <Toolbar
             sx={{
               display: "flex",
@@ -718,13 +710,32 @@ export default function Dashboard() {
               px: [1],
             }}
           >
+            <Box
+              sx={{
+                flexGrow: 1,
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+              }}
+            >
+              <div style={{ flex: "1" }}></div>
+
+              <img
+                src="dress.png"
+                alt="FashionFleet"
+                style={{ height: "40px", width: "40px", marginLeft: "90px" }}
+              />
+            </Box>
+
             <IconButton onClick={handleDrawerClose}>
               <ChevronLeftIcon />
             </IconButton>
           </Toolbar>
+
           <Divider />
           <List component="nav">{MainListItems()}</List>
         </Drawer>
+
         <Box
           component="main"
           sx={{

@@ -151,7 +151,7 @@ const ManageProduction = () => {
   const handleViewProductD = async () => {
     try {
       const id = 3;
-      const response = await fetch("http://127.0.0.1:8000/view/" + id);
+      const response = await fetch("http://127.0.0.1:8000/remove/" + id);
       const data = await response.json();
 
       if (typeof data === "object") {
