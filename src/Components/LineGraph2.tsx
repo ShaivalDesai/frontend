@@ -91,7 +91,7 @@ const LineGraph2: React.FC = () => {
   const fetchProductData = async (productId: number) => {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8000/price_forecasting/${productId}/${forecastMonths}`
+        `http://127.0.0.1:8000/sale_forecasting/${productId}/${forecastMonths}`
       );
       const data = response.data;
       const { graph, forecasted } = data;
@@ -138,11 +138,11 @@ const LineGraph2: React.FC = () => {
         let response;
         if (forecastMonths > 0) {
           response = await axios.get(
-            `http://127.0.0.1:8000/price_forecasting/${selectedProductId}/${forecastMonths}`
+            `http://127.0.0.1:8000/sale_forecasting/${selectedProductId}/${forecastMonths}`
           );
         } else {
           response = await axios.get(
-            `http://127.0.0.1:8000/price_forecasting/${selectedProductId}/1`
+            `http://127.0.0.1:8000/sale_forecasting/${selectedProductId}/1`
           );
         }
         const data = response.data;
@@ -190,7 +190,7 @@ const LineGraph2: React.FC = () => {
   const fetchDataWithForecast = async () => {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8000/price_forecasting/${selectedProductId}/${forecastMonths}`
+        `http://127.0.0.1:8000/sale_forecasting/${selectedProductId}/${forecastMonths}`
       );
       const data = response.data;
       const { forecasted } = data;
