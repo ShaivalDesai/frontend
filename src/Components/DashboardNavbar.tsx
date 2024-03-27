@@ -5,6 +5,7 @@ import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import React, { useEffect, useState } from "react";
 import { AccountCircle } from "@mui/icons-material";
+import CallIcon from "@mui/icons-material/Call";
 import MenuIcon from "@mui/icons-material/Menu";
 import {
   MenuList,
@@ -123,6 +124,11 @@ const DashboardN = () => {
 
   const handleLogoutCancel = () => {
     setLogoutDialogOpen(false);
+  };
+
+  const handleGoToContact = () => {
+    setAnchorEl(null);
+    navigate("/contact");
   };
 
   const openProfile = Boolean(anchorEl);
@@ -250,6 +256,13 @@ const DashboardN = () => {
                     <LogoutIcon fontSize="small" />
                   </ListItemIcon>
                   Logout
+                </MenuItem>
+
+                <MenuItem onClick={handleGoToContact}>
+                  <ListItemIcon>
+                    <CallIcon fontSize="small" />
+                  </ListItemIcon>
+                  Contact Us
                 </MenuItem>
               </MenuList>
             </Popover>

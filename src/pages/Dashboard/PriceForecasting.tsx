@@ -7,15 +7,18 @@ import { LineChart } from "recharts/types/chart/LineChart";
 import LineGraph2 from "../../Components/LineGraph2";
 
 const PriceForecasting: React.FC = () => {
-
-
-    
   return (
     <>
-     <DashboardN/>
-     <div  style={{ marginTop: "100px" }}>
-     <LineGraph/>
-     </div>
+      <div
+        style={{
+          background:
+            "#f2e5d9",
+        }}
+      >
+        <DashboardN />
+
+        <LineGraph />
+      </div>
     </>
   );
 };

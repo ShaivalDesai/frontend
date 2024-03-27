@@ -61,7 +61,6 @@ const ProductTable: React.FC = () => {
     const handleEscKeyPress = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         closeModal();
-        
       }
     };
 
@@ -140,11 +139,6 @@ const ProductTable: React.FC = () => {
     console.log("Edit product:", productId);
   };
 
-
-
-
-
-
   const fetchProductList = async () => {
     try {
       const response = await axios.get<Product[]>(
@@ -205,7 +199,7 @@ const ProductTable: React.FC = () => {
             borderRadius: "10px", // Smoothed corners
             display: "inline-flex", // Use flex to align icon and text
             alignItems: "center", // Center items vertically
-            justifyContent: "center", // Center items horizontally
+            justifyContent: "center",
           }}
         >
           <span style={{ marginRight: "8px", display: "inline-block" }}>+</span>
@@ -634,61 +628,60 @@ const ProductTable: React.FC = () => {
         </div>
       )} */}
 
-{isProductListModalOpen && (
-  <div
-    className="modal"
-    style={{
-      marginTop: "32px",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      position: "fixed",
-      zIndex: 1,
-      left: 0,
-      top: 0,
-      width: "100%",
-      height: "100%",
-      backgroundColor: "rgba(0,0,0,0.4)",
-    }}
-  >
-    <div
-      className="modal-content"
-      id="modal-content"
-      style={{
-        display: "flex",
-        flexDirection: "column", // Added to arrange elements vertically
-        backgroundColor: "#fefefe",
-        padding: "20px",
-        border: "1px solid #888",
-        height: "80%", // Decreased overall height
-        width: "60%", // Adjusted width
-        maxHeight: "80%", // Set maximum height
-        overflowY: "auto",
-        borderRadius: "10px",
-        position: "relative", // Added position relative to the modal content
-      }}
-    >
-      <span
-        className="close"
-        style={{
-          color: "#aaa",
-          position: "absolute", // Set position to absolute
-          top: "10px", // Adjust top position
-          right: "10px", // Adjust right position
-          fontSize: "28px",
-          fontWeight: "bold",
-          cursor: "pointer",
-        }}
-        onClick={closeModal}
-      >
-        &times;
-      </span>
-      {/* Title added */}
-      <ProfessionalForm />
-    </div>
-  </div>
-)}
-
+      {isProductListModalOpen && (
+        <div
+          className="modal"
+          style={{
+            marginTop: "32px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            position: "fixed",
+            zIndex: 1,
+            left: 0,
+            top: 0,
+            width: "100%",
+            height: "100%",
+            backgroundColor: "rgba(0,0,0,0.4)",
+          }}
+        >
+          <div
+            className="modal-content"
+            id="modal-content"
+            style={{
+              display: "flex",
+              flexDirection: "column", // Added to arrange elements vertically
+              backgroundColor: "#fefefe",
+              padding: "20px",
+              border: "1px solid #888",
+              height: "80%", // Decreased overall height
+              width: "60%", // Adjusted width
+              maxHeight: "80%", // Set maximum height
+              overflowY: "auto",
+              borderRadius: "10px",
+              position: "relative", // Added position relative to the modal content
+            }}
+          >
+            <span
+              className="close"
+              style={{
+                color: "#aaa",
+                position: "absolute", // Set position to absolute
+                top: "10px", // Adjust top position
+                right: "10px", // Adjust right position
+                fontSize: "28px",
+                fontWeight: "bold",
+                cursor: "pointer",
+              }}
+              onClick={closeModal}
+            >
+              &times;
+            </span>
+            {/* Title added */}
+            <ProfessionalForm />
+          </div>
+        </div>
+      )}
 
       {/* 
 {isProductListModalOpen && (

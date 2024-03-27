@@ -1,4 +1,3 @@
-/* General table styling */
 .table-container {
   margin-top: 20px;
   overflow-x: auto;
@@ -7,7 +6,7 @@
 table {
   border-collapse: collapse;
   width: 100%;
-  background-color: #fff;
+ background-color: rgba(255, 255, 255, 0.8);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   overflow: hidden;
@@ -33,7 +32,6 @@ tbody tr:nth-child(even) {
   background-color: #f2f2f2;
 }
 
-/* Responsive table */
 @media screen and (max-width: 600px) {
   table {
     border: 0;
@@ -93,6 +91,7 @@ tbody tr:nth-child(even) {
   align-items: center;
   gap: 10px;
   margin-bottom: 20px;
+  text-align: center;
 }
 
 .forecast-input label {
@@ -108,10 +107,11 @@ tbody tr:nth-child(even) {
 /* Adjust the following as needed to fit your design */
 .chart-container {
   padding: 20px;
-  background-color: #f9f9f9;
+  background: rgba(250, 250, 250, 0.7); /* Transparent white background */
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
+
 
 .line-graph-container {
   display: flex;
@@ -133,11 +133,12 @@ tbody tr:nth-child(even) {
 }
 
 .data-table-container {
-  width: 25%; /* Adjust width as needed */
-  max-height: 500px; /* Adjust maximum height */
-  overflow-y: auto; /* Enable vertical scrolling */
+  width: 25%;
+  max-height: 600px;
+  overflow-y: auto;
   margin-top: 10px;
-  
+  color: "brown";
+  background-color: "brown";
 }
 
 .data-table {
@@ -149,12 +150,6 @@ tbody tr:nth-child(even) {
   width: 60%; /* Adjust width as needed */
 }
 
-/* Adjust the width of the data table container */
-.data-table-container {
-  width: 35%; /* Adjust width as needed */
-}
-
-/* Ensure the chart and table are displayed side by side */
 .container {
   display: flex;
   flex-wrap: wrap; /* Allow wrapping if content overflows */
@@ -163,8 +158,14 @@ tbody tr:nth-child(even) {
 /* Add some margin between chart and table */
 .chart-container,
 .data-table-container {
-  margin: 10px; /* Adjust margin as needed */
+  margin: 10px;
+  color: "brown";
+  background-color: "brown"; /* Adjust margin as needed */
 }
 
-
-
+/* Adjusted styling for the table header */
+.table-header th {
+  background-color: #724c31;
+  color: white;
+  font-weight: bold;
+}
