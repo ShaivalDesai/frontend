@@ -77,7 +77,7 @@ const MainListItems = () => {
     }
 
     if (item.primaryText === "Manage Products") {
-      navigate("/manage");
+      navigate("/manage1");
     }
 
     if (item.primaryText === "Product Insights") {

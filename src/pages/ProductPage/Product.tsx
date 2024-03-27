@@ -11,6 +11,7 @@ interface Product {
   price: number;
   image_base64: string[];
   category: string;
+ 
 }
 const [cart, setCart] = useState<Product[]>([]);
 function App() {

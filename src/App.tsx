@@ -97,6 +97,7 @@ import PriceForecasting from "./pages/Dashboard/PriceForecasting";
 import ProductInsight from "./pages/Dashboard/Product_Insight";
 import ContactUs from "./pages/Home/Contact";
 import ProductTable from "./pages/Dashboard/Manage";
+import ProfessionalForm from "./Components/form";
 
 interface Product {
   product_id: number;
@@ -105,6 +106,8 @@ interface Product {
   price: number;
   image_base64: string[];
   category: string;
+
+  
 }
 
 function App() {
@@ -117,6 +120,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Navigate to="/login" replace />} />
           <Route path="/login" element={<AuthPage />} />
+          <Route path="/form" element={<ProfessionalForm />} />
           <Route path="/manage" element={<ManageProduction />} />
           <Route path="/insight" element={<ProductInsight />} />
           <Route path="/contact" element={<ContactUs />} />
@@ -146,17 +150,17 @@ function App() {
             }
           />
 
-          <Route
+          {/* <Route
             path="/wishlist"
             element={<WishlistPage wishlist={[]} />}
-          />
+          /> */}
 
 
-{/* 
+
 <Route
             path="/wishlist"
             element={<WishlistPage wishlist={wishlist} />}
-          /> */}
+          />
           <Route path="/cart" element={<CartPage />} />
         </Routes>
       </ThemeProvider>

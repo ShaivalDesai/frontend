@@ -101,6 +101,26 @@ const DashboardN = () => {
     navigate("/login");
   };
 
+  const forecasting = () => {
+    setLogoutDialogOpen(false);
+    navigate("/dashboard");
+  };
+
+  const viewcompetition = () => {
+    setLogoutDialogOpen(false);
+    navigate("/dashboard");
+  };
+
+  const productInsight = () => {
+    setLogoutDialogOpen(false);
+    navigate("/insight");
+  };
+
+  const manageProducts = () => {
+    setLogoutDialogOpen(false);
+    navigate("/manage1");
+  };
+
   const handleLogoutCancel = () => {
     setLogoutDialogOpen(false);
   };
@@ -144,6 +164,55 @@ const DashboardN = () => {
               alt="FashionFleet"
               style={{ height: "50px", marginRight: "auto" }}
             />
+
+            <Button
+              style={{
+                fontSize: "1.05rem",
+                color: "inherit",
+                fontFamily: "'Roboto', sans-serif",
+                marginRight: "36px",
+              }}
+              color="inherit"
+              onClick={manageProducts}
+            >
+              Manage Products
+            </Button>
+
+            <Button
+              style={{
+                fontSize: "1.05rem",
+                color: "inherit",
+                fontFamily: "'Roboto', sans-serif",
+              }}
+              color="inherit"
+              onClick={forecasting}
+            >
+              Forecasting
+            </Button>
+
+            <Button
+              style={{
+                fontSize: "1.05rem",
+                color: "inherit",
+                fontFamily: "'Roboto', sans-serif",
+              }}
+              color="inherit"
+              onClick={viewcompetition}
+            >
+              View Competition
+            </Button>
+
+            <Button
+              style={{
+                fontSize: "1.05rem",
+                color: "inherit",
+                fontFamily: "'Roboto', sans-serif",
+              }}
+              color="inherit"
+              onClick={productInsight}
+            >
+              Product Insights
+            </Button>
 
             <IconButton
               color="inherit"

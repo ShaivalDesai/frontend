@@ -29,6 +29,7 @@ interface Product {
   price: number;
   image_base64: string[];
   category: string;
+  
 }
 
 const CustomCard = styled(Card)(({ theme }) => ({

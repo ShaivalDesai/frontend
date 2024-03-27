@@ -83,14 +83,6 @@ const ManageProduction = () => {
     }
   };
 
-  // const handleCardClick = async (action: string) => {
-  //     setSelectedAction(action);
-  //     setSelectedButton(action); // Update selected button
-  //     if (action === "View Product" || action === "Delete Product") {
-  //       await fetchProducts();
-  //     }
-  //   };
-
   const toggleDrawer = () => {
     setOpen(!open);
   };
@@ -199,53 +191,6 @@ const ManageProduction = () => {
     }
   };
 
-  //   const confirmAddProduct = async () => {
-  //     if (selectedProduct) {
-  //       try {
-  //         const a=1;
-  //         const id = 51;
-
-  //         const response = await axios.put(
-  //           `http://127.0.0.1:8000/add/${id}`,
-  //           selectedProduct
-  //         );
-  //         if (response.status === 200) {
-  //           // If the product is successfully added, fetch the updated product list
-  //           fetchProducts();
-  //           // Close the add dialog and reset selectedProduct
-  //           setAddDialogOpen(false);
-  //           setSelectedProduct(null);
-  //         } else {
-  //           console.error("Failed to add product:", response.data);
-  //         }
-  //       } catch (error) {
-  //         console.error("Failed to add product:", error);
-  //       }
-  //     }
-  //   };
-
-  // const confirmAddProduct = async (productId) => {
-  //     if (selectedProduct) {
-  //       try {
-  //         const response = await axios.put(
-  //           `http://127.0.0.1:8000/add/${product_id}`,
-  //           selectedProduct
-  //         );
-  //         if (response.status === 200) {
-  //           // If the product is successfully added, fetch the updated product list
-  //           fetchProducts();
-  //           // Close the add dialog and reset selectedProduct
-  //           setAddDialogOpen(false);
-  //           setSelectedProduct(null);
-  //         } else {
-  //           console.error("Failed to add product:", response.data);
-  //         }
-  //       } catch (error) {
-  //         console.error("Failed to add product:", error);
-  //       }
-  //     }
-  //   };
-
   const confirmAddProduct = async () => {
     if (selectedProduct) {
       try {
@@ -333,7 +278,7 @@ const ManageProduction = () => {
             sx={{
               backgroundColor: "#724C31",
               pr: "24px",
-              width: "100%", // Set the toolbar width to 100% to spread over the page
+              width: "100%",
             }}
           >
             <IconButton

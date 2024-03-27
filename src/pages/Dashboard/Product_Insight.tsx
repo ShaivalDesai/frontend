@@ -13,7 +13,8 @@ import CustomCard from "../../Components/InsightCards";
 // import LineGraph from "../../Components/LineGraph";
 import CustomProductCard from "../../Components/Product_Component";
 import axios from "axios";
-import LineGraph from "../../Components/LineGraph";
+import Product_Insight_Graph from "../../Components/Insight_Graph";
+// import LineGraph from "../../Components/LineGraph";
 
 interface GraphData {
   [key: string]: number;
@@ -273,7 +274,7 @@ const ProductInsight: React.FC = () => {
                             height: "380px",
                           }}
                         >
-                          <LineGraph graphData={backendData.graph_data} />
+                          <Product_Insight_Graph graphData={backendData.graph_data} />
                         </Paper>
                       </Container>
                     </div>
