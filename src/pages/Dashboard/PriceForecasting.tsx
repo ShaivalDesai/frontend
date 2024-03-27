@@ -14,7 +14,7 @@ const PriceForecasting: React.FC = () => {
     <>
      <DashboardN/>
      <div  style={{ marginTop: "100px" }}>
-     <LineGraph2/>
+     <LineGraph/>
      </div>
     </>
   );

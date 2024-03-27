@@ -4,6 +4,7 @@ import DashboardCards from "./Cards";
 import DashboardN from "../../Components/DashboardNavbar";
 // import { LineChart } from "recharts/types/chart/LineChart";
 import LineGraph from "../../Components/LineGraph";
+import LineGraph2 from "../../Components/LineGraph2";
 const SalesForecasting: React.FC = () => {
 
 
@@ -12,7 +13,7 @@ const SalesForecasting: React.FC = () => {
     <>
      <DashboardN/>
      <div  style={{ marginTop: "100px" }}>
-     {/* <LineGraph /> */}
+     <LineGraph2/>
      </div>
     </>
   );
