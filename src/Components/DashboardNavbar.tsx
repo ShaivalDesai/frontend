@@ -107,7 +107,7 @@ const DashboardN = () => {
     navigate("/dashboard");
   };
 
-  const viewcompetition = () => {
+  const dashboard = () => {
     setLogoutDialogOpen(false);
     navigate("/dashboard");
   };
@@ -171,7 +171,7 @@ const DashboardN = () => {
               style={{ height: "50px", marginRight: "auto" }}
             />
 
-            <Button
+            {/* <Button
               style={{
                 fontSize: "1.05rem",
                 color: "inherit",
@@ -182,9 +182,9 @@ const DashboardN = () => {
               onClick={manageProducts}
             >
               Manage Products
-            </Button>
+            </Button> */}
 
-            <Button
+            {/* <Button
               style={{
                 fontSize: "1.05rem",
                 color: "inherit",
@@ -194,8 +194,8 @@ const DashboardN = () => {
               onClick={forecasting}
             >
               Forecasting
-            </Button>
-
+            </Button> */}
+{/* 
             <Button
               style={{
                 fontSize: "1.05rem",
@@ -206,7 +206,7 @@ const DashboardN = () => {
               onClick={viewcompetition}
             >
               View Competition
-            </Button>
+            </Button> */}
 
             <Button
               style={{
@@ -215,9 +215,9 @@ const DashboardN = () => {
                 fontFamily: "'Roboto', sans-serif",
               }}
               color="inherit"
-              onClick={productInsight}
+              onClick={dashboard}
             >
-              Product Insights
+              DASHBOARD
             </Button>
 
             <IconButton

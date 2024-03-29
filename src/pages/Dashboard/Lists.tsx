@@ -91,6 +91,9 @@ const MainListItems = () => {
     if (item.primaryText === "Price Forecasting") {
       navigate("/price");
     }
+    if (item.primaryText === "View Competition") {
+      navigate("/competition");
+    }
   };
 
   return (

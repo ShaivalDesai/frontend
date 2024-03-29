@@ -89,7 +89,52 @@
 // }
 
 
+.rating-distribution {
+  margin-top: 30px;
+}
 
+.rating-title, .opinion-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.rating-row, .opinion-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.star {
+  font-size: 20px;
+  margin-right: 10px;
+}
+
+.progress-bar {
+  width: 200px;
+  height: 20px;
+  background-color: #f0f0f0;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-right: 10px;
+}
+
+.progress {
+  height: 100%;
+  background-color: #ff6b00;
+}
+
+.percentage {
+  font-size: 16px;
+}
+
+.opinion-label {
+  width: 100px;
+}
+
+.rating-distribution, .customer-opinion {
+  flex: 1;
+}
 
 
 
@@ -159,4 +204,31 @@
   &:hover {
     background-color: #0056b3; // Darker blue on hover
   }
+}
+
+
+.rating-customer-content {
+  flex: 1;
+  margin-right: 20px; /* Adjust spacing between components */
+}
+
+.rating-customer-content:last-child {
+  margin-right: 0; /* Remove margin from the last child to prevent extra spacing */
+}
+.rating-customer-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.rating-customer-content {
+  flex: 1;
+  text-align: center;
+}
+
+.vertical-line {
+  height: 100%;
+  border-left: 2px solid black;
+  margin: 0 20px;
 }

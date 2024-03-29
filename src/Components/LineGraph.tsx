@@ -547,46 +547,7 @@ const LineGraph: React.FC = () => {
           rel="stylesheet"
         />
       </head>
-      {/* <div style={{ display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "20px" }}>
-      <Typography
-        variant="h4"
-        sx={{
-          paddingTop: "80px",
-          marginBottom: "10px",
-          textAlign: "center",
-          fontFamily: "'Roboto', sans-serif",
-          fontWeight: "bold",
-          fontSize: "30px",
-          color: "#724c31",
-
-          WebkitBackgroundClip: "text",
-        }}
-      >
-        Select Product:
-      </Typography>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          width: "100%",
-          marginBottom: "20px",
-        }}
-      >
-        <Select
-          onOpen={handleDropdownOpen}
-          onChange={(e) => handleProductSelect(Number(e.target.value))}
-          value={selectedProductId !== null ? selectedProductId.toString() : ""}
-          style={{ minWidth: "200px" }}
-        >
-          {Object.entries(vendorProducts).map(([key, product]) => (
-            <MenuItem key={product.product_id} value={product.product_id}>
-              {" "}
-              {product.brand} - {product.product_type}
-            </MenuItem>
-          ))}
-        </Select>
-      </div>
-      </div> */}
+      
 
       <div
         style={{
@@ -613,7 +574,7 @@ const LineGraph: React.FC = () => {
           onOpen={handleDropdownOpen}
           onChange={(e) => handleProductSelect(Number(e.target.value))}
           value={selectedProductId !== null ? selectedProductId.toString() : ""}
-          style={{ minWidth: "200px" , marginTop: "80px",height:"40px"}}
+          style={{ minWidth: "200px", marginTop: "80px", height: "40px" }}
         >
           {Object.entries(vendorProducts).map(([key, product]) => (
             <MenuItem key={product.product_id} value={product.product_id}>

@@ -12,7 +12,7 @@ const PriceForecasting: React.FC = () => {
       <div
         style={{
           background:
-            "#f2e5d9",
+            "#d4d4d4",
         }}
       >
         <DashboardN />

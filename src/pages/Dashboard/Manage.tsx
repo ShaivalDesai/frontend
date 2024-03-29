@@ -174,9 +174,10 @@ const ProductTable: React.FC = () => {
 
   return (
     <>
+    
       <ToastContainer />
       <DashboardN />
-
+      <div>
       <div
         style={{
           textAlign: "center",
@@ -694,6 +695,7 @@ const ProductTable: React.FC = () => {
           </div>
         </div>
       )} */}
+      </div>
     </>
   );
 };

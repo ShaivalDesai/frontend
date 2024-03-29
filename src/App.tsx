@@ -98,6 +98,8 @@ import ProductInsight from "./pages/Dashboard/Product_Insight";
 import ContactUs from "./pages/Home/Contact";
 import ProductTable from "./pages/Dashboard/Manage";
 import ProfessionalForm from "./Components/form";
+import ViewCompetition from "./pages/Dashboard/ViewCompetition";
+
 
 interface Product {
   product_id: number;
@@ -125,6 +127,7 @@ function App() {
           <Route path="/insight" element={<ProductInsight />} />
           <Route path="/contact" element={<ContactUs />} />
           <Route path="/manage1" element={<ProductTable />} />
+          <Route path="/competition" element={<ViewCompetition/>} />
 
           <Route path="/home" element={<HomePage />} />
           <Route path="/price" element={<PriceForecasting />} />
