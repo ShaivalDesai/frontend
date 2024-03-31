@@ -85,7 +85,7 @@ tbody tr:nth-child(even) {
   }
 }
 
-/* Styling for the forecast input and buttons for a professional look */
+
 .forecast-input {
   display: flex;
   align-items: center;

@@ -368,6 +368,7 @@ import {
 import axios from "axios";
 import { Select, MenuItem, Container, Typography } from "@mui/material";
 
+
 interface ProductDetails {
   product_id: number;
   price: number;
@@ -683,207 +684,207 @@ const LineGraph: React.FC = () => {
 
 export default LineGraph;
 
-<style>
-  {`
+// {/* <style>
+//   {`
 
-body {
-  background: linear-gradient(45deg, #fbfaf9 0%, #e4d9d0 100%);
-}
+// body {
+//   background: linear-gradient(45deg, #fbfaf9 0%, #e4d9d0 100%);
+// }
 
 
-  .select-container {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
-    width: 100%; /* Ensure it takes full width */
-  }
+//   .select-container {
+//     display: flex;
+//     justify-content: center;
+//     margin-bottom: 20px;
+//     width: 100%; /* Ensure it takes full width */
+//   }
   
-  .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%; /* Ensures container is full width */
-  }
+//   .container {
+//     display: flex;
+//     flex-direction: column;
+//     align-items: center;
+//     width: 100%; /* Ensures container is full width */
+//   }
   
-  .chart-container, .data-table-container {
-    width: 100%;
-    max-width: 800px; /* Adjust based on your design */
-    margin: 0 auto;
-  }
+//   .chart-container, .data-table-container {
+//     width: 100%;
+//     max-width: 800px; /* Adjust based on your design */
+//     margin: 0 auto;
+//   }
 
   
-  }
+//   }
    
 
 
 
 
-.table-container {
-  margin-top: 20px;
-  overflow-x: auto;
-}
+// .table-container {
+//   margin-top: 20px;
+//   overflow-x: auto;
+// }
 
-table {
-  border-collapse: collapse;
-  width: 100%;
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  overflow: hidden;
-}
+// table {
+//   border-collapse: collapse;
+//   width: 100%;
+//   background-color: #fff;
+//   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+//   border-radius: 8px;
+//   overflow: hidden;
+// }
 
-th,
-td {
-  text-align: left;
-  padding: 12px 15px;
-}
+// th,
+// td {
+//   text-align: left;
+//   padding: 12px 15px;
+// }
 
-th {
-  background-color: #007bff;
-  color: white;
-  font-weight: bold;
-}
+// th {
+//   background-color: #007bff;
+//   color: white;
+//   font-weight: bold;
+// }
 
-td {
-  border-top: 1px solid #eee;
-}
+// td {
+//   border-top: 1px solid #eee;
+// }
 
-tbody tr:nth-child(even) {
-  background-color: #f2f2f2;
-}
+// tbody tr:nth-child(even) {
+//   background-color: #f2f2f2;
+// }
 
-/* Responsive table */
-@media screen and (max-width: 600px) {
-  table {
-    border: 0;
-  }
+// /* Responsive table */
+// @media screen and (max-width: 600px) {
+//   table {
+//     border: 0;
+//   }
 
-  table caption {
-    font-size: 1.3em;
-  }
+//   table caption {
+//     font-size: 1.3em;
+//   }
 
-  table,
-  thead,
-  tbody,
-  th,
-  td,
-  tr {
-    display: block;
-  }
+//   table,
+//   thead,
+//   tbody,
+//   th,
+//   td,
+//   tr {
+//     display: block;
+//   }
 
-  thead tr {
-    position: absolute;
-    top: -9999px;
-    left: -9999px;
-  }
+//   thead tr {
+//     position: absolute;
+//     top: -9999px;
+//     left: -9999px;
+//   }
 
-  tr {
-    border: 1px solid #ccc;
-  }
+//   tr {
+//     border: 1px solid #ccc;
+//   }
 
-  td {
-    border: none;
-    border-bottom: 1px solid #eee;
-    position: relative;
-    padding-left: 50%;
-    text-align: right;
-  }
+//   td {
+//     border: none;
+//     border-bottom: 1px solid #eee;
+//     position: relative;
+//     padding-left: 50%;
+//     text-align: right;
+//   }
 
-  td:before {
-    position: absolute;
-    top: 12px;
-    left: 6px;
-    width: 45%;
-    padding-right: 10px;
-    white-space: nowrap;
-    text-align: left;
-    font-weight: bold;
-    content: attr(data-label);
-  }
+//   td:before {
+//     position: absolute;
+//     top: 12px;
+//     left: 6px;
+//     width: 45%;
+//     padding-right: 10px;
+//     white-space: nowrap;
+//     text-align: left;
+//     font-weight: bold;
+//     content: attr(data-label);
+//   }
 
-  td:last-child {
-    border-bottom: 0;
-  }
-}
+//   td:last-child {
+//     border-bottom: 0;
+//   }
+// }
 
-/* Styling for the forecast input and buttons for a professional look */
-.forecast-input {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 20px;
-}
+// /* Styling for the forecast input and buttons for a professional look */
+// .forecast-input {
+//   display: flex;
+//   align-items: center;
+//   gap: 10px;
+//   margin-bottom: 20px;
+// }
 
-.forecast-input label {
-  font-weight: bold;
-}
+// .forecast-input label {
+//   font-weight: bold;
+// }
 
-.forecast-input input {
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
+// .forecast-input input {
+//   padding: 8px;
+//   border: 1px solid #ccc;
+//   border-radius: 4px;
+// }
 
-/* Adjust the following as needed to fit your design */
-.chart-container {
-  padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
+// /* Adjust the following as needed to fit your design */
+// .chart-container {
+//   padding: 20px;
+//   background-color: #f9f9f9;
+//   border-radius: 8px;
+//   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+// }
 
-.line-graph-container {
-  display: flex;
-}
+// .line-graph-container {
+//   display: flex;
+// }
 
-.chart-container,
-.forecast-chart-container {
-  flex: 1;
-  margin: 10px;
-}
+// .chart-container,
+// .forecast-chart-container {
+//   flex: 1;
+//   margin: 10px;
+// }
 
-.container {
-  display: flex;
-  justify-content: space-between;
-}
+// .container {
+//   display: flex;
+//   justify-content: space-between;
+// }
 
-.chart-container {
-  width: 70%; /* Adjust width as needed */
-}
+// .chart-container {
+//   width: 70%; /* Adjust width as needed */
+// }
 
-.data-table-container {
-  width: 25%; /* Adjust width as needed */
-  max-height: 500px; /* Adjust maximum height */
-  overflow-y: auto; /* Enable vertical scrolling */
-  margin-top: 10px;
+// .data-table-container {
+//   width: 25%; /* Adjust width as needed */
+//   max-height: 500px; /* Adjust maximum height */
+//   overflow-y: auto; /* Enable vertical scrolling */
+//   margin-top: 10px;
   
-}
+// }
 
-.data-table {
-  width: 100%;
-}
+// .data-table {
+//   width: 100%;
+// }
 
-/* Adjust the width of the chart container */
-.chart-container {
-  width: 60%; /* Adjust width as needed */
-}
+// /* Adjust the width of the chart container */
+// .chart-container {
+//   width: 60%; /* Adjust width as needed */
+// }
 
-/* Adjust the width of the data table container */
-.data-table-container {
-  width: 35%; /* Adjust width as needed */
-}
+// /* Adjust the width of the data table container */
+// .data-table-container {
+//   width: 35%; /* Adjust width as needed */
+// }
 
-/* Ensure the chart and table are displayed side by side */
-.container {
-  display: flex;
-  flex-wrap: wrap; /* Allow wrapping if content overflows */
-}
+// /* Ensure the chart and table are displayed side by side */
+// .container {
+//   display: flex;
+//   flex-wrap: wrap; /* Allow wrapping if content overflows */
+// }
 
-/* Add some margin between chart and table */
-.chart-container,
-.data-table-container {
-  margin: 10px; /* Adjust margin as needed */
-}
+// /* Add some margin between chart and table */
+// .chart-container,
+// .data-table-container {
+//   margin: 10px; /* Adjust margin as needed */
+// }
 
-}`}
-</style>;
+// }`}
+// </style>; */}

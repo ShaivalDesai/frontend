@@ -442,7 +442,7 @@ const SingleProduct: React.FC = () => {
     const fetchMarketBasketData = async () => {
       try {
         const additionalResponse = await axios.get(
-          `http://127.0.0.1:8000/bought_together/${productId}`
+          `http://127.0.0.1:8000/bought_together/?product_id=${productId}`
         );
         setMarketBasket(additionalResponse.data);
       } catch (error) {
@@ -573,25 +573,25 @@ const SingleProduct: React.FC = () => {
         <div
           style={{ display: "flex", alignItems: "center", marginTop: "20px" }}
         >
-          {/* <div
+          <div
             style={{
               background: "white",
               borderRadius: "15px",
               padding: "20px",
               boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
               textAlign: "center", // Center align the content
-              margin: "20px", // Add margin for spacing
+              marginLeft: "50px", // Add margin for spacing
               justifyContent:"center"
             }}
-          > */}
-             <div
+          >
+             {/* <div
     style={{
       fontWeight: "bold",
       fontSize: "20px",
       marginBottom: "10px",
       textAlign: "center" // Center align the title
     }}
-  >
+  > */}
   
             <RatingDistribution {...randomStarData} />
           </div>

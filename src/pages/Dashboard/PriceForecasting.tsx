@@ -5,6 +5,7 @@ import DashboardN from "../../Components/DashboardNavbar";
 import LineGraph from "../../Components/LineGraph";
 import { LineChart } from "recharts/types/chart/LineChart";
 import LineGraph2 from "../../Components/LineGraph2";
+// import LineGraph2 from "../../Components/LineGraph2";
 
 const PriceForecasting: React.FC = () => {
   return (
