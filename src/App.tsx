@@ -99,6 +99,7 @@ import ContactUs from "./pages/Home/Contact";
 import ProductTable from "./pages/Dashboard/Manage";
 import ProfessionalForm from "./Components/form";
 import ViewCompetition from "./pages/Dashboard/ViewCompetition";
+import ContactUs2 from "./Components/ContactUs2";
 
 
 interface Product {
@@ -106,7 +107,7 @@ interface Product {
   product_type: string;
   brand: string;
   price: number;
-  image_base64: string[];
+  image: string[];
   category: string;
 
   
@@ -165,6 +166,7 @@ function App() {
             element={<WishlistPage wishlist={wishlist} />}
           />
           <Route path="/cart" element={<CartPage />} />
+          <Route path="/contactVendor" element={<ContactUs2 />} />
         </Routes>
       </ThemeProvider>
     </>

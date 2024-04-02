@@ -4,18 +4,13 @@ import ProductCard, { Product } from "../Whishlist/WhishlistProductCard";
 // import Product from "../../ProductPage/Product";
 // import ProductCard, { Product } from "../Whishlist/WishlistProductCard";
 
-
 interface CartProps {
   cart: Product[];
 }
 
-const handleRemove = (productId: number) => {
-   
-  };
+const handleRemove = (productId: number) => {};
 
-  const handleAddToCart = (productId: number) => {
-
-  };
+const handleAddToCart = (productId: number) => {};
 
 const Cart: React.FC<CartProps> = ({ cart }) => {
   return (
@@ -58,10 +53,10 @@ const Cart: React.FC<CartProps> = ({ cart }) => {
           <Grid container spacing={3} justifyContent="center">
             {cart.map((product) => (
               <Grid item key={product.product_id} xs={12} sm={6} md={4} lg={3}>
-                <ProductCard 
-                product={product}
-                onRemove={handleRemove}
-                onAdd={handleAddToCart}
+                <ProductCard
+                  product={product}
+                  onRemove={handleRemove}
+                  onAdd={handleAddToCart}
                 />
               </Grid>
             ))}
@@ -73,5 +68,3 @@ const Cart: React.FC<CartProps> = ({ cart }) => {
 };
 
 export default Cart;
-
-

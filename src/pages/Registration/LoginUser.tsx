@@ -112,7 +112,7 @@ export default function LoginUser() {
               alignItems: "center",
             }}
           >
-            <Avatar sx={{ m: 1, bgcolor: "#724C31", height: 65, width: 65 }}>
+            <Avatar sx={{ m: 1, bgcolor: "#724C31", height: 65, width: 65 , marginTop:"30px"}}>
               <LockOutlinedIcon fontSize="large" />
             </Avatar>
             <Typography component="h1" variant="h5">
@@ -125,7 +125,7 @@ export default function LoginUser() {
               sx={{ mt: 1 }}
             >
               <TextField
-                margin="normal"
+                margin="dense"
                 required
                 fullWidth
                 id="email"
@@ -142,7 +142,7 @@ export default function LoginUser() {
               </div>
 
               <TextField
-                margin="normal"
+                margin="dense"
                 required
                 fullWidth
                 name="password"
@@ -163,9 +163,9 @@ export default function LoginUser() {
                 {errors.password && <span>{errors.password}</span>}
               </div>
 
-              <Typography style={{ color: "#67442b", marginBottom: -5 }}>
+              {/* <Typography style={{ color: "#67442b", marginBottom: -5 }}>
                 Please select an option:
-              </Typography>
+              </Typography> */}
 
               <RadioGroup
                 row

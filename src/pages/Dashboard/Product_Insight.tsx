@@ -10,11 +10,9 @@ import {
 import React, { useEffect, useState } from "react";
 import DashboardN from "../../Components/DashboardNavbar";
 import CustomCard from "../../Components/InsightCards";
-// import LineGraph from "../../Components/LineGraph";
 import CustomProductCard from "../../Components/Product_Component";
 import axios from "axios";
 import Product_Insight_Graph from "../../Components/Insight_Graph";
-// import LineGraph from "../../Components/LineGraph";
 
 interface GraphData {
   [key: string]: number;
@@ -133,7 +131,7 @@ const ProductInsight: React.FC = () => {
               <div
                 style={{ fontFamily: "Arial, sans-serif", textAlign: "center" }}
               >
-                <Typography
+                {/* <Typography
                   variant="h4"
                   sx={{
                     marginTop: "30px",
@@ -144,7 +142,7 @@ const ProductInsight: React.FC = () => {
                   }}
                 >
                   Select the product:
-                </Typography>
+                </Typography> */}
                 <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
                   <Select
                     value={selectedProductId !== null ? selectedProductId : ""}
@@ -154,12 +152,17 @@ const ProductInsight: React.FC = () => {
                       handleProductChange(productId);
                     }}
                     style={{
-                      width: "200px",
+                      minWidth: "200px",
                       height: "40px",
                       fontSize: "16px",
                       marginTop: "-20px",
                     }}
+                    displayEmpty
                   >
+                    {" "}
+                    <MenuItem value="" disabled>
+                      Select the product
+                    </MenuItem>
                     {Object.entries(vendorProducts).map(
                       ([productId, product]) => (
                         <MenuItem key={productId} value={productId}>
@@ -264,7 +267,7 @@ const ProductInsight: React.FC = () => {
                     </div>
 
                     <div>
-                      <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+                      {/* <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
                         <Paper
                           elevation={3}
                           style={{
@@ -275,6 +278,25 @@ const ProductInsight: React.FC = () => {
                           }}
                         >
                           <Product_Insight_Graph graphData={backendData.graph_data} />
+                        </Paper>
+                      </Container> */}
+
+                      <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+                        <Paper
+                          elevation={3}
+                          style={{
+                            padding: "30px",
+                            width: "790px",
+                            marginTop: "10px",
+                            height: "380px",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                        >
+                          <Product_Insight_Graph
+                            graphData={backendData.graph_data}
+                          />
                         </Paper>
                       </Container>
                     </div>

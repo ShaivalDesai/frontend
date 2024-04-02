@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { Line } from "react-chartjs-2";
 import {
@@ -13,7 +12,7 @@ import {
 } from "chart.js";
 import axios from "axios";
 import "./LineGraph.css";
-import { Select, MenuItem } from "@mui/material";
+import { Select, MenuItem, Container, Typography } from "@mui/material";
 
 interface ProductDetails {
   product_id: number;
@@ -33,7 +32,7 @@ ChartJS.register(
   Legend
 );
 
-const LineGraph2: React.FC = () => {
+const LineGraph: React.FC = () => {
   const [productData, setProductData] = useState<any>({
     labels: [],
     datasets: [
@@ -59,12 +58,7 @@ const LineGraph2: React.FC = () => {
   const handleForecastChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseInt(event.target.value);
     setForecastMonths(value >= 0 ? value : 0);
-  };
-
-  const handleKeyPress = (event: React.KeyboardEvent) => {
-    if (event.key === "Enter") {
-      setShowForecast(true);
-    }
+    setShowForecast(true); // Automatically show forecast when value changes
   };
 
   const fetchVendorProducts = async (vendorId: number): Promise<void> => {
@@ -80,57 +74,9 @@ const LineGraph2: React.FC = () => {
     }
   };
 
-  const handleForecastButtonClick = () => {
-    setShowForecast(true);
-  };
-
   useEffect(() => {
     fetchData();
   }, [selectedProductId]);
-
-  const fetchProductData = async (productId: number) => {
-    try {
-      const response = await axios.get(
-        `http://127.0.0.1:8000/sale_forecasting/${productId}/${forecastMonths}`
-      );
-      const data = response.data;
-      const { graph, forecasted } = data;
-
-      const labels = Object.keys(graph).slice(-12);
-      const salesData = labels.map((label) => parseInt(graph[label]));
-
-      const allLabels = [
-        ...labels,
-        ...forecasted.map((item: any) => item.label),
-      ];
-      const allSalesData = [
-        ...salesData,
-        ...forecasted.map((item: any) => item.data),
-      ];
-
-      setProductData({
-        labels: allLabels,
-        datasets: [
-          {
-            label: "Product Sales",
-            data: allSalesData,
-            borderColor: "blue",
-            backgroundColor: "rgba(255, 99, 132, 0.2)",
-            pointBackgroundColor: "blue",
-            pointBorderColor: "blue",
-          },
-        ],
-      });
-    } catch (error) {
-      console.error("Error fetching product data:", error);
-    }
-  };
-
-  useEffect(() => {
-    if (showForecast && selectedProductId) {
-      fetchDataWithForecast();
-    }
-  }, [showForecast, forecastMonths, selectedProductId]);
 
   const fetchData = async () => {
     try {
@@ -138,42 +84,31 @@ const LineGraph2: React.FC = () => {
         let response;
         if (forecastMonths > 0) {
           response = await axios.get(
-            `http://127.0.0.1:8000/sale_forecasting/${selectedProductId}/${forecastMonths}`
+            `http://127.0.0.1:8000/price_forecasting/${selectedProductId}/${forecastMonths}`
           );
         } else {
+          // Fetching only the last 12 months' data
+          const a = 1;
           response = await axios.get(
-            `http://127.0.0.1:8000/sale_forecasting/${selectedProductId}/1`
+            `http://127.0.0.1:8000/price_forecasting/${selectedProductId}/${a}`
           );
         }
         const data = response.data;
 
-        console.log("Fetched data:", data);
-
         // Extracting data from response
         const { graph, forecasted } = data;
 
-        console.log("Forecasted data:", forecasted);
-
         // Extracting only the latest 12 months data if no forecasted months are selected
-        const labels =
-          forecastMonths > 0
-            ? Object.keys(graph)
-            : Object.keys(graph).slice(-12);
+        const labels = Object.keys(graph);
         const salesData = labels.map((label) => parseInt(graph[label]));
-
-        console.log("Actual sales data:", salesData);
-
-        // Combining actual sales data and forecasted data initially
-        let allLabels = [...labels];
-        let allSalesData = [...salesData];
 
         // Update the state to show only the last 12 months initially if no forecasted months are selected
         setProductData({
-          labels: allLabels,
+          labels: labels.slice(-12),
           datasets: [
             {
               label: "Product Sales",
-              data: allSalesData,
+              data: salesData.slice(-12),
               borderColor: "blue",
               backgroundColor: "rgba(255, 99, 132, 0.2)",
               pointBackgroundColor: "blue",
@@ -187,10 +122,17 @@ const LineGraph2: React.FC = () => {
     }
   };
 
+  useEffect(() => {
+    if (showForecast && selectedProductId) {
+      fetchDataWithForecast();
+    }
+  }, [showForecast, forecastMonths, selectedProductId]);
+
   const fetchDataWithForecast = async () => {
     try {
+      const forecastMonthsToFetch = Math.max(1, forecastMonths);
       const response = await axios.get(
-        `http://127.0.0.1:8000/sale_forecasting/${selectedProductId}/${forecastMonths}`
+        `http://127.0.0.1:8000/price_forecasting/${selectedProductId}/${forecastMonths}`
       );
       const data = response.data;
       const { forecasted } = data;
@@ -206,7 +148,7 @@ const LineGraph2: React.FC = () => {
         }
       }
 
-      setForecastData(forecastedData);
+      setForecastData(forecastedData.slice(0, 6));
     } catch (error) {
       console.error("Error fetching forecasted data:", error);
     }
@@ -243,114 +185,99 @@ const LineGraph2: React.FC = () => {
     },
   };
 
-  // return (
-  //   <>
-  //     <div className="select-container">
-  //       <Select
-  //         onOpen={handleDropdownOpen}
-  //         onChange={(e) => handleProductSelect(Number(e.target.value))}
-  //         value={selectedProductId !== null ? selectedProductId.toString() : ""}
-  //       >
-  //         {Object.entries(vendorProducts).map(([key, product]) => (
-  //           <MenuItem key={product.product_id} value={product.product_id}>
-  //             {" "}
-  //             {product.brand} - {product.product_type}
-  //           </MenuItem>
-  //         ))}
-  //       </Select>
-  //     </div>
-
-  //     <div className="container">
-  //       <div className="chart-container">
-  //         <Line
-  //           data={{
-  //             labels: [
-  //               ...productData.labels,
-  //               ...forecastData.map((item) => item.label),
-  //             ],
-  //             datasets: [
-  //               {
-  //                 label: "Product Sales",
-  //                 data: [
-  //                   ...productData.datasets[0].data,
-  //                   ...forecastData.map((item) => item.data),
-  //                 ],
-  //                 borderColor: "blue",
-  //                 backgroundColor: "rgba(255, 99, 132, 0.2)",
-  //                 pointBackgroundColor: "blue",
-  //                 pointBorderColor: "blue",
-  //               },
-  //             ],
-  //           }}
-  //           options={options}
-  //         />
-  //       </div>
-
-  //       <div className="data-table-container">
-  //         <table>
-  //           <thead className="table-header">
-  //             <tr>
-  //               <th>Month</th>
-  //               <th>Quantity</th>
-  //             </tr>
-  //           </thead>
-  //           <tbody>
-  //             {productData.labels.map((label: any, index: any) => (
-  //               <tr key={index}>
-  //                 <td>{label}</td>
-  //                 <td>{productData.datasets[0].data[index]}</td>
-  //               </tr>
-  //             ))}
-  //             {forecastData.map((item, index) => (
-  //               <tr key={index + productData.labels.length}>
-  //                 <td>{item.label}</td>
-  //                 <td>{item.data}</td>
-  //               </tr>
-  //             ))}
-  //           </tbody>
-  //         </table>
-  //       </div>
-  //     </div>
-  //   </>
-  // );
-
-
-
-
-
-
-
-
-
-   return (
+  return (
     <>
-      <Select
-        onOpen={handleDropdownOpen}
-        onChange={(e) => handleProductSelect(Number(e.target.value))}
-        value={selectedProductId !== null ? selectedProductId.toString() : ""}
-      >
-        {Object.entries(vendorProducts).map(([key, product]) => (
-          <MenuItem key={product.product_id} value={product.product_id}>
-            {" "}
-            {product.brand} - {product.product_type}
-          </MenuItem>
-        ))}
-      </Select>
+      <head>
+        <link
+          href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+          rel="stylesheet"
+        />
+      </head>
 
-      <div className="container">
-        <div className="chart-container">
+      <Typography
+        variant="h4"
+        sx={{
+
+          textAlign: "center",
+          fontFamily: "'Roboto', sans-serif",
+          fontWeight: "bold",
+          fontSize: "50px",
+         
+          color: "red",
+          background:
+            "linear-gradient(45deg, #8B4513 30%, #5D4037 60%, #BCAAA4 90%)",
+          WebkitBackgroundClip: "text",
+          WebkitTextFillColor: "transparent",
+          marginTop:"65px"
+        }}
+      >
+        Sales Forecasting
+      </Typography>
+
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          marginBottom: "20px",
+        }}
+      >
+       
+
+        <Select
+          onOpen={handleDropdownOpen}
+          onChange={(e) => handleProductSelect(Number(e.target.value))}
+          value={selectedProductId !== null ? selectedProductId.toString() : ""}
+          style={{ minWidth: "200px", marginTop: "20px", height: "40px" }}
+          displayEmpty // This is to display the selected value even when it's empty
+        >
+          {/* Placeholder */}
+          <MenuItem value="" disabled>
+            Select the product
+          </MenuItem>
+          {/* Other options */}
+          {Object.entries(vendorProducts).map(([key, product]) => (
+            <MenuItem key={product.product_id} value={product.product_id}>
+              {product.brand} - {product.product_type}
+            </MenuItem>
+          ))}
+        </Select>
+      </div>
+
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-around",
+          width: "100%",
+          flexWrap: "wrap",
+        }}
+      >
+        <div
+          className="chart-container"
+          style={{ flex: 1, minWidth: "300px", marginRight: "20px" }}
+        >
           <div className="forecast-input">
-            <label htmlFor="forecastMonths">Number of forecasted months:</label>
+            <label
+              htmlFor="forecastMonths"
+              style={{
+                textAlign: "center",
+                color: "brown",
+                justifyContent: "center",
+              }}
+            >
+              Months to Forecast:
+            </label>
             <input
               type="number"
               id="forecastMonths"
               name="forecastMonths"
               value={forecastMonths}
               onChange={handleForecastChange}
-              onKeyDown={handleKeyPress}
               inputMode="numeric"
             />
           </div>
+
           <Line
             data={{
               labels: [
@@ -360,14 +287,22 @@ const LineGraph2: React.FC = () => {
               datasets: [
                 {
                   label: "Product Sales",
-                  data: [
-                    ...productData.datasets[0].data,
-                    ...forecastData.map((item) => item.data),
-                  ],
+                  data: productData.datasets[0].data,
                   borderColor: "blue",
-                  backgroundColor: "rgba(255, 99, 132, 0.2)",
+                  backgroundColor: "#0000ff",
                   pointBackgroundColor: "blue",
                   pointBorderColor: "blue",
+                },
+                {
+                  label: "Forecasted Sales",
+                  data: [
+                    ...productData.datasets[0].data, // Use the actual sales data instead of padding
+                    ...forecastData.map((item) => item.data),
+                  ],
+                  borderColor: "red",
+                  backgroundColor: "red",
+                  pointBackgroundColor: "red",
+                  pointBorderColor: "red",
                 },
               ],
             }}
@@ -406,10 +341,16 @@ const LineGraph2: React.FC = () => {
   );
 };
 
-export default LineGraph2;
+export default LineGraph;
 
 <style>
   {`
+
+body {
+  background: linear-gradient(45deg, #fbfaf9 0%, #e4d9d0 100%);
+}
+
+
   .select-container {
     display: flex;
     justify-content: center;
@@ -429,6 +370,180 @@ export default LineGraph2;
     max-width: 800px; /* Adjust based on your design */
     margin: 0 auto;
   }
+
   
-`}
+  }
+   
+
+
+
+
+.table-container {
+  margin-top: 20px;
+  overflow-x: auto;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 12px 15px;
+}
+
+th {
+  background-color: #007bff;
+  color: white;
+  font-weight: bold;
+}
+
+td {
+  border-top: 1px solid #eee;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+/* Responsive table */
+@media screen and (max-width: 600px) {
+  table {
+    border: 0;
+  }
+
+  table caption {
+    font-size: 1.3em;
+  }
+
+  table,
+  thead,
+  tbody,
+  th,
+  td,
+  tr {
+    display: block;
+  }
+
+  thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+
+  tr {
+    border: 1px solid #ccc;
+  }
+
+  td {
+    border: none;
+    border-bottom: 1px solid #eee;
+    position: relative;
+    padding-left: 50%;
+    text-align: right;
+  }
+
+  td:before {
+    position: absolute;
+    top: 12px;
+    left: 6px;
+    width: 45%;
+    padding-right: 10px;
+    white-space: nowrap;
+    text-align: left;
+    font-weight: bold;
+    content: attr(data-label);
+  }
+
+  td:last-child {
+    border-bottom: 0;
+  }
+}
+
+/* Styling for the forecast input and buttons for a professional look */
+.forecast-input {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.forecast-input label {
+  font-weight: bold;
+}
+
+.forecast-input input {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Adjust the following as needed to fit your design */
+.chart-container {
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.line-graph-container {
+  display: flex;
+}
+
+.chart-container,
+.forecast-chart-container {
+  flex: 1;
+  margin: 10px;
+}
+
+.container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.chart-container {
+  width: 70%; /* Adjust width as needed */
+}
+
+.data-table-container {
+  width: 25%; /* Adjust width as needed */
+  max-height: 500px; /* Adjust maximum height */
+  overflow-y: auto; /* Enable vertical scrolling */
+  margin-top: 10px;
+  
+}
+
+.data-table {
+  width: 100%;
+}
+
+/* Adjust the width of the chart container */
+.chart-container {
+  width: 60%; /* Adjust width as needed */
+}
+
+/* Adjust the width of the data table container */
+.data-table-container {
+  width: 35%; /* Adjust width as needed */
+}
+
+/* Ensure the chart and table are displayed side by side */
+.container {
+  display: flex;
+  flex-wrap: wrap; /* Allow wrapping if content overflows */
+}
+
+/* Add some margin between chart and table */
+.chart-container,
+.data-table-container {
+  margin: 10px; /* Adjust margin as needed */
+}
+
+}`}
 </style>;

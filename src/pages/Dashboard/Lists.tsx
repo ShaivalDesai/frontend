@@ -97,14 +97,15 @@ const MainListItems = () => {
   };
 
   return (
-    <List style={{ padding: 0, backgroundColor: "#f4f4f4" }}>
+    // <div style={{backgroundColor:"#d4d4d4"}}>
+    <List style={{ padding: 0, backgroundColor: "#d4d4d4" }}>
       {listItemData.map((item, index) => (
         <ListItemButton
           key={index}
           onClick={() => handleClick(item)}
           sx={{
             "&:hover": {
-              backgroundColor: "#f1e0c5",
+              backgroundColor: "white",
             },
           }}
         >
@@ -119,6 +120,7 @@ const MainListItems = () => {
         </ListItemButton>
       ))}
     </List>
+    // </div>
   );
 };
 

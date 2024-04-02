@@ -18,7 +18,7 @@ const HomePage: React.FC = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  const images = ["ic11.avif", "ic9.avif", "h2.jpg", "ic12.avif"];
+  const images = ["ic11.avif", "ic9.avif", "ic7.jpg", "ic12.avif"];
 
   useEffect(() => {
     fetchDataAndSetSessionStorage();
@@ -65,16 +65,20 @@ const HomePage: React.FC = () => {
 
   return (
     <>
+   
       <Navbar />
-
+      
       <ImageCarousel1 images={images} />
 
       <ImageCarousel />
+      {/* <div style={{backgroundColor:"#d4d4d4",marginTop:"20px"}}> */}
+      
       <div
         style={{
           display: "flex",
           flexDirection: "row",
           justifyContent: "space-around",
+        
         }}
       >
         <MyCard
@@ -157,6 +161,8 @@ const HomePage: React.FC = () => {
           onClick={handleSearch}
         />
       </div>
+      {/* </div> */}
+      
     </>
   );
 };

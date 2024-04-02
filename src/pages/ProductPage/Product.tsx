@@ -9,7 +9,7 @@ interface Product {
   product_type: string;
   brand: string;
   price: number;
-  image_base64: string[];
+  image: string[];
   category: string;
  
 }

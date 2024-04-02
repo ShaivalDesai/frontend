@@ -1,7 +1,7 @@
 .table-container {
   margin-top: 20px;
   overflow-x: auto;
-}
+} 
 
 table {
   border-collapse: collapse;
@@ -19,7 +19,7 @@ td {
 }
 
 th {
-  background-color: #007bff;
+  /* background-color: #007bff; */
   color: white;
   font-weight: bold;
 }
@@ -163,7 +163,6 @@ tbody tr:nth-child(even) {
   background-color: "brown"; /* Adjust margin as needed */
 }
 
-/* Adjusted styling for the table header */
 .table-header th {
   background-color: #724c31;
   color: white;

@@ -7,7 +7,7 @@ export interface Product {
     product_name: string;
     description: string;
     price: number;
-    image_base64: string;
+    image: string;
   }
 
 interface ProductCardProps {
@@ -35,7 +35,7 @@ const ProductCard: FC<ProductCardProps> = ({ product, onAddToCart }) => {
       <CardMedia
         component="img"
         height="150"
-        image={product.image_base64}
+        image={product.image}
         alt={product.product_name}
       />
       <CardContent

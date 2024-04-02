@@ -25,6 +25,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import CallIcon from "@mui/icons-material/Call";
 import MainListItems from "./Lists";
 import {
   Dialog,
@@ -35,6 +36,14 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import CustomTypography from "../../Components/TypographyPR";
+
+interface ProductDetails {
+  [key: string]: {
+    // Assuming the key is the product ID here.
+    "total quantity": number;
+    product_title: string;
+  };
+}
 
 const id = 2;
 const API_URL = "http://127.0.0.1:8000/vendor_dashboard/" + id;
@@ -77,7 +86,7 @@ const Drawer = styled(MuiDrawer, {
       duration: theme.transitions.duration.enteringScreen,
     }),
     boxSizing: "border-box",
-    backgroundColor: "#f5f5f5",
+    backgroundColor: "#d4d4d4",
     ...(!open && {
       overflowX: "hidden",
       transition: theme.transitions.create("width", {
@@ -123,13 +132,20 @@ export default function Dashboard() {
           })
         );
 
+        // const formattedData = Object.entries(
+        //   data.all_product_quantity ?? {}
+        // ).map(([product_title, productData]) => ({
+        //   name: product_title,
+        //   value:
+        //     (productData as { "total quantity": number })["total quantity"] ||
+        //     0,
+        // }));
+
         const formattedData = Object.entries(
-          data.all_product_quantity ?? {}
-        ).map(([productId, productData]) => ({
-          name: productId,
-          value:
-            (productData as { "total quantity": number })["total quantity"] ||
-            0,
+          (data.all_product_quantity ?? {}) as ProductDetails
+        ).map(([_, productDetails]) => ({
+          name: productDetails.product_title,
+          value: productDetails["total quantity"],
         }));
 
         setDashboardData({
@@ -165,6 +181,11 @@ export default function Dashboard() {
   const handleGoToProfile = () => {
     setAnchorEl(null);
     navigate("/vendorprofile");
+  };
+
+  const handleContact = () => {
+    setAnchorEl(null);
+    navigate("/contactVendor");
   };
 
   const handleProfileClick = (event: any) => {
@@ -259,6 +280,13 @@ export default function Dashboard() {
                   </ListItemIcon>
                   Logout
                 </MenuItem>
+
+                <MenuItem onClick={handleContact}>
+                  <ListItemIcon>
+                  <CallIcon fontSize="small" />
+                  </ListItemIcon>
+                  Contact Us
+                </MenuItem>
               </MenuList>
             </Popover>
             <Dialog
@@ -334,7 +362,7 @@ export default function Dashboard() {
               <div style={{ flex: "1" }}></div>
 
               <img
-                src="dress.png"
+                src="sbl.png"
                 alt="FashionFleet"
                 style={{ height: "40px", width: "40px", marginLeft: "90px" }}
               />
@@ -352,10 +380,11 @@ export default function Dashboard() {
         <Box
           component="main"
           sx={{
-            backgroundColor: (theme) =>
-              theme.palette.mode === "light"
-                ? theme.palette.grey[100]
-                : theme.palette.grey[100],
+            // backgroundColor: (theme) =>
+            //   theme.palette.mode === "light"
+            //     ? theme.palette.grey[100]
+            //     : theme.palette.grey[100],
+            backgroundColor: "#d4d4d4",
             flexGrow: 1,
             height: "100vh",
             overflow: "auto",
@@ -363,7 +392,8 @@ export default function Dashboard() {
         >
           <Toolbar />
 
-          <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+          <Container maxWidth="lg" sx={{ mt: 4, mb: 4, marginLeft: "20px",}}>
+          {/* <Container maxWidth="lg" sx={{ mt: 2 }}> */}
             <DashboardCards
               topSales={dashboardData.highest_sale_value ?? 0}
               totalSales={dashboardData.total_sale ?? 0}
@@ -388,11 +418,27 @@ export default function Dashboard() {
                 />
               </Grid>
 
-              <Grid item xs={12} sm={6}>
+              {/* <Grid item xs={12} sm={6}>
                 <PieChartCard
                   title="Pie Chart"
                   data={dashboardData.pieChartData ?? []}
                 />
+              </Grid> */}
+
+              <Grid item xs={12} sm={6}>
+                <Box
+                  sx={{
+                    width: 550,
+                    margin: "auto",
+                    marginTop: 2,
+                    // height: "50px",
+                  }}
+                >
+                  <PieChartCard
+                    title="Pie Chart"
+                    data={dashboardData.pieChartData ?? []}
+                  />
+                </Box>
               </Grid>
             </Grid>
           </Container>

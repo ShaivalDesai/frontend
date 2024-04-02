@@ -45,7 +45,7 @@ const Product_Insight_Graph: React.FC<LineGraphProps> = ({ graphData }) => {
         label: "Product Sales",
         data: last12Data,
         borderColor: "blue",
-        backgroundColor: "rgba(255, 99, 132, 0.2)",
+        backgroundColor: "blue",
         pointBackgroundColor: "blue",
         pointBorderColor: "blue",
       },

@@ -78,9 +78,6 @@
 // // :
 // // "19"
 
-
-
-
 import React from "react";
 import {
   Box,
@@ -99,6 +96,23 @@ interface PieChartCardProps {
   data: { name: string; value: number }[];
   colors?: string[];
 }
+interface CustomTooltipProps {
+  active: boolean;
+  payload?: Array<{ name: string; value: number }>; // Make payload optional
+}
+
+const CustomTooltip: React.FC<CustomTooltipProps> = ({ active, payload }) => {
+  if (active && payload && payload.length) {
+    return (
+      <div style={{ backgroundColor: "rgba(255, 255, 255, 0.9)", border: "1px solid black", padding: "10px", borderRadius: "10px" }}>
+        <p>{payload[0].name}</p> {/* Access name directly */}
+        <p>{payload[0].value}</p> {/* Access value directly */}
+      </div>
+    );
+  }
+
+  return null;
+};
 
 const PieChartCard: React.FC<PieChartCardProps> = ({
   title,
@@ -106,7 +120,7 @@ const PieChartCard: React.FC<PieChartCardProps> = ({
   colors = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884d8"],
 }) => {
   return (
-    <Box sx={{ maxWidth: 550, margin: "auto", marginTop: 2 }}>
+    <Box sx={{ maxWidth: 550, margin: "auto", marginTop: 2, }}>
       <Card
         sx={{
           borderRadius: "10px",
@@ -124,43 +138,36 @@ const PieChartCard: React.FC<PieChartCardProps> = ({
           </Typography>
           <br />
           <div style={{ display: "flex", justifyContent: "center" }}>
-            <PieChart width={400} height={300}>
+            <PieChart width={400} height={300} margin={{ top: -20 }}>
               <Pie
                 data={data}
                 cx="50%"
                 cy="50%"
-                outerRadius={105}
+                outerRadius={90}
                 fill="#8884d8"
                 dataKey="value"
                 label
               >
                 {data.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={colors[index % colors.length]}
+                  />
                 ))}
               </Pie>
-              <Tooltip />
-              <Legend />
+              <Tooltip content={<CustomTooltip active={false} />} />
+              {/* <Legend
+                wrapperStyle={{
+                  marginTop: "50px",
+                  textAlign: "center",
+                }}
+              /> */}
+
+              {/* <div style={{ marginTop: "50px", textAlign: "center" }}>
+                <Legend />
+              </div> */}
             </PieChart>
           </div>
-          <Table size="small" aria-label="pie chart data table">
-            <TableBody>
-              {data.map((row, index) => (
-                <TableRow key={index}>
-                  <TableCell component="th" scope="row" style={{ width: '20px', paddingRight: '10px' }}>
-                    <Box
-                      sx={{
-                        width: 15,
-                        height: 15,
-                        backgroundColor: colors[index % colors.length],
-                      }}
-                    />
-                  </TableCell>
-                  <TableCell>{row.name}</TableCell>
-                  <TableCell align="right">{row.value}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
         </CardContent>
       </Card>
     </Box>

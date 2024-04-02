@@ -366,8 +366,8 @@ import {
   Legend,
 } from "chart.js";
 import axios from "axios";
+import "./LineGraph.css";
 import { Select, MenuItem, Container, Typography } from "@mui/material";
-
 
 interface ProductDetails {
   product_id: number;
@@ -402,7 +402,7 @@ const LineGraph: React.FC = () => {
     ],
   });
 
-  const [forecastMonths, setForecastMonths] = useState<number>(0);
+  const [forecastMonths, setForecastMonths] = useState<number>(1);
   const [showForecast, setShowForecast] = useState<boolean>(false);
   const [forecastData, setForecastData] = useState<any[]>([]);
   const [vendorProducts, setVendorProducts] = useState<ProductDetails[]>([]);
@@ -542,23 +542,47 @@ const LineGraph: React.FC = () => {
 
   return (
     <>
-      <head>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
-          rel="stylesheet"
-        />
-      </head>
-      
-
       <div
         style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          marginBottom: "20px",
+          backgroundColor: selectedProductId ? "#d4d4d4" : "#d4d4d4", // Conditional background color
+          minHeight: "100vh", // Ensure the page takes up at least the full viewport height
         }}
       >
+        <head>
+          <link
+            href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+            rel="stylesheet"
+          />
+        </head>
+
         <Typography
+          variant="h4"
+          sx={{
+            textAlign: "center",
+            fontFamily: "'Roboto', sans-serif",
+            fontWeight: "bold",
+            fontSize: "50px",
+
+            color: "red",
+            background:
+              "linear-gradient(45deg, #8B4513 30%, #5D4037 60%, #BCAAA4 90%)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            marginTop: "65px",
+          }}
+        >
+          Price Forecasting
+        </Typography>
+
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            marginBottom: "20px",
+          }}
+        >
+          {/* <Typography
           variant="h4"
           sx={{
             paddingTop: "80px",
@@ -570,8 +594,27 @@ const LineGraph: React.FC = () => {
           }}
         >
           Select Product:
-        </Typography>
-        <Select
+        </Typography> */}
+
+          {/* <Typography
+        variant="h4"
+        sx={{
+          marginTop:"20px",
+          textAlign: "center",
+          fontFamily: "'Roboto', sans-serif",
+          fontWeight: "bold",
+          fontSize: "50px",
+          marginBottom: "1rem",
+          color: "red",
+          background:
+            "linear-gradient(45deg, #8B4513 30%, #5D4037 60%, #BCAAA4 90%)",
+          WebkitBackgroundClip: "text",
+          WebkitTextFillColor: "transparent",
+        }}
+      >
+       Price Forecasting
+      </Typography> */}
+          {/* <Select
           onOpen={handleDropdownOpen}
           onChange={(e) => handleProductSelect(Number(e.target.value))}
           value={selectedProductId !== null ? selectedProductId.toString() : ""}
@@ -582,101 +625,136 @@ const LineGraph: React.FC = () => {
               {product.brand} - {product.product_type}
             </MenuItem>
           ))}
-        </Select>
-      </div>
+        </Select> */}
 
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "space-around",
-          width: "100%",
-          flexWrap: "wrap",
-        }}
-      >
-        <div
-          className="chart-container"
-          style={{ flex: 1, minWidth: "300px", marginRight: "20px" }}
-        >
-          <div className="forecast-input">
-            <label
-              htmlFor="forecastMonths"
-              style={{
-                textAlign: "center",
-                color: "brown",
-                justifyContent: "center",
-              }}
+          <Select
+            onOpen={handleDropdownOpen}
+            onChange={(e) => handleProductSelect(Number(e.target.value))}
+            value={
+              selectedProductId !== null ? selectedProductId.toString() : ""
+            }
+            style={{ minWidth: "200px", marginTop: "20px", height: "40px" }}
+            displayEmpty // This is to display the selected value even when it's empty
+          >
+            {/* Placeholder */}
+            <MenuItem value="" disabled>
+              Select the product
+            </MenuItem>
+            {/* Other options */}
+            {Object.entries(vendorProducts).map(([key, product]) => (
+              <MenuItem key={product.product_id} value={product.product_id}>
+                {product.brand} - {product.product_type}
+              </MenuItem>
+            ))}
+          </Select>
+        </div>
+
+        {selectedProductId && (
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-around",
+              width: "100%",
+              flexWrap: "wrap",
+            }}
+          >
+            <div
+              className="chart-container"
+              style={{ flex: 1, minWidth: "300px", marginRight: "20px" }}
             >
-              Number of forecasted months:
-            </label>
-            <input
+              <div className="forecast-input">
+                <label
+                  htmlFor="forecastMonths"
+                  style={{
+                    textAlign: "center",
+                    color: "brown",
+                    justifyContent: "center",
+                  }}
+                >
+                  Months to Forecast:
+                </label>
+                {/* <input
               type="number"
               id="forecastMonths"
               name="forecastMonths"
               value={forecastMonths}
               onChange={handleForecastChange}
               inputMode="numeric"
-            />
-          </div>
+            /> */}
 
-          <Line
-            data={{
-              labels: [
-                ...productData.labels,
-                ...forecastData.map((item) => item.label),
-              ],
-              datasets: [
-                {
-                  label: "Product Sales",
-                  data: productData.datasets[0].data,
-                  borderColor: "blue",
-                  backgroundColor: "rgba(255, 99, 132, 0.2)",
-                  pointBackgroundColor: "blue",
-                  pointBorderColor: "blue",
-                },
-                {
-                  label: "Forecasted Sales",
-                  data: [
-                    ...productData.datasets[0].data, // Use the actual sales data instead of padding
-                    ...forecastData.map((item) => item.data),
+                <input
+                  type="text"
+                  id="forecastMonths"
+                  name="forecastMonths"
+                  value={forecastMonths}
+                  onChange={handleForecastChange}
+                  inputMode="numeric"
+                  style={{ width: "4em" }}
+                />
+              </div>
+
+              <Line
+                data={{
+                  labels: [
+                    ...productData.labels,
+                    ...forecastData.map((item) => item.label),
                   ],
-                  borderColor: "red",
-                  backgroundColor: "rgba(75, 192, 192, 0.2)",
-                  pointBackgroundColor: "red",
-                  pointBorderColor: "red",
-                },
-              ],
-            }}
-            options={options}
-          />
-        </div>
+                  datasets: [
+                    {
+                      label: "Product Sales",
+                      data: productData.datasets[0].data,
+                      borderColor: "blue",
+                      // backgroundColor: "rgba(255, 99, 132, 0.2)",
+                      backgroundColor: "#0000ff",
+                      pointBackgroundColor: "blue",
+                      pointBorderColor: "blue",
+                    },
+                    {
+                      label: "Forecasted Sales",
+                      data: [
+                        ...productData.datasets[0].data, // Use the actual sales data instead of padding
+                        ...forecastData.map((item) => item.data),
+                      ],
+                      borderColor: "red",
+                      backgroundColor: "red",
+                      pointBackgroundColor: "red",
+                      pointBorderColor: "red",
+                    },
+                  ],
+                }}
+                options={options}
+              />
+            </div>
 
-        <div className="data-table-container">
-          <div className="data-table">
-            <table>
-              <thead className="table-header">
-                <tr>
-                  <th>Month</th>
-                  <th>Quantity</th>
-                </tr>
-              </thead>
-              <tbody>
-                {productData.labels.map((label: any, index: any) => (
-                  <tr key={index}>
-                    <td>{label}</td>
-                    <td>{productData.datasets[0].data[index]}</td>
-                  </tr>
-                ))}
-                {forecastData.map((item, index) => (
-                  <tr key={index + productData.labels.length}>
-                    <td>{item.label}</td>
-                    <td>{item.data}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            <div className="data-table-container">
+              <div className="data-table">
+                <table>
+                  <thead className="table-header">
+                    <tr>
+                      <th>Month</th>
+                      <th>Quantity</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {productData.labels.map((label: any, index: any) => (
+                      <tr key={index}>
+                        <td>{label}</td>
+                        <td>{productData.datasets[0].data[index]}</td>
+                      </tr>
+                    ))}
+                    {forecastData.map((item, index) => (
+                      <tr key={index + productData.labels.length}>
+                        <td style={{ color: "red" }}>{item.label}</td>
+                        <td style={{ color: "red" }}>{item.data}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </>
   );
@@ -684,207 +762,207 @@ const LineGraph: React.FC = () => {
 
 export default LineGraph;
 
-// {/* <style>
-//   {`
+<style>
+  {`
 
-// body {
-//   background: linear-gradient(45deg, #fbfaf9 0%, #e4d9d0 100%);
-// }
+body {
+  background: linear-gradient(45deg, #fbfaf9 0%, #e4d9d0 100%);
+}
 
 
-//   .select-container {
-//     display: flex;
-//     justify-content: center;
-//     margin-bottom: 20px;
-//     width: 100%; /* Ensure it takes full width */
-//   }
+  .select-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+    width: 100%; 
+  }
   
-//   .container {
-//     display: flex;
-//     flex-direction: column;
-//     align-items: center;
-//     width: 100%; /* Ensures container is full width */
-//   }
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%; 
+  }
   
-//   .chart-container, .data-table-container {
-//     width: 100%;
-//     max-width: 800px; /* Adjust based on your design */
-//     margin: 0 auto;
-//   }
+  .chart-container, .data-table-container {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+  }
 
   
-//   }
+  }
    
 
 
 
 
-// .table-container {
-//   margin-top: 20px;
-//   overflow-x: auto;
-// }
+.table-container {
+  margin-top: 20px;
+  overflow-x: auto;
+}
 
-// table {
-//   border-collapse: collapse;
-//   width: 100%;
-//   background-color: #fff;
-//   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-//   border-radius: 8px;
-//   overflow: hidden;
-// }
+table {
+  border-collapse: collapse;
+  width: 100%;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+}
 
-// th,
-// td {
-//   text-align: left;
-//   padding: 12px 15px;
-// }
+th,
+td {
+  text-align: left;
+  padding: 12px 15px;
+}
 
-// th {
-//   background-color: #007bff;
-//   color: white;
-//   font-weight: bold;
-// }
+th {
+  background-color: #007bff;
+  color: white;
+  font-weight: bold;
+}
 
-// td {
-//   border-top: 1px solid #eee;
-// }
+td {
+  border-top: 1px solid #eee;
+}
 
-// tbody tr:nth-child(even) {
-//   background-color: #f2f2f2;
-// }
+tbody tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
 
-// /* Responsive table */
-// @media screen and (max-width: 600px) {
-//   table {
-//     border: 0;
-//   }
 
-//   table caption {
-//     font-size: 1.3em;
-//   }
+@media screen and (max-width: 600px) {
+  table {
+    border: 0;
+  }
 
-//   table,
-//   thead,
-//   tbody,
-//   th,
-//   td,
-//   tr {
-//     display: block;
-//   }
+  table caption {
+    font-size: 1.3em;
+  }
 
-//   thead tr {
-//     position: absolute;
-//     top: -9999px;
-//     left: -9999px;
-//   }
+  table,
+  thead,
+  tbody,
+  th,
+  td,
+  tr {
+    display: block;
+  }
 
-//   tr {
-//     border: 1px solid #ccc;
-//   }
+  thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
 
-//   td {
-//     border: none;
-//     border-bottom: 1px solid #eee;
-//     position: relative;
-//     padding-left: 50%;
-//     text-align: right;
-//   }
+  tr {
+    border: 1px solid #ccc;
+  }
 
-//   td:before {
-//     position: absolute;
-//     top: 12px;
-//     left: 6px;
-//     width: 45%;
-//     padding-right: 10px;
-//     white-space: nowrap;
-//     text-align: left;
-//     font-weight: bold;
-//     content: attr(data-label);
-//   }
+  td {
+    border: none;
+    border-bottom: 1px solid #eee;
+    position: relative;
+    padding-left: 50%;
+    text-align: right;
+  }
 
-//   td:last-child {
-//     border-bottom: 0;
-//   }
-// }
+  td:before {
+    position: absolute;
+    top: 12px;
+    left: 6px;
+    width: 45%;
+    padding-right: 10px;
+    white-space: nowrap;
+    text-align: left;
+    font-weight: bold;
+    content: attr(data-label);
+  }
 
-// /* Styling for the forecast input and buttons for a professional look */
-// .forecast-input {
-//   display: flex;
-//   align-items: center;
-//   gap: 10px;
-//   margin-bottom: 20px;
-// }
+  td:last-child {
+    border-bottom: 0;
+  }
+}
 
-// .forecast-input label {
-//   font-weight: bold;
-// }
 
-// .forecast-input input {
-//   padding: 8px;
-//   border: 1px solid #ccc;
-//   border-radius: 4px;
-// }
+.forecast-input {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
 
-// /* Adjust the following as needed to fit your design */
-// .chart-container {
-//   padding: 20px;
-//   background-color: #f9f9f9;
-//   border-radius: 8px;
-//   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-// }
+.forecast-input label {
+  font-weight: bold;
+}
 
-// .line-graph-container {
-//   display: flex;
-// }
+.forecast-input input {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
 
-// .chart-container,
-// .forecast-chart-container {
-//   flex: 1;
-//   margin: 10px;
-// }
 
-// .container {
-//   display: flex;
-//   justify-content: space-between;
-// }
+.chart-container {
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
 
-// .chart-container {
-//   width: 70%; /* Adjust width as needed */
-// }
+.line-graph-container {
+  display: flex;
+}
 
-// .data-table-container {
-//   width: 25%; /* Adjust width as needed */
-//   max-height: 500px; /* Adjust maximum height */
-//   overflow-y: auto; /* Enable vertical scrolling */
-//   margin-top: 10px;
+.chart-container,
+.forecast-chart-container {
+  flex: 1;
+  margin: 10px;
+}
+
+.container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.chart-container {
+  width: 70%;
+}
+
+.data-table-container {
+  width: 25%; 
+  max-height: 500px; 
+  overflow-y: auto; 
+  margin-top: 10px;
   
-// }
+}
 
-// .data-table {
-//   width: 100%;
-// }
+.data-table {
+  width: 100%;
+}
 
-// /* Adjust the width of the chart container */
-// .chart-container {
-//   width: 60%; /* Adjust width as needed */
-// }
 
-// /* Adjust the width of the data table container */
-// .data-table-container {
-//   width: 35%; /* Adjust width as needed */
-// }
+.chart-container {
+  width: 60%; 
+}
 
-// /* Ensure the chart and table are displayed side by side */
-// .container {
-//   display: flex;
-//   flex-wrap: wrap; /* Allow wrapping if content overflows */
-// }
 
-// /* Add some margin between chart and table */
-// .chart-container,
-// .data-table-container {
-//   margin: 10px; /* Adjust margin as needed */
-// }
+.data-table-container {
+  width: 35%; 
+}
 
-// }`}
-// </style>; */}
+
+.container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+
+.chart-container,
+.data-table-container {
+  margin: 10px; 
+}
+
+}`}
+</style>;
