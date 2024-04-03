@@ -214,6 +214,7 @@
 
 import React, { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Modal } from "@mui/material";
 import axios from "axios";
 import {
   Card,
@@ -228,6 +229,7 @@ import {
   Button,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import CloseIcon from "@mui/icons-material/Close";
 import Navbar from "../Home/Navbar";
 import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
@@ -275,6 +277,8 @@ const ProductNameTypography = styled(Typography)({
 const ProductPage: React.FC<ProductPageProps> = ({ wishlist, setWishlist }) => {
   const [likedProducts, setLikedProducts] = useState<boolean[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -333,21 +337,49 @@ const ProductPage: React.FC<ProductPageProps> = ({ wishlist, setWishlist }) => {
   const c_id = 2;
 
 
+  // const handleAddToWishlist = async (selectedProduct: number) => {
+  //   try {
+  //     const response = await axios.post(
+  //       `http://127.0.0.1:8000/wishlist_add/${c_id}/${selectedProduct}`
+  //     );
+  //     if (response.status === 200) {
+  //       setModalMessage("Product added to the wishlist");
+  //       setIsModalOpen(true);
+  //       setTimeout(() => {
+  //         window.location.reload();
+  //       }, 3000); 
+  //     } else {
+  //       console.error("Invalid data format:", response.data);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error adding to cart:", error);
+  //   }
+  // };
+
+
   const handleAddToWishlist = async (selectedProduct: number) => {
     try {
       const response = await axios.post(
         `http://127.0.0.1:8000/wishlist_add/${c_id}/${selectedProduct}`
       );
       if (response.status === 200) {
-        window.alert("Product added to wishlist successfully");
-        window.location.reload();
+        setModalMessage(response.data.message);
+        setIsModalOpen(true);
+        setTimeout(() => {
+          window.location.reload();
+        }, 3000); 
+      } else if (response.status === 400) {
+        
       } else {
         console.error("Invalid data format:", response.data);
       }
     } catch (error) {
-      console.error("Error adding to cart:", error);
+      console.error("Error adding to wishlist:", error);
+      setModalMessage("Already in the wishlist");
+        setIsModalOpen(true);
     }
   };
+  
 
   const handleAddToCart = async (selectedProduct: number) => {
     try {
@@ -355,13 +387,18 @@ const ProductPage: React.FC<ProductPageProps> = ({ wishlist, setWishlist }) => {
         `http://127.0.0.1:8000/cart_add/${c_id}/${selectedProduct}`
       );
       if (response.status === 200) {
-        window.alert("Product added to cart successfully");
-        window.location.reload();
+        setModalMessage("Product added to the cart");
+        setIsModalOpen(true);
+        setTimeout(() => {
+          window.location.reload();
+        }, 3000); 
       } else {
         console.error("Invalid data format:", response.data);
       }
     } catch (error) {
       console.error("Error adding to cart:", error);
+      setModalMessage("Already in the cart");
+      setIsModalOpen(true);
     }
   };
 
@@ -426,6 +463,53 @@ const ProductPage: React.FC<ProductPageProps> = ({ wishlist, setWishlist }) => {
           />
         </Box>
       </Box>
+      <Modal
+          open={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: 400,
+              bgcolor: "background.paper",
+              boxShadow: 24,
+              p: 4,
+              borderRadius: 2,
+              outline: "none", // This removes the default focus ring
+            }}
+          >
+            <IconButton
+              aria-label="close"
+              onClick={() => setIsModalOpen(false)}
+              sx={{
+                position: "absolute",
+                right: 8,
+                top: 8,
+                color: (theme) => theme.palette.grey[500],
+              }}
+            >
+              <CloseIcon />
+            </IconButton>
+            <Typography id="modal-modal-title" variant="h6" component="h2">
+              Success!
+            </Typography>
+            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+              {modalMessage}
+            </Typography>
+            <Button
+              variant="contained"
+              style={{ marginTop: "20px" }}
+              onClick={() => setIsModalOpen(false)}
+            >
+              Close
+            </Button>
+          </Box>
+        </Modal>
     </>
   );
 };

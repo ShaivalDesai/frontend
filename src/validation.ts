@@ -145,3 +145,90 @@ export const validatereg = (reg:string) => {
   return ""; // Return an empty string if there's no error
 };
 
+export const validateTitle = (title: string) => {
+  if (!title.trim()) {
+    return "Title is required";
+  }
+  return "";
+};
+
+export const validateSize = (size: string) => {
+  if (!size.trim()) {
+    return "Size is required";
+  }
+  return "";
+};
+
+export const validateBrand = (brand: string) => {
+  if (!brand.trim()) {
+    return "Brand is required";
+  }
+  return "";
+};
+
+export const validateMaterial = (material: string) => {
+  if (!material.trim()) {
+    return "Material is required";
+  }
+  return "";
+};
+
+export const validateColor = (color: string) => {
+  if (!color.trim()) {
+    return "Color is required";
+  }
+  return "";
+};
+
+export const validateProduct_type = (type: string) => {
+  if (!type.trim()) {
+    return "Product Type is required";
+  }
+  return "";
+};
+
+export const validateDes = (des: string) => {
+  if (!des.trim()) {
+    return " Product Description is required";
+  }
+  return "";
+};
+
+export const validatelook= (look: string) => {
+  if (!look.trim()) {
+    return "Product Look is required";
+  }
+  return "";
+};
+
+export const validateSpecification = (specification: string) => {
+  if (!specification.trim()) {
+    return "Product Specification is required";
+  }
+  return "";
+};
+
+export const validateCategory = (category: string) => {
+  if (!category.trim()) {
+    return "Product Category is required";
+  }
+  return "";
+};
+
+export const validatePrice = (price: string) => {
+  // Attempt to parse the price as a float
+  const parsedPrice = parseFloat(price);
+
+  // Check if the parsed price is NaN (Not a Number) - this means the conversion failed
+  if (isNaN(parsedPrice)) {
+    return "Price must be a number";
+  }
+
+  // Check if the parsed price is greater than zero
+  if (parsedPrice <= 0) {
+    return "Price must be greater than zero";
+  }
+
+  // If the price passes validation, return an empty string.
+  return "";
+};

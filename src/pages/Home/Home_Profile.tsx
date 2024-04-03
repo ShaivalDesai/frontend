@@ -153,7 +153,7 @@ const Home_Profile: React.FC = () => {
     }));
   };
 
-  // Similar adjustments for handleStateChange and handleCityChange
+ 
 
   const handleStateChange = async (selectedOption: any) => {
     setSelectedState(selectedOption);
@@ -191,15 +191,13 @@ const Home_Profile: React.FC = () => {
 
   const handleCityChange = (selectedOption: any) => {
     setSelectedCity(selectedOption);
-
+  
     // Clear city related validation error
     setFormData((prevFormData) => ({
       ...prevFormData,
-      city: selectedOption.label, // Assuming you want to store the label
-      // state: "", // Reset state
-    // Reset city
+      city: selectedOption.name, // Change this to selectedOption.name
     }));
-
+  
     // Reset errors for country, state, and city
     setErrors((prevErrors) => ({
       ...prevErrors,

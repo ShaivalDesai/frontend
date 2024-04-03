@@ -32,6 +32,7 @@ import {
   validateCity,
   validatereg,
 } from "../../validation";
+import DashboardN from "../../Components/DashboardNavbar";
 
 interface FormData {
   name: string;
@@ -47,6 +48,9 @@ interface FormData {
   reg_number: string;
   est_date: string;
 }
+
+const API_URL = "http://127.0.0.1:8000/vendor_dashboard/";
+const FILE_API_URL = "http://127.0.0.1:8000/file_endpoint";
 
 const initialFormData: FormData = {
   name: "",
@@ -96,34 +100,40 @@ const Vendor_Profile: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        let vid: number;
+        let vid: number | undefined; // Declare vid with type number or undefined
         const vidstring = sessionStorage.getItem("v_id");
 
         if (vidstring !== null) {
           vid = parseInt(vidstring);
-
-          var API_URL = `http://127.0.0.1:8000/vendor_dashboard/` + vid;
         }
 
-        const response = await axios.get("API_URL");
-        const userData = response.data;
+        if (vid !== undefined) {
+          // Check if vid is defined before using it
+          var API_URL = `http://127.0.0.1:8000/vendor_dashboard/` + vid;
+          const response = await axios.get(API_URL);
+          const userData = response.data;
 
-        setFormData({
-          name: userData.user_update.name,
-          email: userData.user_update.email,
-          number: String(userData.user_update.number),
-          number_2: String(userData.vendor_update.number_2),
-          est_date: userData.vendor_update.est_date,
-          address: userData.vendor_update.address,
-          pincode: String(userData.vendor_update.pincode),
-          address_2: userData.vendor_update.address_2,
-          country: userData.vendor_update.country,
-          state: userData.vendor_update.state,
-          city: userData.vendor_update.city,
-          reg_number: String(userData.vendor_update.reg_number),
-        });
+          setFormData({
+            name: userData.user_update.name,
+            email: userData.user_update.email,
+            number: String(userData.user_update.number),
+            number_2: String(userData.vendor_update.number_2),
+            est_date: userData.vendor_update.est_date,
+            address: userData.vendor_update.address,
+            pincode: String(userData.vendor_update.pincode),
+            address_2: userData.vendor_update.address_2,
+            country: userData.vendor_update.country,
+            state: userData.vendor_update.state,
+            city: userData.vendor_update.city,
+            reg_number: String(userData.vendor_update.reg_number),
+          });
+        } else {
+          console.error("No vendor ID available");
+        }
+
+        var FILE_API_URL = `http://127.0.0.1:8000/file_endpoint`;
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error:", error);
       }
     };
 
@@ -251,7 +261,7 @@ const Vendor_Profile: React.FC = () => {
 
   const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-  
+
     const validationErrors: Partial<FormData> = {
       name: validateName(formData.name),
       email: validateEmail(formData.email),
@@ -264,15 +274,15 @@ const Vendor_Profile: React.FC = () => {
       city: validateCity(formData.city),
       reg_number: validatereg(formData.reg_number),
     };
-  
+
     setErrors(validationErrors);
-  
+
     const hasErrors = Object.values(validationErrors).some((error) => !!error);
-  
+
     if (!hasErrors) {
       try {
         const formDataToSubmit = new FormData();
-  
+
         // Add file if selected
         if (selectedFile) {
           // Check file size (1MB = 1024 * 1024 bytes)
@@ -280,25 +290,38 @@ const Vendor_Profile: React.FC = () => {
             toast.error("File size should be less than 1MB");
             return;
           }
-  
+
           // Check file type
           const allowedTypes = ["image/jpeg", "image/heic", "image/avif"];
           if (!allowedTypes.includes(selectedFile.type)) {
             toast.error("Only JPG, HEIC, and AVIF file types are allowed");
             return;
           }
-  
+
           formDataToSubmit.append("file", selectedFile);
         }
-  
+
         // Add other form data fields
         Object.entries(formData).forEach(([key, value]) => {
           formDataToSubmit.append(key, value);
         });
-  
-        await axios.put("YOUR_API_ENDPOINT", formDataToSubmit, {
+
+        await axios.put(FILE_API_URL, formDataToSubmit, {
           headers: {
             "Content-Type": "multipart/form-data",
+          },
+        });
+        console.log("File uploaded successfully");
+        toast.success("File uploaded successfully");
+      } catch (error) {
+        console.error("Error uploading file:", error);
+        toast.error("Failed to upload file. Please try again later.");
+      }
+
+      try {
+        await axios.put(API_URL, formData, {
+          headers: {
+            "Content-Type": "application/json",
           },
         });
         console.log("Data updated successfully");
@@ -309,12 +332,11 @@ const Vendor_Profile: React.FC = () => {
       }
     }
   };
-  
 
   return (
     <>
       <ToastContainer />
-
+      <DashboardN />
       <div
         style={{
           display: "flex",
@@ -324,6 +346,7 @@ const Vendor_Profile: React.FC = () => {
           backgroundSize: "cover",
           backgroundPosition: "center",
           minHeight: "100vh",
+          marginTop: "63px",
         }}
       >
         <Container maxWidth="sm">

@@ -174,267 +174,283 @@ const ProductTable: React.FC = () => {
 
   return (
     <>
-    
       <ToastContainer />
       <DashboardN />
       <div>
-      <div
-        style={{
-          textAlign: "center",
-          marginTop: "100px",
-          marginBottom: "20px",
-        }}
-      >
-        <button
-          onClick={() => {
-            setIsProductListModalOpen(true);
-            fetchProductList(); // Fetch products when opening the modal
-          }}
-          style={{
-            padding: "10px 20px",
-            fontSize: "16px",
-            cursor: "pointer",
-            backgroundColor: "#724c31", // A shade of brown
-            color: "white", // White text color for better contrast
-            border: "none", // Remove default border
-            borderRadius: "10px", // Smoothed corners
-            display: "inline-flex", // Use flex to align icon and text
-            alignItems: "center", // Center items vertically
-            justifyContent: "center",
-          }}
-        >
-          <span style={{ marginRight: "8px", display: "inline-block" }}>+</span>
-          Add Product
-        </button>
-      </div>
-
-      <div className="container" style={{ textAlign: "center" }}>
         <div
-          className="table-container"
           style={{
-            margin: "0 auto",
-            width: "80%",
-            overflowX: "auto",
-            borderRadius: "10px",
-            border: "1px solid #ddd",
-            boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
+            textAlign: "center",
+            marginTop: "100px",
+            marginBottom: "20px",
           }}
         >
-          <table
-            className="product-table"
+          <button
+            onClick={() => {
+              setIsProductListModalOpen(true);
+              fetchProductList(); // Fetch products when opening the modal
+            }}
             style={{
-              width: "100%",
-              borderCollapse: "collapse",
-              borderRadius: "10px",
+              padding: "10px 20px",
+              fontSize: "16px",
+              cursor: "pointer",
+              backgroundColor: "#724c31", // A shade of brown
+              color: "white", // White text color for better contrast
+              border: "none", // Remove default border
+              borderRadius: "10px", // Smoothed corners
+              display: "inline-flex", // Use flex to align icon and text
+              alignItems: "center", // Center items vertically
+              justifyContent: "center",
             }}
           >
-            <thead>
-              <tr>
-                <th style={tableHeaderStyle}>Image</th>
-                <th style={tableHeaderStyle}>Brand</th>
-                <th style={tableHeaderStyle}>Product Type</th>
-                <th style={tableHeaderStyle}>Color</th>
-                <th style={tableHeaderStyle}>Category</th>
-                <th style={tableHeaderStyle}>Size</th>
-                <th style={tableHeaderStyle}>Price</th>
-                <th style={tableHeaderStyle}>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {Object.entries(products)
-                .sort(([, a], [, b]) =>
-                  customCategorySort(a.category, b.category)
-                )
-                .map(([productId, product]) => (
-                  <tr
-                    key={productId}
-                    style={{
-                      cursor: "pointer",
-                    }}
-                    onClick={() => handleImageClick(product)}
-                  >
-                    <td style={tableCellStyle}>
-                      <img
-                        src={`data:image/jpeg;base64,${product.image}`}
-                        alt="Product"
-                        style={{
-                          width: "50px",
-                          height: "50px",
-                          cursor: "pointer",
-                          borderRadius: "5px",
-                        }}
-                      />
-                    </td>
-                    <td style={tableCellStyle}>{product.brand}</td>
-                    <td style={tableCellStyle}>{product.product_type}</td>
-                    <td style={tableCellStyle}>{product.color}</td>
-                    <td style={tableCellStyle}>{product.category}</td>
-                    <td style={tableCellStyle}>{product.size}</td>
-                    <td style={tableCellStyle}>₹{product.price}</td>
-                    <td style={tableCellStyle}>
-                      <FaEdit
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleEdit(productId);
-                        }}
-                        style={{ cursor: "pointer", marginRight: "5px" }}
-                      />
-
-                      <FaTrash
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          openConfirmDialog(productId); // Call openConfirmDialog instead of handleDelete
-                        }}
-                        style={{ cursor: "pointer", marginLeft: "5px" }}
-                      />
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
+            <span style={{ marginRight: "8px", display: "inline-block" }}>
+              +
+            </span>
+            Add Product
+          </button>
         </div>
 
-        {isModalOpen && (
+        <div className="container" style={{ textAlign: "center" }}>
           <div
-            className="modal"
+            className="table-container"
             style={{
-              marginTop: "32px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
+              margin: "0 auto",
+              width: "80%",
+              overflowX: "auto",
+              borderRadius: "10px",
+              border: "1px solid #ddd",
+              boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
+            }}
+          >
+            <table
+              className="product-table"
+              style={{
+                width: "100%",
+                borderCollapse: "collapse",
+                borderRadius: "10px",
+              }}
+            >
+              <thead>
+                <tr>
+                  <th style={tableHeaderStyle}>Image</th>
+                  <th style={tableHeaderStyle}>Brand</th>
+                  <th style={tableHeaderStyle}>Product Type</th>
+                  <th style={tableHeaderStyle}>Color</th>
+                  <th style={tableHeaderStyle}>Category</th>
+                  <th style={tableHeaderStyle}>Size</th>
+                  <th style={tableHeaderStyle}>Price</th>
+                  <th style={tableHeaderStyle}>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {Object.entries(products)
+                  .sort(([, a], [, b]) =>
+                    customCategorySort(a.category, b.category)
+                  )
+                  .map(([productId, product]) => (
+                    <tr
+                      key={productId}
+                      style={{
+                        cursor: "pointer",
+                      }}
+                      onClick={() => handleImageClick(product)}
+                    >
+                      <td style={tableCellStyle}>
+                        <img
+                          src={`data:image/jpeg;base64,${product.image}`}
+                          alt="Product"
+                          style={{
+                            width: "50px",
+                            height: "50px",
+                            cursor: "pointer",
+                            borderRadius: "5px",
+                          }}
+                        />
+                      </td>
+                      <td style={tableCellStyle}>{product.brand}</td>
+                      <td style={tableCellStyle}>{product.product_type}</td>
+                      <td style={tableCellStyle}>{product.color}</td>
+                      <td style={tableCellStyle}>{product.category}</td>
+                      <td style={tableCellStyle}>{product.size}</td>
+                      <td style={tableCellStyle}>₹{product.price}</td>
+                      <td style={tableCellStyle}>
+                        <FaEdit
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleEdit(productId);
+                          }}
+                          style={{ cursor: "pointer", marginRight: "5px" }}
+                        />
+
+                        <FaTrash
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            openConfirmDialog(productId); // Call openConfirmDialog instead of handleDelete
+                          }}
+                          style={{ cursor: "pointer", marginLeft: "5px" }}
+                        />
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </div>
+
+          {isModalOpen && (
+            <div
+              className="modal"
+              style={{
+                marginTop: "32px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                position: "fixed",
+                zIndex: 1,
+                left: 0,
+                top: 0,
+                width: "100%",
+                height: "100%",
+                backgroundColor: "rgba(0,0,0,0.4)",
+              }}
+            >
+              <div
+                className="modal-content"
+                id="modal-content"
+                style={{
+                  display: "flex",
+                  backgroundColor: "#fefefe",
+                  padding: "20px",
+                  border: "1px solid #888",
+                  height: "80%", // Decreased overall height
+                  width: "60%", // Adjusted width
+                  maxHeight: "80%", // Set maximum height
+                  overflowY: "auto",
+                  borderRadius: "10px",
+                  position: "relative", // Added position relative to the modal content
+                }}
+              >
+                <span
+                  className="close"
+                  style={{
+                    color: "#aaa",
+                    position: "absolute", // Set position to absolute
+                    top: "10px", // Adjust top position
+                    right: "10px", // Adjust right position
+                    fontSize: "28px",
+                    fontWeight: "bold",
+                    cursor: "pointer",
+                  }}
+                  onClick={closeModal}
+                >
+                  &times;
+                </span>
+                <div style={{ display: "flex" }}>
+                  <div style={{ flex: "1" }}>
+                    <img
+                      src={`data:image/jpeg;base64,${selectedProduct?.image}`}
+                      alt="Product"
+                      style={{
+                        width: "100%",
+                        maxHeight: "100%",
+                        objectFit: "contain",
+                      }} // Adjusted image size
+                    />
+                  </div>
+                  <div
+                    style={{
+                      flex: "1",
+                      paddingLeft: "20px",
+                      textAlign: "left",
+                    }}
+                  >
+                    <h2>{selectedProduct?.title}</h2>
+
+                    <p>
+                      <strong>Size:</strong> {selectedProduct?.size}
+                    </p>
+                    <p>
+                      <strong>Price:</strong>{" "}
+                      <span
+                        style={{
+                          color: selectedProduct ? "red" : "inherit",
+                          fontWeight: selectedProduct ? "bold" : "normal",
+                        }}
+                      >
+                        ₹{selectedProduct?.price}
+                      </span>
+                    </p>
+                    <p>
+                      <strong>Category:</strong> {selectedProduct?.category}
+                    </p>
+
+                    <p>
+                      <strong>Brand:</strong> {selectedProduct?.brand}
+                    </p>
+                    <p>
+                      <strong>Material:</strong> {selectedProduct?.material}
+                    </p>
+                    <p>
+                      <strong>Color:</strong> {selectedProduct?.color}
+                    </p>
+
+                    <p>
+                      <strong>Product Type:</strong>{" "}
+                      {selectedProduct?.product_type}
+                    </p>
+                    <p>
+                      <strong>Specification:</strong>{" "}
+                      {selectedProduct?.specification}
+                    </p>
+                    <p>
+                      <strong>Description:</strong>{" "}
+                      {selectedProduct?.description}
+                    </p>
+                    <p>
+                      <strong>Complete the Look:</strong>{" "}
+                      {selectedProduct?.complete_the_look}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {isConfirmOpen && (
+          <div
+            style={{
               position: "fixed",
-              zIndex: 1,
-              left: 0,
               top: 0,
+              left: 0,
               width: "100%",
               height: "100%",
-              backgroundColor: "rgba(0,0,0,0.4)",
+              backgroundColor: "rgba(0,0,0,0.5)",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
             }}
           >
             <div
-              className="modal-content"
-              id="modal-content"
               style={{
-                display: "flex",
-                backgroundColor: "#fefefe",
+                backgroundColor: "#fff",
                 padding: "20px",
-                border: "1px solid #888",
-                height: "80%", // Decreased overall height
-                width: "60%", // Adjusted width
-                maxHeight: "80%", // Set maximum height
-                overflowY: "auto",
                 borderRadius: "10px",
-                position: "relative", // Added position relative to the modal content
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
               }}
             >
-              <span
-                className="close"
-                style={{
-                  color: "#aaa",
-                  position: "absolute", // Set position to absolute
-                  top: "10px", // Adjust top position
-                  right: "10px", // Adjust right position
-                  fontSize: "28px",
-                  fontWeight: "bold",
-                  cursor: "pointer",
-                }}
-                onClick={closeModal}
-              >
-                &times;
-              </span>
-              <div style={{ display: "flex" }}>
-                <div style={{ flex: "1" }}>
-                  <img
-                    src={`data:image/jpeg;base64,${selectedProduct?.image}`}
-                    alt="Product"
-                    style={{
-                      width: "100%",
-                      maxHeight: "100%",
-                      objectFit: "contain",
-                    }} // Adjusted image size
-                  />
-                </div>
-                <div
-                  style={{ flex: "1", paddingLeft: "20px", textAlign: "left" }}
-                >
-                  <h2>{selectedProduct?.title}</h2>
-
-                  <p>
-                    <strong>Size:</strong> {selectedProduct?.size}
-                  </p>
-                  <p>
-                    <strong>Brand:</strong> {selectedProduct?.brand}
-                  </p>
-                  <p>
-                    <strong>Material:</strong> {selectedProduct?.material}
-                  </p>
-                  <p>
-                    <strong>Color:</strong> {selectedProduct?.color}
-                  </p>
-                  <p>
-                    <strong>Product Type:</strong>{" "}
-                    {selectedProduct?.product_type}
-                  </p>
-                  <p>
-                    <strong>Description:</strong> {selectedProduct?.description}
-                  </p>
-                  <p>
-                    <strong>Complete the Look:</strong>{" "}
-                    {selectedProduct?.complete_the_look}
-                  </p>
-                  <p>
-                    <strong>Specification:</strong>{" "}
-                    {selectedProduct?.specification}
-                  </p>
-                  <p>
-                    <strong>Price:</strong> ₹{selectedProduct?.price}
-                  </p>
-                  <p>
-                    <strong>Category:</strong> {selectedProduct?.category}
-                  </p>
-                </div>
+              <p>Are you sure you want to delete this product?</p>
+              <div style={{ marginTop: "20px" }}>
+                <button onClick={confirmDelete} style={{ marginRight: "10px" }}>
+                  Yes
+                </button>
+                <button onClick={cancelDelete}>No</button>
               </div>
             </div>
           </div>
         )}
-      </div>
 
-      {isConfirmOpen && (
-        <div
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            backgroundColor: "rgba(0,0,0,0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <div
-            style={{
-              backgroundColor: "#fff",
-              padding: "20px",
-              borderRadius: "10px",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-            }}
-          >
-            <p>Are you sure you want to delete this product?</p>
-            <div style={{ marginTop: "20px" }}>
-              <button onClick={confirmDelete} style={{ marginRight: "10px" }}>
-                Yes
-              </button>
-              <button onClick={cancelDelete}>No</button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* {isProductListModalOpen && (
+        {/* {isProductListModalOpen && (
         <div
           style={{
             position: "fixed",
@@ -629,62 +645,62 @@ const ProductTable: React.FC = () => {
         </div>
       )} */}
 
-      {isProductListModalOpen && (
-        <div
-          className="modal"
-          style={{
-            marginTop: "32px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            position: "fixed",
-            zIndex: 1,
-            left: 0,
-            top: 0,
-            width: "100%",
-            height: "100%",
-            backgroundColor: "rgba(0,0,0,0.4)",
-          }}
-        >
+        {isProductListModalOpen && (
           <div
-            className="modal-content"
-            id="modal-content"
+            className="modal"
             style={{
+              marginTop: "32px",
               display: "flex",
-              flexDirection: "column", // Added to arrange elements vertically
-              backgroundColor: "#fefefe",
-              padding: "20px",
-              border: "1px solid #888",
-              height: "80%", // Decreased overall height
-              width: "60%", // Adjusted width
-              maxHeight: "80%", // Set maximum height
-              overflowY: "auto",
-              borderRadius: "10px",
-              position: "relative", // Added position relative to the modal content
+              alignItems: "center",
+              justifyContent: "center",
+              position: "fixed",
+              zIndex: 1,
+              left: 0,
+              top: 0,
+              width: "100%",
+              height: "100%",
+              backgroundColor: "rgba(0,0,0,0.4)",
             }}
           >
-            <span
-              className="close"
+            <div
+              className="modal-content"
+              id="modal-content"
               style={{
-                color: "#aaa",
-                position: "absolute", // Set position to absolute
-                top: "10px", // Adjust top position
-                right: "10px", // Adjust right position
-                fontSize: "28px",
-                fontWeight: "bold",
-                cursor: "pointer",
+                display: "flex",
+                flexDirection: "column", // Added to arrange elements vertically
+                backgroundColor: "#fefefe",
+                padding: "20px",
+                border: "1px solid #888",
+                height: "80%", // Decreased overall height
+                width: "60%", // Adjusted width
+                maxHeight: "80%", // Set maximum height
+                overflowY: "auto",
+                borderRadius: "10px",
+                position: "relative", // Added position relative to the modal content
               }}
-              onClick={closeModal}
             >
-              &times;
-            </span>
-            {/* Title added */}
-            <ProfessionalForm />
+              <span
+                className="close"
+                style={{
+                  color: "#aaa",
+                  position: "absolute", // Set position to absolute
+                  top: "10px", // Adjust top position
+                  right: "10px", // Adjust right position
+                  fontSize: "28px",
+                  fontWeight: "bold",
+                  cursor: "pointer",
+                }}
+                onClick={closeModal}
+              >
+                &times;
+              </span>
+              {/* Title added */}
+              <ProfessionalForm />
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* 
+        {/* 
 {isProductListModalOpen && (
         <div className="modal">
           <div className="modal-content">
