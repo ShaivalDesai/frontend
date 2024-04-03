@@ -927,72 +927,93 @@ const WishlistPage = ({
         </Grid>
         {/* Product Details Modal */}
         <Modal
-          open={isProductModalOpen}
-          onClose={() => setIsProductModalOpen(false)}
-          aria-labelledby="product-modal-title"
-          aria-describedby="product-modal-description"
-        >
-          <Box
-            sx={{
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-              width: 400,
-              bgcolor: "background.paper",
-              boxShadow: 24,
-              p: 4,
-              borderRadius: 2,
-              outline: "none", // This removes the default focus ring
-            }}
-          >
-            <IconButton
-              aria-label="close"
-              onClick={() => setIsProductModalOpen(false)}
-              sx={{
-                position: "absolute",
-                right: 8,
-                top: 8,
-                color: (theme) => theme.palette.grey[500],
-              }}
-            >
-              <CloseIcon />
-            </IconButton>
-            <Typography id="product-modal-title" variant="h6" component="h2">
-              Product Details
-            </Typography>
-            {selectedProduct && (
-              <>
-                <img
-                  src={`data:image/jpeg;base64,${selectedProduct.image}`}
-                  alt={selectedProduct.product_type}
-                  onClick={() => handleImageClick(selectedProduct)}
-                  style={{
-                    width: "70px",
-                    height: "70px",
-                    borderRadius: "8px",
-                  }}
-                />
-                <Typography variant="subtitle1">
-                  Brand: {selectedProduct.brand}
-                </Typography>
-                <Typography variant="subtitle1">
-                  Price: ₹{selectedProduct.price.toFixed(2)}
-                </Typography>
-                <Typography variant="subtitle1">
-                  Product Type: {selectedProduct.product_type}
-                </Typography>
-              </>
-            )}
-            <Button
-              variant="contained"
-              style={{ marginTop: "20px" }}
-              onClick={() => setIsProductModalOpen(false)}
-            >
-              Close
-            </Button>
-          </Box>
-        </Modal>
+  open={isProductModalOpen}
+  onClose={() => setIsProductModalOpen(false)}
+  aria-labelledby="product-modal-title"
+  aria-describedby="product-modal-description"
+>
+  <Box
+    sx={{
+      display: "flex",
+      position: "absolute",
+      top: "50%",
+      left: "50%",
+      transform: "translate(-50%, -50%)",
+      width: 600, // Adjust the width as per your requirement
+      bgcolor: "background.paper",
+      boxShadow: 24,
+      borderRadius: 2,
+      outline: "none",
+      border: "1px solid rgba(0, 0, 0, 0.12)",
+    }}
+  >
+    <Box sx={{ flex: 1 }}>
+      {selectedProduct && (
+        <img
+          src={`data:image/jpeg;base64,${selectedProduct.image}`}
+          alt={selectedProduct.product_type}
+          style={{
+            width: "100%",
+            height: "auto",
+            borderTopLeftRadius: "8px",
+            borderBottomLeftRadius: "8px",
+          }}
+        />
+      )}
+    </Box>
+    <Box sx={{ flex: 1, p: 3 }}>
+      <IconButton
+        aria-label="close"
+        onClick={() => setIsProductModalOpen(false)}
+        sx={{
+          position: "absolute",
+          right: 8,
+          top: 8,
+          color: (theme) => theme.palette.grey[500],
+        }}
+      >
+        <CloseIcon />
+      </IconButton>
+      <Typography
+        id="product-modal-title"
+        variant="h6"
+        component="h2"
+        sx={{ fontWeight: "medium", mb: 2 }}
+      >
+        Product Details
+      </Typography>
+      {selectedProduct && (
+        <>
+          <Typography variant="subtitle1" sx={{ mb: 1, fontWeight: "regular" }}>
+            Brand: {selectedProduct.brand}
+          </Typography>
+          <Typography variant="subtitle1" sx={{ mb: 1, fontWeight: "regular" }}>
+            Price: ₹{selectedProduct.price.toFixed(2)}
+          </Typography>
+          <Typography variant="subtitle1" sx={{ fontWeight: "regular" }}>
+            Product Type: {selectedProduct.product_type}
+          </Typography>
+        </>
+      )}
+      {/* <Button
+        variant="contained"
+        sx={{
+          marginTop: "20px",
+          bgcolor: "primary.main",
+          "&:hover": {
+            bgcolor: "primary.dark",
+          },
+          color: "white",
+          padding: "8px 16px",
+          textTransform: "none",
+        }}
+        onClick={() => setIsProductModalOpen(false)}
+      >
+        Close
+      </Button> */}
+    </Box>
+  </Box>
+</Modal>
         {/* Message Modal */}
         <Modal
           open={isMessageModalOpen}
