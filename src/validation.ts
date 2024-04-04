@@ -87,8 +87,26 @@ export const validatezip = (zip: string) => {
 };
 
 
-export const validateDate = (date: string) => {
-  if (!date.trim()) {
+// export const validateDate = (date: string) => {
+//   if (!date.trim()) {
+//     return "Date is required";
+//   }
+
+//   const inputDate = new Date(date);
+//   const currentDate = new Date();
+
+//   if (inputDate > currentDate) {
+//     return "Future date selection is not allowed";
+//   }
+// };
+
+
+
+
+
+
+export const validateDate = (date: string | null) => {
+  if (!date || !date.trim()) {
     return "Date is required";
   }
 
@@ -99,6 +117,7 @@ export const validateDate = (date: string) => {
     return "Future date selection is not allowed";
   }
 };
+
 
 export const validateGender = (gender: string): string | undefined => {
   if (!gender.trim()) {

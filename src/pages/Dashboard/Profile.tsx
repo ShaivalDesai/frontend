@@ -11,9 +11,6 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { Country, State, City } from "country-state-city";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-
 import Select from "react-select";
 import {
   validatezip,
@@ -25,63 +22,73 @@ import {
   validateName,
   validateDate,
   validatePhoneNumber,
+  validatereg,
   validateGender,
   validateState,
   validateAddress,
   validateCountry,
   validateCity,
-  validatereg,
 } from "../../validation";
+import { ToastContainer } from "react-bootstrap";
 import DashboardN from "../../Components/DashboardNavbar";
 
 interface FormData {
   name: string;
   email: string;
   number: string;
+  number_2: string;
+  est_date: string;
+  reg_number: string;
+
   address: string;
+  pincode: string;
+  address_2: string;
   country: string;
   state: string;
   city: string;
-  pincode: string;
-  address_2: string;
-  number_2: string;
-  reg_number: string;
-  est_date: string;
 }
-
-const API_URL = "http://127.0.0.1:8000/vendor_dashboard/";
-const FILE_API_URL = "http://127.0.0.1:8000/file_endpoint";
 
 const initialFormData: FormData = {
   name: "",
   email: "",
   number: "",
+  number_2: "",
+  est_date: "",
+
   address: "",
+  pincode: "",
+  address_2: "",
+  reg_number: "",
   country: "",
   state: "",
   city: "",
-  pincode: "",
-  address_2: "",
-  number_2: "",
-  reg_number: "",
-  est_date: "",
 };
 
 const Vendor_Profile: React.FC = () => {
   const [formData, setFormData] = useState<FormData>(initialFormData);
-
-  const [selectedCountry, setSelectedCountry] = useState<any>(null);
+  const [country, setCountry] = useState<string>("");
+  const [avatarImage, setAvatarImage] = useState<string>("");
+  const [selectedCountry, setSelectedCountry] = useState<any>("");
   const [selectedState, setSelectedState] = useState<any>(null);
   const [selectedCity, setSelectedCity] = useState<any>(null);
   const [countryOptions, setCountryOptions] = useState<any[]>([]);
   const [stateOptions, setStateOptions] = useState<any[]>([]);
   const [cityOptions, setCityOptions] = useState<any[]>([]);
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isLocked, setIsLocked] = useState(true);
-  const [avatarImage, setAvatarImage] = useState<string>("");
   const [number2, setNumber2] = useState<string>("");
+  const [pincode, setPincode] = useState<string>("");
+  const [name, setName] = useState<string>("");
+  const [number, setNumber] = useState<string>("");
   const [address, setAddress] = useState<string>("");
+
+  const [est_date, setEst_date] = React.useState<string>("");
   const [reg_number, setReg_number] = useState<string>("");
+  const [email, setEmail] = React.useState<string>("");
+  const [selected, setSelected] = useState({
+    country: "",
+    state: "",
+    city: "",
+  });
   const [errors, setErrors] = React.useState<Partial<FormData>>({});
 
   useEffect(() => {
@@ -100,40 +107,86 @@ const Vendor_Profile: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        let vid: number | undefined; // Declare vid with type number or undefined
-        const vidstring = sessionStorage.getItem("v_id");
+        const u_id = 1;
+        const c_id = 1;
+        const response = await axios.get(
+          // "http://127.0.0.1:8000/user_and_vendor/" + u_id + "/" + c_id
+          "http://127.0.0.1:8000/user_and_vendor/1/1"
+        );
+        const userData = response.data;
 
-        if (vidstring !== null) {
-          vid = parseInt(vidstring);
+        // Extract user, vendor, and vendor data
+        const { user, vendor } = userData;
+
+        // Set user data
+        setName(user.name);
+        setEmail(user.email);
+        setNumber(String(user.number));
+        setReg_number(String(vendor.reg_number));
+
+        // Set vendor data
+        setFormData({
+          ...formData,
+          name: user.name,
+          email: user.email,
+          number: String(user.number),
+          number_2: String(vendor.number_2),
+          est_date: vendor.est_date,
+          address: vendor.address,
+          pincode: String(vendor.pincode),
+          address_2: vendor.address_2,
+          country: vendor.country,
+          state: vendor.state,
+          city: vendor.city,
+          reg_number: String(vendor.reg_number),
+        });
+
+        // Set other state values
+        setNumber2(String(vendor.number_2));
+        setPincode(String(vendor.pincode));
+        setSelected({
+          country: vendor.country,
+          state: vendor.state,
+          city: vendor.city,
+        });
+
+        // Fetch list of countries and find the ID of the desired country
+        const countries = await Country.getAllCountries();
+        const desiredCountry = countries.find(
+          (country) => country.name === vendor.country
+        );
+        if (!desiredCountry) {
+          console.error("Desired country not found");
+          return;
         }
+        const countryId = desiredCountry.isoCode;
 
-        if (vid !== undefined) {
-          // Check if vid is defined before using it
-          var API_URL = `http://127.0.0.1:8000/vendor_dashboard/` + vid;
-          const response = await axios.get(API_URL);
-          const userData = response.data;
-
-          setFormData({
-            name: userData.user_update.name,
-            email: userData.user_update.email,
-            number: String(userData.user_update.number),
-            number_2: String(userData.vendor_update.number_2),
-            est_date: userData.vendor_update.est_date,
-            address: userData.vendor_update.address,
-            pincode: String(userData.vendor_update.pincode),
-            address_2: userData.vendor_update.address_2,
-            country: userData.vendor_update.country,
-            state: userData.vendor_update.state,
-            city: userData.vendor_update.city,
-            reg_number: String(userData.vendor_update.reg_number),
-          });
-        } else {
-          console.error("No vendor ID available");
+        // Now you have the country ID, you can use it to fetch states
+        const states = await State.getStatesOfCountry(countryId);
+        const desiredState = states.find(
+          (state) => state.name === vendor.state
+        );
+        if (!desiredState) {
+          console.error("Desired state not found");
+          return;
         }
+        const stateCode = desiredState.isoCode;
+        setStateOptions(
+          states.map((state: any) => ({
+            value: state.isoCode,
+            label: state.name,
+          }))
+        );
 
-        var FILE_API_URL = `http://127.0.0.1:8000/file_endpoint`;
+        const cities = await City.getCitiesOfState(countryId, stateCode);
+        setCityOptions(
+          cities.map((city: any) => ({
+            value: city.name,
+            label: city.name,
+          }))
+        );
       } catch (error) {
-        console.error("Error:", error);
+        console.error("Error fetching data:", error);
       }
     };
 
@@ -142,121 +195,75 @@ const Vendor_Profile: React.FC = () => {
 
   const handleCountryChange = async (selectedOption: any) => {
     setSelectedCountry(selectedOption);
-    const states: any = await State.getStatesOfCountry(selectedOption.value);
-    const formattedStates = states.map((state: any) => ({
-      value: state.isoCode,
-      label: state.name,
-    }));
-    setStateOptions(formattedStates);
     setSelectedState(null);
-    setCityOptions([]);
     setSelectedCity(null);
 
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      country: selectedOption.label, // Assuming you want to store the label
-      state: "",
-      city: "",
-    }));
-
-    setErrors((prevErrors) => ({
-      ...prevErrors,
-      country: "",
-      state: "",
-      city: "",
-    }));
+    try {
+      const states: any = await State.getStatesOfCountry(selectedOption.value);
+      const formattedStates = states.map((state: any) => ({
+        value: state.isoCode,
+        label: state.name,
+      }));
+      setStateOptions(formattedStates);
+      setCityOptions([]);
+      setFormData({
+        ...formData,
+        country: selectedOption.label, // Use full name instead of short form
+        state: "",
+        city: "",
+      });
+    } catch (error) {
+      console.error("Error fetching states:", error);
+    }
   };
 
   const handleStateChange = async (selectedOption: any) => {
     setSelectedState(selectedOption);
-    console.log("Selected State:", selectedOption);
-    console.log("Selected Country:", selectedCountry);
+    setSelectedCity(null);
 
-    if (selectedCountry && selectedOption) {
+    try {
       const cities: any = await City.getCitiesOfState(
         selectedCountry.value,
         selectedOption.value
       );
-      console.log("Cities:", cities);
       const formattedCities = cities.map((city: any) => ({
         value: city.name,
         label: city.name,
       }));
       setCityOptions(formattedCities);
-      setSelectedCity(null);
+      setFormData({
+        ...formData,
+        state: selectedOption.label, // Use full name instead of short form
+        city: "",
+      });
+    } catch (error) {
+      console.error("Error fetching cities:", error);
+      // Handle error appropriately, such as displaying an error message
     }
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      state: selectedOption.label,
-
-      city: "",
-    }));
-
-    // Reset errors for country, state, and city
-    setErrors((prevErrors) => ({
-      ...prevErrors,
-      country: "",
-      state: "",
-      city: "",
-    }));
   };
 
   const handleCityChange = (selectedOption: any) => {
     setSelectedCity(selectedOption);
-
-    // Clear city related validation error
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      city: selectedOption.label, // Assuming you want to store the label
-      // state: "", // Reset state
-      // Reset city
-    }));
-
-    // Reset errors for country, state, and city
-    setErrors((prevErrors) => ({
-      ...prevErrors,
-      country: "",
-      state: "",
-      city: "",
-    }));
+    setFormData({
+      ...formData,
+      city: selectedOption.label, // Use full name instead of short form
+    });
+    setSelected({ ...selected, city: selectedOption.label });
   };
 
   const handleChange = (event: any) => {
     const { name, value } = event.target;
+
     setFormData({ ...formData, [name]: String(value) });
   };
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log(formData);
+  };
 
-    if (file) {
-      // Check file size (1MB = 1024 * 1024 bytes)
-      if (file.size > 1024 * 1024) {
-        toast.error("File size should be less than 1MB");
-        return;
-      }
-
-      const allowedTypes = [
-        "image/jpeg",
-        "image/heic",
-        "image/avif",
-        "image/png",
-      ];
-      if (!allowedTypes.includes(file.type)) {
-        toast.error("Only JPG, HEIC, and AVIF file types are allowed");
-        return;
-      }
-
-      setSelectedFile(file);
-      // Set the selected file as the source of the avatar image
-      const reader = new FileReader();
-      reader.onload = () => {
-        if (reader.readyState === 2) {
-          setAvatarImage(reader.result as string);
-        }
-      };
-      reader.readAsDataURL(file);
-    }
+  const handleLockToggle = () => {
+    setIsLocked(!isLocked);
   };
 
   const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -281,54 +288,32 @@ const Vendor_Profile: React.FC = () => {
 
     if (!hasErrors) {
       try {
-        const formDataToSubmit = new FormData();
-
-        // Add file if selected
-        if (selectedFile) {
-          // Check file size (1MB = 1024 * 1024 bytes)
-          if (selectedFile.size > 1024 * 1024) {
-            toast.error("File size should be less than 1MB");
-            return;
+        const u_id = 1;
+        const c_id = 1;
+        await axios.put(
+          "http://127.0.0.1:8000/VendorProfile/" + u_id + "/" + c_id,
+          {
+            user_update: {
+              name: formData.name,
+              email: formData.email,
+              number: parseInt(formData.number),
+            },
+            vendor_update: {
+              address: formData.address,
+              city: formData.city,
+              state: formData.state,
+              country: formData.country,
+              pincode: parseInt(formData.pincode),
+              address_2: formData.address_2,
+              number_2: parseInt(formData.number_2),
+              reg_number: parseInt(formData.reg_number),
+              est_date: formData.est_date,
+            },
           }
-
-          // Check file type
-          const allowedTypes = ["image/jpeg", "image/heic", "image/avif"];
-          if (!allowedTypes.includes(selectedFile.type)) {
-            toast.error("Only JPG, HEIC, and AVIF file types are allowed");
-            return;
-          }
-
-          formDataToSubmit.append("file", selectedFile);
-        }
-
-        // Add other form data fields
-        Object.entries(formData).forEach(([key, value]) => {
-          formDataToSubmit.append(key, value);
-        });
-
-        await axios.put(FILE_API_URL, formDataToSubmit, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
-        console.log("File uploaded successfully");
-        toast.success("File uploaded successfully");
-      } catch (error) {
-        console.error("Error uploading file:", error);
-        toast.error("Failed to upload file. Please try again later.");
-      }
-
-      try {
-        await axios.put(API_URL, formData, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+        );
         console.log("Data updated successfully");
-        toast.success("Data updated successfully");
       } catch (error) {
         console.error("Error updating data:", error);
-        toast.error("Failed to update data. Please try again later.");
       }
     }
   };
@@ -337,6 +322,7 @@ const Vendor_Profile: React.FC = () => {
     <>
       <ToastContainer />
       <DashboardN />
+
       <div
         style={{
           display: "flex",
@@ -346,7 +332,7 @@ const Vendor_Profile: React.FC = () => {
           backgroundSize: "cover",
           backgroundPosition: "center",
           minHeight: "100vh",
-          marginTop: "63px",
+          marginTop: "64px",
         }}
       >
         <Container maxWidth="sm">
@@ -369,47 +355,41 @@ const Vendor_Profile: React.FC = () => {
               }}
             />
 
-            <Typography variant="h5" gutterBottom>
-              General Information
-            </Typography>
-
             <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <Typography variant="h5" gutterBottom>
+                  General Information
+                </Typography>
+              </Grid>
               <Grid item xs={6}>
                 <TextField
                   fullWidth
-                  name="name"
                   label="Name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  // disabled={isLocked}
+                  name="name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
                 />
                 <div style={{ color: "red" }}>
                   {errors.name && <span>{errors.name}</span>}
                 </div>
               </Grid>
-
               <Grid item xs={6}>
                 <TextField
                   fullWidth
-                  name="email"
                   label="Email"
                   type="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  // disabled={isLocked}
+                  name="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
-                <div style={{ color: "red" }}>
-                  {errors.email && <span>{errors.email}</span>}
-                </div>
               </Grid>
-
               <Grid item xs={6}>
                 <TextField
                   fullWidth
                   label="Phone Number 1"
                   name="number"
-                  value={formData.number}
-                  onChange={handleChange}
+                  value={number}
+                  onChange={(e) => setNumber(e.target.value)}
                   inputProps={{ maxLength: 10 }}
                 />
                 <div style={{ color: "red" }}>
@@ -418,86 +398,67 @@ const Vendor_Profile: React.FC = () => {
               </Grid>
               <Grid item xs={6}>
                 <TextField
-                  // required
                   fullWidth
-                  id="number2"
                   label="Phone Number 2"
                   name="number2"
                   value={number2}
-                  // disabled={isLocked}
                   onChange={(e) => setNumber2(e.target.value)}
                   inputProps={{ maxLength: 10 }}
                 />
               </Grid>
-
               <Grid item xs={6}>
                 <TextField
                   fullWidth
+                  label="Registration Number"
+                  name="reg_number"
+                  value={reg_number}
+                  onChange={(e) => setReg_number(e.target.value)}
+                  inputProps={{ maxLength: 8 }}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  fullWidth
+                  label="Establishment Date"
                   name="est_date"
                   type="date"
                   value={formData.est_date}
                   onChange={handleChange}
-                  // disabled={isLocked}
                 />
                 <div style={{ color: "red" }}>
                   {errors.est_date && <span>{errors.est_date}</span>}
                 </div>
               </Grid>
-
-              <Grid item xs={6}>
-                <TextField
-                  // required
-                  fullWidth
-                  // id="reg_number"
-                  label="Registration Number"
-                  name="reg_number"
-                  value={formData.reg_number}
-                  onChange={handleChange}
-                  inputProps={{ maxLength: 8 }}
-                />
-                <div style={{ color: "red" }}>
-                  {errors.reg_number && <span>{errors.reg_number}</span>}
-                </div>
-              </Grid>
-
               <Grid item xs={12}>
-                <Typography
-                  variant="h5"
-                  style={{ marginBottom: -8 }}
-                  gutterBottom
-                >
+                <Typography variant="h5" gutterBottom>
                   Address Details
                 </Typography>
               </Grid>
               <Grid item xs={6}>
                 <TextField
                   fullWidth
-                  name="address"
                   label="Address 1"
+                  name="address"
                   value={formData.address}
                   onChange={handleChange}
-                  // disabled={isLocked}
                 />
                 <div style={{ color: "red" }}>
                   {errors.address && <span>{errors.address}</span>}
                 </div>
               </Grid>
-
               <Grid item xs={6}>
                 <TextField
                   fullWidth
-                  name="pincode"
                   label="Pincode"
-                  value={formData.pincode}
-                  onChange={handleChange}
+                  name="pincode"
+                  value={pincode}
+                  onChange={(e) => setPincode(e.target.value)}
                   inputProps={{ maxLength: 6 }}
-                  // disabled={isLocked}
                 />
                 <div style={{ color: "red" }}>
                   {errors.pincode && <span>{errors.pincode}</span>}
                 </div>
               </Grid>
-
               <Grid item xs={12}>
                 <TextField
                   fullWidth
@@ -505,25 +466,22 @@ const Vendor_Profile: React.FC = () => {
                   name="address_2"
                   value={formData.address_2}
                   onChange={handleChange}
-                  // disabled={isLocked}
                 />
               </Grid>
-
               <Grid item xs={4}>
                 <Select
                   options={countryOptions}
-                  value={selectedCountry}
+                  value={countryOptions.find(
+                    (option) => option.label === formData.country
+                  )}
                   onChange={handleCountryChange}
                   styles={{
                     control: (provided) => ({
                       ...provided,
                       backgroundColor: "transparent",
+                      minHeight: "56px",
                     }),
                   }}
-                  menuPlacement="auto"
-                  menuPosition="fixed"
-                  menuPortalTarget={document.body}
-                  // isDisabled={isLocked}
                 />
                 <div style={{ color: "red" }}>
                   {errors.country && <span>{errors.country}</span>}
@@ -532,58 +490,42 @@ const Vendor_Profile: React.FC = () => {
               <Grid item xs={4}>
                 <Select
                   options={stateOptions}
-                  value={selectedState}
+                  value={stateOptions.find(
+                    (option) => option.label === formData.state
+                  )}
                   onChange={handleStateChange}
                   styles={{
                     control: (provided) => ({
                       ...provided,
-                      backgroundColor: "white",
+                      backgroundColor: "transparent",
+                      minHeight: "56px",
                     }),
                   }}
-                  menuPlacement="auto"
-                  menuPosition="fixed"
-                  menuPortalTarget={document.body}
-                  // isDisabled={isLocked}
                 />
                 <div style={{ color: "red" }}>
                   {errors.state && <span>{errors.state}</span>}
                 </div>
               </Grid>
-
               <Grid item xs={4}>
                 <Select
                   options={cityOptions}
-                  value={selectedCity}
+                  value={cityOptions.find(
+                    (option) => option.label === formData.city
+                  )}
                   onChange={handleCityChange}
                   styles={{
                     control: (provided) => ({
                       ...provided,
-                      backgroundColor: "white",
+                      backgroundColor: "transparent",
+                      minHeight: "56px",
                     }),
                   }}
-                  menuPlacement="auto"
-                  menuPosition="fixed"
-                  menuPortalTarget={document.body}
-                  // isDisabled={isLocked}
                 />
                 <div style={{ color: "red" }}>
                   {errors.city && <span>{errors.city}</span>}
                 </div>
               </Grid>
-
               <Grid item xs={12}>
-                <input type="file" onChange={handleFileChange} />
-              </Grid>
-
-              <Grid item xs={12}>
-                {/* <Button
-                  type="submit"
-                  onClick={handleLockToggle}
-                  variant="contained"
-                  color={isLocked ? "primary" : "secondary"}
-                >
-                  {isLocked ? "Update" : "Save"}
-                </Button> */}
                 <form onSubmit={handleRegister}>
                   <Button type="submit" variant="contained" color="primary">
                     Save
