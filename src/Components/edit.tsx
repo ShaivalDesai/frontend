@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Grid, TextField, Button } from "@mui/material";
 import axios from "axios";
 import {
@@ -30,7 +30,7 @@ interface FormValues {
   category: string;
 }
 
-const ProfessionalForm: React.FC = () => {
+const EditForm: React.FC = () => {
   const [formValues, setFormValues] = useState<FormValues>({
     image: "",
     title: "",
@@ -48,6 +48,42 @@ const ProfessionalForm: React.FC = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [errors, setErrors] = React.useState<Partial<FormValues>>({});
 
+
+
+
+  useEffect(() => {
+    const fetchData = async (productId: number) => {
+      try {
+        const response = await axios.get(`http://127.0.0.1:8000/view/${productId}`);
+        const data = response.data(); 
+        setFormValues({
+          image: data.image,
+          title: data.title,
+          size: data.size,
+          brand: data.brand,
+          material: data.material,
+          color: data.color,
+          product_type: data.product_type,
+          description: data.description,
+          complete_the_look: data.complete_the_look,
+          specification: data.specification,
+          price: data.price.toString(),
+          category: data.category,
+        });
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+  
+    
+    fetchData(1); // Fetch data for product with ID 1
+  }, []);
+  
+
+
+
+  
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -58,10 +94,90 @@ const ProfessionalForm: React.FC = () => {
     }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+//   const handleSubmit = async (e: React.FormEvent) => {
+//     e.preventDefault();
+//     const validationErrors: Partial<FormValues> = {};
+
+//     validationErrors.title = validateTitle(formValues.title);
+//     validationErrors.size = validateSize(formValues.size);
+//     validationErrors.brand = validateBrand(formValues.brand);
+//     validationErrors.material = validateMaterial(formValues.material);
+//     validationErrors.color = validateColor(formValues.color);
+//     validationErrors.product_type = validateProduct_type(
+//       formValues.product_type
+//     );
+//     validationErrors.description = validateDes(formValues.description);
+//     validationErrors.complete_the_look = validatelook(
+//       formValues.complete_the_look
+//     );
+//     validationErrors.specification = validateSpecification(
+//       formValues.specification
+//     );
+//     validationErrors.price = validatePrice(formValues.price);
+//     validationErrors.category = validateCategory(formValues.category);
+
+//     if (!selectedFile) {
+//       validationErrors.image = "Please select an image file";
+//     }
+
+//     setErrors(validationErrors);
+
+//     try {
+//       const formData = new FormData();
+//       formData.append("image", selectedFile as Blob);
+//       formData.append("size", formValues.size);
+//       formData.append("brand", formValues.brand);
+//       formData.append("material", formValues.material);
+//       formData.append("title", formValues.title);
+//       formData.append("color", formValues.color);
+//       formData.append("product_type", formValues.product_type);
+//       formData.append("description", formValues.description);
+//       formData.append("complete_the_look", formValues.complete_the_look);
+//       formData.append("specification", formValues.specification);
+//       formData.append("price", formValues.price.toString());
+//       formData.append("category", formValues.category);
+
+//       const response = await axios.get(
+//         `http://127.0.0.1:8000/view/1`,
+//         {
+//         //   headers: {
+//         //     "Content-Type": "multipart/form-data",
+//         //   },
+//         }
+//       );
+//       console.log("Data submitted successfully:", response.data);
+//       // Clear form values after successful submission
+//       setFormValues({
+//         image: "",
+//         title: "",
+//         size: "",
+//         brand: "",
+//         material: "",
+//         color: "",
+//         product_type: "",
+//         description: "",
+//         complete_the_look: "",
+//         specification: "",
+//         price: "",
+//         category: "",
+//       });
+//       setSelectedFile(null);
+      
+//     } catch (error) {
+//       console.error("Error submitting data:", error);
+   
+//     }
+//   };
+
+
+
+
+
+
+const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const validationErrors: Partial<FormValues> = {};
-
+  
     validationErrors.title = validateTitle(formValues.title);
     validationErrors.size = validateSize(formValues.size);
     validationErrors.brand = validateBrand(formValues.brand);
@@ -79,13 +195,18 @@ const ProfessionalForm: React.FC = () => {
     );
     validationErrors.price = validatePrice(formValues.price);
     validationErrors.category = validateCategory(formValues.category);
-
+  
     if (!selectedFile) {
       validationErrors.image = "Please select an image file";
     }
-
-    setErrors(validationErrors);
-
+  
+    // Check if there are any validation errors
+    if (Object.values(validationErrors).some(error => !!error)) {
+      setErrors(validationErrors);
+      return; // Exit function if there are validation errors
+    }
+  
+    // If no validation errors, proceed with form submission
     try {
       const formData = new FormData();
       formData.append("image", selectedFile as Blob);
@@ -100,16 +221,8 @@ const ProfessionalForm: React.FC = () => {
       formData.append("specification", formValues.specification);
       formData.append("price", formValues.price.toString());
       formData.append("category", formValues.category);
-
-      const response = await axios.post(
-        `http://127.0.0.1:8000/add_product/?vendor_id=2&size=${formValues.size}&brand=${formValues.brand}&material=${formValues.material}&title=${formValues.title}&color=${formValues.color}&product_type=${formValues.product_type}&description=${formValues.description}&complete_the_look=${formValues.complete_the_look}&specification=${formValues.specification}&price=${formValues.price}&category=${formValues.category}`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+  
+      const response = await axios.get(`http://127.0.0.1:8000/view/1`);
       console.log("Data submitted successfully:", response.data);
       // Clear form values after successful submission
       setFormValues({
@@ -127,12 +240,11 @@ const ProfessionalForm: React.FC = () => {
         category: "",
       });
       setSelectedFile(null);
-      // Close the modal or perform other actions as needed
     } catch (error) {
       console.error("Error submitting data:", error);
-      // Handle errors if the POST request fails
     }
   };
+  
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -340,4 +452,4 @@ const ProfessionalForm: React.FC = () => {
   );
 };
 
-export default ProfessionalForm;
+export default EditForm;

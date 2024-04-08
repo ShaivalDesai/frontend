@@ -122,8 +122,6 @@
 //     fetchData();
 //   }, []);
 
-
-
 //   const handleCountryChange = async (selectedOption: any) => {
 //     setSelectedCountry(selectedOption);
 //     const states: any = await State.getStatesOfCountry(selectedOption.value);
@@ -152,8 +150,6 @@
 //       city: "",
 //     }));
 //   };
-
- 
 
 //   const handleStateChange = async (selectedOption: any) => {
 //     setSelectedState(selectedOption);
@@ -191,13 +187,13 @@
 
 //   const handleCityChange = (selectedOption: any) => {
 //     setSelectedCity(selectedOption);
-  
+
 //     // Clear city related validation error
 //     setFormData((prevFormData) => ({
 //       ...prevFormData,
 //       city: selectedOption.name, // Change this to selectedOption.name
 //     }));
-  
+
 //     // Reset errors for country, state, and city
 //     setErrors((prevErrors) => ({
 //       ...prevErrors,
@@ -552,10 +548,6 @@
 
 // export default Home_Profile;
 
-
-
-
-
 import React, { useState, useEffect } from "react";
 import {
   Button,
@@ -617,8 +609,6 @@ const initialFormData: FormData = {
   city: "",
 };
 
-
-
 const Home_Profile: React.FC = () => {
   const [formData, setFormData] = useState<FormData>(initialFormData);
   const [country, setCountry] = useState<string>("");
@@ -629,7 +619,7 @@ const Home_Profile: React.FC = () => {
   const [stateOptions, setStateOptions] = useState<any[]>([]);
   const [cityOptions, setCityOptions] = useState<any[]>([]);
   const [isLocked, setIsLocked] = useState(true);
-  
+
   const [gender, setGender] = useState<any>("");
   const [pincode, setpincode] = useState<string>("");
   const [name, setName] = useState<string>("");
@@ -638,10 +628,10 @@ const Home_Profile: React.FC = () => {
   const [dob, setDob] = React.useState<string>("");
   const [email, setEmail] = React.useState<string>("");
   const [selected, setSelected] = useState({
-    country: '',
-    state: '',
-    city: ''
-  })
+    country: "",
+    state: "",
+    city: "",
+  });
   const [errors, setErrors] = React.useState<Partial<FormData>>({});
   const [genderOptions, setGenderOptions] = useState<any[]>([]);
 
@@ -678,7 +668,6 @@ const Home_Profile: React.FC = () => {
     fetchCountries();
   }, []);
 
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -689,16 +678,17 @@ const Home_Profile: React.FC = () => {
         );
         const userData = response.data;
         console.log("userData", userData.customer.country);
-        
-        // Fetch list of countries and find the ID of the desired country
+
         const countries = await Country.getAllCountries();
-        const desiredCountry = countries.find(country => country.name === userData.customer.country);
+        const desiredCountry = countries.find(
+          (country) => country.name === userData.customer.country
+        );
         if (!desiredCountry) {
           console.error("Desired country not found");
           return;
         }
         const countryId = desiredCountry.isoCode;
-  
+
         setFormData({
           name: userData.user.name,
           email: userData.user.email,
@@ -713,10 +703,12 @@ const Home_Profile: React.FC = () => {
           state: userData.customer.state,
           city: userData.customer.city,
         });
-  
+
         // Now you have the country ID, you can use it to fetch states
         const states = await State.getStatesOfCountry(countryId);
-        const desiredState = states.find(state => state.name === userData.customer.state);
+        const desiredState = states.find(
+          (state) => state.name === userData.customer.state
+        );
         if (!desiredState) {
           console.error("Desired state not found");
           return;
@@ -728,22 +720,19 @@ const Home_Profile: React.FC = () => {
             label: state.name,
           }))
         );
-  
-        const cities = await City.getCitiesOfState(
-          countryId,stateCode
-        );
+
+        const cities = await City.getCitiesOfState(countryId, stateCode);
         setCityOptions(
           cities.map((city: any) => ({
             value: city.name,
             label: city.name,
           }))
         );
-  
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
-  
+
     fetchData();
   }, []);
 
@@ -768,7 +757,6 @@ const Home_Profile: React.FC = () => {
       });
     } catch (error) {
       console.error("Error fetching states:", error);
-      
     }
   };
 
@@ -777,7 +765,10 @@ const Home_Profile: React.FC = () => {
     setSelectedCity(null);
 
     try {
-      const cities: any = await City.getCitiesOfState(selectedCountry.value, selectedOption.value);
+      const cities: any = await City.getCitiesOfState(
+        selectedCountry.value,
+        selectedOption.value
+      );
       const formattedCities = cities.map((city: any) => ({
         value: city.name,
         label: city.name,
@@ -794,7 +785,6 @@ const Home_Profile: React.FC = () => {
     }
   };
 
-
   const handleCityChange = (selectedOption: any) => {
     setSelectedCity(selectedOption);
     setFormData({
@@ -803,7 +793,6 @@ const Home_Profile: React.FC = () => {
     });
     setSelected({ ...selected, city: selectedOption.label });
   };
-
 
   const handleChange = (event: any) => {
     const { name, value } = event.target;
@@ -866,13 +855,10 @@ const Home_Profile: React.FC = () => {
           }
         );
         console.log("Data updated successfully");
-    
       } catch (error) {
         console.error("Error updating data:", error);
-        // Optionally show an error message to the user
-      
+      }
     }
-  }
   };
 
   return (
@@ -908,7 +894,7 @@ const Home_Profile: React.FC = () => {
                 label="Name"
                 value={formData.name}
                 onChange={handleChange}
-              // disabled={isLocked}
+                // disabled={isLocked}
               />
               <div style={{ color: "red" }}>
                 {errors.name && <span>{errors.name}</span>}
@@ -923,7 +909,7 @@ const Home_Profile: React.FC = () => {
                 type="email"
                 value={formData.email}
                 onChange={handleChange}
-              // disabled={isLocked}
+                // disabled={isLocked}
               />
               <div style={{ color: "red" }}>
                 {errors.email && <span>{errors.email}</span>}
@@ -965,7 +951,7 @@ const Home_Profile: React.FC = () => {
                 type="date"
                 value={formData.dob}
                 onChange={handleChange}
-              // disabled={isLocked}
+                // disabled={isLocked}
               />
               <div style={{ color: "red" }}>
                 {errors.dob && <span>{errors.dob}</span>}
@@ -974,7 +960,9 @@ const Home_Profile: React.FC = () => {
             <Grid item xs={6} style={{ position: "relative" }}>
               <Select
                 options={genderOptions}
-                value={genderOptions.find(option => option.value === formData.gender)}
+                value={genderOptions.find(
+                  (option) => option.value === formData.gender
+                )}
                 onChange={handleGenderChange}
                 placeholder="Gender"
                 styles={{
@@ -987,7 +975,7 @@ const Home_Profile: React.FC = () => {
                   }),
                   control: (provided) => ({
                     ...provided,
-                    background: 'transparent',
+                    background: "transparent",
                     minHeight: "56px",
                   }),
                 }}
@@ -1012,7 +1000,7 @@ const Home_Profile: React.FC = () => {
                 name="address"
                 value={formData.address}
                 onChange={handleChange}
-              // disabled={isLocked}
+                // disabled={isLocked}
               />
               <div style={{ color: "red" }}>
                 {errors.address && <span>{errors.address}</span>}
@@ -1027,7 +1015,7 @@ const Home_Profile: React.FC = () => {
                 value={formData.pincode}
                 onChange={handleChange}
                 inputProps={{ maxLength: 6 }}
-              // disabled={isLocked}
+                // disabled={isLocked}
               />
               <div style={{ color: "red" }}>
                 {errors.pincode && <span>{errors.pincode}</span>}
@@ -1041,14 +1029,16 @@ const Home_Profile: React.FC = () => {
                 name="address_2"
                 value={formData.address_2}
                 onChange={handleChange}
-              // disabled={isLocked}
+                // disabled={isLocked}
               />
             </Grid>
 
             <Grid item xs={6}>
               <Select
                 options={countryOptions}
-                value={countryOptions.find(option => option.label === formData.country)}
+                value={countryOptions.find(
+                  (option) => option.label === formData.country
+                )}
                 onChange={handleCountryChange}
                 styles={{
                   control: (provided) => ({
@@ -1060,7 +1050,7 @@ const Home_Profile: React.FC = () => {
                 menuPlacement="auto"
                 menuPosition="fixed"
                 menuPortalTarget={document.body}
-              // isDisabled={isLocked}
+                // isDisabled={isLocked}
               />
               {/* <div style={{ color: "red" }}>
                 {errors.country && <span>{errors.country}</span>}
@@ -1069,7 +1059,9 @@ const Home_Profile: React.FC = () => {
             <Grid item xs={6}>
               <Select
                 options={stateOptions}
-                value={stateOptions.find(option => option.label === formData.state)}
+                value={stateOptions.find(
+                  (option) => option.label === formData.state
+                )}
                 onChange={handleStateChange}
                 styles={{
                   control: (provided) => ({
@@ -1090,7 +1082,9 @@ const Home_Profile: React.FC = () => {
             <Grid item xs={6}>
               <Select
                 options={cityOptions}
-                value={cityOptions.find(option => option.label === formData.city)}
+                value={cityOptions.find(
+                  (option) => option.label === formData.city
+                )}
                 onChange={handleCityChange}
                 styles={{
                   control: (provided) => ({

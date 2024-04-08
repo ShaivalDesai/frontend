@@ -318,21 +318,6 @@ const SingleProduct: React.FC = () => {
               backgroundColor: "black",
             }}
           />
-          <Typography
-            variant="h4"
-            sx={{
-              // paddingTop: "80px",
-              fontFamily: "'Roboto', sans-serif",
-              fontWeight: "bold",
-              fontSize: "30px",
-              color: "#724c31",
-              marginRight: "10px",
-              textAlign: "center",
-              marginLeft: "10px",
-            }}
-          >
-            Ratings
-          </Typography>
 
           <hr
             style={{
@@ -358,15 +343,6 @@ const SingleProduct: React.FC = () => {
               justifyContent: "center",
             }}
           >
-            {/* <div
-    style={{
-      fontWeight: "bold",
-      fontSize: "20px",
-      marginBottom: "10px",
-      textAlign: "center" // Center align the title
-    }}
-  > */}
-
             <RatingDistribution {...randomStarData} />
           </div>
 

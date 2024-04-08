@@ -7,6 +7,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ProfessionalForm from "../../Components/form";
+import EditForm from "../../Components/edit";
+import { Button, Grid, TextField } from "@mui/material";
 
 interface Product {
   photo: any;
@@ -35,7 +37,10 @@ const ProductTable: React.FC = () => {
   const [deleteProductId, setDeleteProductId] = useState<string | null>(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isProductListModalOpen, setIsProductListModalOpen] = useState(false);
+  const [isEditListModalOpen, setIsEditListModalOpen] = useState(false);
   const [productList, setProductList] = useState<Product[]>([]);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [errors, setErrors] = React.useState<Partial<Product>>({});
 
   useEffect(() => {
     const fetchData = async () => {
@@ -79,10 +84,10 @@ const ProductTable: React.FC = () => {
       const updatedProducts = { ...products };
       delete updatedProducts[productId];
       setProducts(updatedProducts);
-      setIsConfirmOpen(false); // Close confirmation dialog
-      toast.success("Product deleted successfully"); // Display success message
+      setIsConfirmOpen(false);
+      toast.success("Product deleted successfully");
     } else {
-      toast.error("Failed to delete product"); // Display error message
+      toast.error("Failed to delete product");
     }
   };
 
@@ -105,37 +110,46 @@ const ProductTable: React.FC = () => {
   const handleImageClick = (product: Product) => {
     setSelectedProduct(product);
     setIsModalOpen(true);
-    // Calculate height dynamically based on content
+
     const contentHeight =
       document.getElementById("modal-content")?.clientHeight;
-    setModalHeight(contentHeight || null); // Use null if contentHeight is undefined
+    setModalHeight(contentHeight || null);
+  };
+
+  const handleEditClick = (product: Product) => {
+    setSelectedProduct(product);
+    setIsEditListModalOpen(true);
+
+    const contentHeight =
+      document.getElementById("modal-content")?.clientHeight;
+    setModalHeight(contentHeight || null);
   };
 
   const handleAddClick = (product: Product) => {
     setSelectedProduct(product);
     setIsAddOpen(true);
-    // Calculate height dynamically based on content
+
     const contentHeight =
       document.getElementById("modal-content")?.clientHeight;
-    setModalHeight(contentHeight || null); // Use null if contentHeight is undefined
+    setModalHeight(contentHeight || null);
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
     setIsProductListModalOpen(false);
+    setIsEditListModalOpen(false);
   };
 
   const closeAddModal = () => {
     setIsAddOpen(false);
   };
 
-  const customCategorySort = (a: string, b: string) => {
-    const order = ["men", "women", "girls", "boys"];
-    return order.indexOf(a.toLowerCase()) - order.indexOf(b.toLowerCase());
-  };
+  // const customCategorySort = (a: string, b: string) => {
+  //   const order = ["men", "women", "girls", "boys"];
+  //   return order.indexOf(a.toLowerCase()) - order.indexOf(b.toLowerCase());
+  // };
 
   const handleEdit = (productId: string) => {
-    // Handle edit action here
     console.log("Edit product:", productId);
   };
 
@@ -143,7 +157,7 @@ const ProductTable: React.FC = () => {
     try {
       const response = await axios.get<Product[]>(
         `${process.env.REACT_APP_FAST_API}to_add`
-      ); // Update the endpoint as needed
+      );
       setProductList(response.data);
     } catch (error) {
       console.error("Failed to fetch product list:", error);
@@ -151,7 +165,7 @@ const ProductTable: React.FC = () => {
   };
 
   const handleProductClick = (productDetails: any) => {
-    setSelectedProduct(productDetails); // Assuming you want to use the entire product object
+    setSelectedProduct(productDetails);
     fetchProductDetails(productDetails);
   };
 
@@ -159,17 +173,79 @@ const ProductTable: React.FC = () => {
     if (productDetails) {
       try {
         const a = 2;
-        // Use productDetails directly in your API call
+
         await axios.put(
           `${process.env.REACT_APP_FAST_API}add/${a}/${productDetails.product_id}`,
           productDetails
         );
-        // Additional logic to handle response or refresh the product list
+
         setSelectedProduct(null);
       } catch (error) {
         console.error("Failed to add product:", error);
       }
     }
+  };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+
+    if (file) {
+      // Check file size (1MB = 1024 * 1024 bytes)
+      if (file.size > 1024 * 1024) {
+        setErrors((prevErrors: any) => ({
+          ...prevErrors,
+          image: "File size should be less than 1MB",
+        }));
+        return;
+      }
+
+      const allowedTypes = [
+        "image/jpeg",
+        "image/heic",
+        "image/avif",
+        "image/png",
+      ];
+      if (!allowedTypes.includes(file.type)) {
+        setErrors((prevErrors: any) => ({
+          ...prevErrors,
+          image: "Only JPG, HEIC, and AVIF file types are allowed",
+        }));
+        return;
+      }
+
+      setSelectedFile(file);
+      // Set the selected file as the source of the avatar image
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (reader.readyState === 2) {
+          //   setAvatarImage(reader.result as string);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  // const handleInputChange = (
+  //   e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  //   field: keyof Product
+  // ) => {
+  //   const { value } = e.target;
+  //   if (selectedProduct !== null) {
+  //     setSelectedProduct((prevProduct) => ({
+  //       ...(prevProduct || {}),
+  //       [field]: value,
+  //     }));
+  //   }
+  // };
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setProducts((prevState: any) => ({
+      ...prevState,
+      [name]: value,
+    }));
   };
 
   return (
@@ -187,18 +263,18 @@ const ProductTable: React.FC = () => {
           <button
             onClick={() => {
               setIsProductListModalOpen(true);
-              fetchProductList(); // Fetch products when opening the modal
+              // fetchProductList();
             }}
             style={{
               padding: "10px 20px",
               fontSize: "16px",
               cursor: "pointer",
-              backgroundColor: "#724c31", // A shade of brown
-              color: "white", // White text color for better contrast
-              border: "none", // Remove default border
-              borderRadius: "10px", // Smoothed corners
-              display: "inline-flex", // Use flex to align icon and text
-              alignItems: "center", // Center items vertically
+              backgroundColor: "#724c31",
+              color: "white",
+              border: "none",
+              borderRadius: "10px",
+              display: "inline-flex",
+              alignItems: "center",
               justifyContent: "center",
             }}
           >
@@ -242,55 +318,62 @@ const ProductTable: React.FC = () => {
                 </tr>
               </thead>
               <tbody>
-                {Object.entries(products)
-                  .sort(([, a], [, b]) =>
-                    customCategorySort(a.category, b.category)
-                  )
-                  .map(([productId, product]) => (
-                    <tr
-                      key={productId}
-                      style={{
-                        cursor: "pointer",
-                      }}
-                      onClick={() => handleImageClick(product)}
-                    >
-                      <td style={tableCellStyle}>
-                        <img
-                          src={`data:image/jpeg;base64,${product.image}`}
-                          alt="Product"
-                          style={{
-                            width: "50px",
-                            height: "50px",
-                            cursor: "pointer",
-                            borderRadius: "5px",
-                          }}
-                        />
-                      </td>
-                      <td style={tableCellStyle}>{product.brand}</td>
-                      <td style={tableCellStyle}>{product.product_type}</td>
-                      <td style={tableCellStyle}>{product.color}</td>
-                      <td style={tableCellStyle}>{product.category}</td>
-                      <td style={tableCellStyle}>{product.size}</td>
-                      <td style={tableCellStyle}>₹{product.price}</td>
-                      <td style={tableCellStyle}>
-                        <FaEdit
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleEdit(productId);
-                          }}
-                          style={{ cursor: "pointer", marginRight: "5px" }}
-                        />
+                {Object.entries(products).map(([productId, product]) => (
+                  <tr
+                    key={productId}
+                    style={{
+                      cursor: "pointer",
+                    }}
+                    // onClick={() => handleImageClick(product)}
+                  >
+                    <td style={tableCellStyle}>
+                      <img
+                        src={`data:image/jpeg;base64,${product.image}`}
+                        alt="Product"
+                        style={{
+                          width: "50px",
+                          height: "50px",
+                          cursor: "pointer",
+                          borderRadius: "5px",
+                        }}
+                      />
+                    </td>
+                    <td style={tableCellStyle}>
+                      <button
+                        // onClick={() => handleImageClick(product)}
+                        style={{
+                          border: "none",
+                          background: "none",
+                          cursor: "pointer",
+                        }}
+                      >
+                        {product.brand}
+                      </button>
+                    </td>
 
-                        <FaTrash
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            openConfirmDialog(productId); // Call openConfirmDialog instead of handleDelete
-                          }}
-                          style={{ cursor: "pointer", marginLeft: "5px" }}
-                        />
-                      </td>
-                    </tr>
-                  ))}
+                    <td style={tableCellStyle}>{product.product_type}</td>
+                    <td style={tableCellStyle}>{product.color}</td>
+                    <td style={tableCellStyle}>{product.category}</td>
+                    <td style={tableCellStyle}>{product.size}</td>
+                    <td style={tableCellStyle}>₹{product.price}</td>
+                    <td style={tableCellStyle}>
+                      <FaEdit
+                        onClick={() => handleEditClick(product)}
+                        // onClick={()=> {setIsEditListModalOpen(true)
+
+                        style={{ cursor: "pointer", marginRight: "5px" }}
+                      />
+
+                      <FaTrash
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          openConfirmDialog(productId);
+                        }}
+                        style={{ cursor: "pointer", marginLeft: "5px" }}
+                      />
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
@@ -320,21 +403,21 @@ const ProductTable: React.FC = () => {
                   backgroundColor: "#fefefe",
                   padding: "20px",
                   border: "1px solid #888",
-                  height: "80%", // Decreased overall height
-                  width: "60%", // Adjusted width
-                  maxHeight: "80%", // Set maximum height
+                  height: "80%",
+                  width: "60%",
+                  maxHeight: "80%",
                   overflowY: "auto",
                   borderRadius: "10px",
-                  position: "relative", // Added position relative to the modal content
+                  position: "relative",
                 }}
               >
                 <span
                   className="close"
                   style={{
                     color: "#aaa",
-                    position: "absolute", // Set position to absolute
-                    top: "10px", // Adjust top position
-                    right: "10px", // Adjust right position
+                    position: "absolute",
+                    top: "10px",
+                    right: "10px",
                     fontSize: "28px",
                     fontWeight: "bold",
                     cursor: "pointer",
@@ -352,7 +435,7 @@ const ProductTable: React.FC = () => {
                         width: "100%",
                         maxHeight: "100%",
                         objectFit: "contain",
-                      }} // Adjusted image size
+                      }}
                     />
                   </div>
                   <div
@@ -415,6 +498,382 @@ const ProductTable: React.FC = () => {
           )}
         </div>
 
+        {isEditListModalOpen && (
+          <div
+            className="modal"
+            style={{
+              marginTop: "32px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              position: "fixed",
+              zIndex: 1,
+              left: 0,
+              top: 0,
+              width: "100%",
+              height: "100%",
+              backgroundColor: "rgba(0,0,0,0.4)",
+            }}
+          >
+            <div
+              className="modal-content"
+              id="modal-content"
+              style={{
+                display: "flex",
+                backgroundColor: "#fefefe",
+                padding: "20px",
+                border: "1px solid #888",
+                height: "80%",
+                width: "60%",
+                maxHeight: "80%",
+                overflowY: "auto",
+                borderRadius: "10px",
+                position: "relative",
+              }}
+            >
+              <span
+                className="close"
+                style={{
+                  color: "#aaa",
+                  position: "absolute",
+                  top: "10px",
+                  right: "10px",
+                  fontSize: "28px",
+                  fontWeight: "bold",
+                  cursor: "pointer",
+                }}
+                onClick={closeModal}
+              >
+                &times;
+              </span>
+              <div style={{ display: "flex" }}>
+                <Grid container spacing={2}>
+                  <div style={{ flex: "1" }}>
+                    <img
+                      src={`data:image/jpeg;base64,${selectedProduct?.image}`}
+                      alt="Product"
+                      style={{
+                        width: "100%",
+                        maxHeight: "100%",
+                        objectFit: "contain",
+                      }}
+                    />
+                  </div>
+                  <Grid item xs={6}>
+                    <TextField
+                      label="Title"
+                      variant="outlined"
+                      fullWidth
+                      name="title"
+                      value={selectedProduct?.title}
+                      onChange={handleChange}
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <TextField
+                      label="Size"
+                      variant="outlined"
+                      fullWidth
+                      name="size"
+                      value={selectedProduct?.size || ""}
+                      // onChange={(e) => handleInputChange(e, "size")}
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <TextField
+                      label="Brand"
+                      variant="outlined"
+                      fullWidth
+                      name="brand"
+                      value={selectedProduct?.brand || ""}
+                      // onChange={(e) => handleInputChange(e, "brand")}
+                    />
+                  </Grid>
+
+                  <Grid item xs={6}>
+                    <TextField
+                      label="Material"
+                      variant="outlined"
+                      fullWidth
+                      name="material"
+                      value={selectedProduct?.material || ""}
+                      // onChange={(e) => handleInputChange(e, "material")}
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <TextField
+                      label="Color"
+                      variant="outlined"
+                      fullWidth
+                      name="color"
+                      value={selectedProduct?.color || ""}
+                      // onChange={(e) => handleInputChange(e, "color")}
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <TextField
+                      label="Product type"
+                      variant="outlined"
+                      fullWidth
+                      name="product_type"
+                      value={selectedProduct?.product_type || ""}
+                      // onChange={(e) => handleInputChange(e, "product_type")}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      label="Description"
+                      variant="outlined"
+                      fullWidth
+                      name="description"
+                      value={selectedProduct?.description || ""}
+                      // onChange={(e) => handleInputChange(e, "description")}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      label="Complete the Look"
+                      variant="outlined"
+                      fullWidth
+                      name="complete_the_look"
+                      value={selectedProduct?.complete_the_look || ""}
+                      // onChange={(e) =>
+                      //   handleInputChange(e, "complete_the_look")
+                      // }
+                    />
+                  </Grid>
+
+                  <Grid item xs={12}>
+                    <TextField
+                      label="Specification"
+                      variant="outlined"
+                      fullWidth
+                      name="specification"
+                      value={selectedProduct?.specification || ""}
+                      // onChange={(e) => handleInputChange(e, "specification")}
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <TextField
+                      label="Price"
+                      variant="outlined"
+                      fullWidth
+                      name="price"
+                      type="text"
+                      value={selectedProduct?.price || ""}
+                      // onChange={(e) => handleInputChange(e, "price")}
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <TextField
+                      label="Category"
+                      variant="outlined"
+                      fullWidth
+                      name="category"
+                      value={selectedProduct?.category || ""}
+                      // onChange={(e) => handleInputChange(e, "category")}
+                    />
+                  </Grid>
+
+                  <Grid item xs={12}>
+                    <input type="file" onChange={handleFileChange} />
+                  </Grid>
+
+                  <Grid item xs={12}>
+                    <Button variant="contained" color="primary">
+                      Update
+                    </Button>
+                  </Grid>
+                </Grid>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* {isEditListModalOpen && (
+          <div
+            className="modal"
+            style={{
+              marginTop: "32px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              position: "fixed",
+              zIndex: 1,
+              left: 0,
+              top: 0,
+              width: "100%",
+              height: "100%",
+              backgroundColor: "rgba(0,0,0,0.4)",
+            }}
+          >
+            <div
+              className="modal-content"
+              id="modal-content"
+              style={{
+                display: "flex",
+                backgroundColor: "#fefefe",
+                padding: "20px",
+                border: "1px solid #888",
+                height: "80%",
+                width: "60%",
+                maxHeight: "80%",
+                overflowY: "auto",
+                borderRadius: "10px",
+                position: "relative",
+              }}
+            >
+              <span
+                className="close"
+                style={{
+                  color: "#aaa",
+                  position: "absolute",
+                  top: "10px",
+                  right: "10px",
+                  fontSize: "28px",
+                  fontWeight: "bold",
+                  cursor: "pointer",
+                }}
+                onClick={closeModal}
+              >
+                &times;
+              </span>
+              <div style={{ display: "flex" }}>
+                <Grid container spacing={2}>
+                  <div style={{ flex: "1" }}>
+                    <img
+                      src={`data:image/jpeg;base64,${selectedProduct?.image}`}
+                      alt="Product"
+                      style={{
+                        width: "100%",
+                        maxHeight: "100%",
+                        objectFit: "contain",
+                      }}
+                    />
+                  </div>
+                  <Grid item xs={6}>
+                    <TextField
+                      label="Title"
+                      variant="outlined"
+                      fullWidth
+                      name="title"
+                      value={selectedProduct?.title || ""}
+                      disabled
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <TextField
+                      label="Size"
+                      variant="outlined"
+                      fullWidth
+                      name="size"
+                      value={selectedProduct?.size || ""}
+                      disabled
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <TextField
+                      label="Brand"
+                      variant="outlined"
+                      fullWidth
+                      name="brand"
+                      value={selectedProduct?.brand || ""}
+                      disabled
+                    />
+                  </Grid>
+
+                  <Grid item xs={6}>
+                    <TextField
+                      label="Material"
+                      variant="outlined"
+                      fullWidth
+                      name="material"
+                      value={selectedProduct?.material || ""}
+                      disabled
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <TextField
+                      label="Color"
+                      variant="outlined"
+                      fullWidth
+                      name="color"
+                      value={selectedProduct?.color || ""}
+                      disabled
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <TextField
+                      label="Product type"
+                      variant="outlined"
+                      fullWidth
+                      name="product_type"
+                      value={selectedProduct?.product_type || ""}
+                      disabled
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      label="Description"
+                      variant="outlined"
+                      fullWidth
+                      name="description"
+                      value={selectedProduct?.description || ""}
+                      disabled
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <TextField
+                      label="Complete the Look"
+                      variant="outlined"
+                      fullWidth
+                      name="complete_the_look"
+                      value={selectedProduct?.complete_the_look || ""}
+                      disabled
+                    />
+                  </Grid>
+
+                  <Grid item xs={12}>
+                    <TextField
+                      label="Specification"
+                      variant="outlined"
+                      fullWidth
+                      name="specification"
+                      value={selectedProduct?.specification || ""}
+                      disabled
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <TextField
+                      label="Price"
+                      variant="outlined"
+                      fullWidth
+                      name="price"
+                      type="text"
+                      value={selectedProduct?.price || ""}
+                      disabled
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <TextField
+                      label="Category"
+                      variant="outlined"
+                      fullWidth
+                      name="category"
+                      value={selectedProduct?.category || ""}
+                      disabled
+                    />
+                  </Grid>
+
+                  <Grid item xs={12}>
+                    <input type="file" onChange={handleFileChange} />
+                  </Grid>
+                </Grid>
+              </div>
+            </div>
+          </div>
+        )} */}
+
         {isConfirmOpen && (
           <div
             style={{
@@ -450,201 +909,6 @@ const ProductTable: React.FC = () => {
           </div>
         )}
 
-        {/* {isProductListModalOpen && (
-        <div
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <div
-            style={{
-              backgroundColor: "#fff",
-              padding: "20px",
-              borderRadius: "10px",
-              border: "1px solid #ddd", // Outer border
-              boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)", // Shadow for depth
-              maxHeight: "90%",
-              overflowY: "auto",
-            }}
-          >
-            <h2>Select a Product</h2>
-            <table
-              style={{
-                width: "100%",
-                borderCollapse: "collapse",
-                borderRadius: "8px",
-              }}
-            >
-              <thead>
-                <tr style={{ borderBottom: "1px solid #ddd" }}>
-                  <th style={tableHeaderStyle}>Image</th>
-                  <th style={tableHeaderStyle}>Brand</th>
-                  <th style={tableHeaderStyle}>Product Type</th>
-                  <th style={tableHeaderStyle}>Price</th>
-                </tr>
-              </thead>
-              <tbody>
-                {Object.entries(productList).map(
-                  ([productId, productDetails]) => (
-                    <tr
-                      key={productId}
-                      style={{ borderBottom: "1px solid #ddd" }}
-                      onClick={() => handleAddClick(productDetails)}
-                    >
-                      <td style={{ ...tableCellStyle, padding: "10px" }}>
-                        <img
-                          src={`data:image/jpeg;base64,${productDetails.photo}`}
-                          alt="Product"
-                          style={{
-                            width: "50px",
-                            height: "50px",
-                            borderRadius: "5px",
-                          }}
-                        />
-                      </td>
-                      <td style={{ ...tableCellStyle, padding: "10px" }}>
-                        {productDetails.brand}
-                      </td>
-                      <td style={{ ...tableCellStyle, padding: "10px" }}>
-                        {productDetails.product_type}
-                      </td>
-                      <td style={{ ...tableCellStyle, padding: "10px" }}>
-                        ₹{productDetails.price}
-                      </td>
-                    </tr>
-                  )
-                )}
-              </tbody>
-            </table>
-
-            {isAddOpen && (
-              <div
-                className="modal"
-                style={{
-                  marginTop: "32px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  position: "fixed",
-                  zIndex: 1,
-                  left: 0,
-                  top: 0,
-                  width: "100%",
-                  height: "80%",
-                  backgroundColor: "rgba(0,0,0,0.4)",
-                }}
-              >
-                <div
-                  className="modal-content"
-                  id="modal-content"
-                  style={{
-                    display: "flex",
-                    backgroundColor: "#fefefe",
-                    padding: "20px",
-                    border: "1px solid #888",
-                    height: "80%", // Decreased overall height
-                    width: "60%", // Adjusted width
-                    maxHeight: "80%", // Set maximum height
-                    overflowY: "auto",
-                    borderRadius: "10px",
-                    position: "relative", // Added position relative to the modal content
-                  }}
-                >
-                  <span
-                    className="close"
-                    style={{
-                      color: "#aaa",
-                      position: "absolute", // Set position to absolute
-                      top: "10px", // Adjust top position
-                      right: "10px", // Adjust right position
-                      fontSize: "28px",
-                      fontWeight: "bold",
-                      cursor: "pointer",
-                    }}
-                    onClick={closeAddModal}
-                  >
-                    &times;
-                  </span>
-                  <div style={{ display: "flex" }}>
-                    <div style={{ flex: "1" }}>
-                      <img
-                        src={`data:image/jpeg;base64,${selectedProduct?.photo}`}
-                        alt="Product"
-                        style={{
-                          width: "100%",
-                          maxHeight: "100%",
-                          objectFit: "contain",
-                        }}
-                      />
-                    </div>
-                    <div
-                      style={{
-                        flex: "1",
-                        paddingLeft: "20px",
-                        textAlign: "left",
-                      }}
-                    >
-                      <h2>{selectedProduct?.title}</h2>
-
-                      <p>
-                        <strong>Brand:</strong> {selectedProduct?.brand}
-                      </p>
-                      <p>
-                        <strong>Material:</strong> {selectedProduct?.material}
-                      </p>
-
-                      <p>
-                        <strong>Product Type:</strong>{" "}
-                        {selectedProduct?.product_type}
-                      </p>
-
-                      <p>
-                        <strong>Price:</strong> ₹{selectedProduct?.price}
-                      </p>
-                      <p>
-                        <strong>Category:</strong> {selectedProduct?.category}
-                      </p>
-                      {Object.entries(productList).map(
-                        ([productId, productDetails]) => (
-                          <button
-                            onClick={() => handleProductClick(productDetails)}
-                          >
-                            Add product
-                          </button>
-                        )
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            <button
-              style={{
-                marginTop: "20px",
-                padding: "10px 20px",
-                backgroundColor: "#007bff",
-                color: "#fff",
-                border: "none",
-                borderRadius: "5px",
-                cursor: "pointer",
-              }}
-              onClick={() => setIsProductListModalOpen(false)}
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      )} */}
-
         {isProductListModalOpen && (
           <div
             className="modal"
@@ -667,25 +931,25 @@ const ProductTable: React.FC = () => {
               id="modal-content"
               style={{
                 display: "flex",
-                flexDirection: "column", // Added to arrange elements vertically
+                flexDirection: "column",
                 backgroundColor: "#fefefe",
                 padding: "20px",
                 border: "1px solid #888",
-                height: "80%", // Decreased overall height
-                width: "60%", // Adjusted width
-                maxHeight: "80%", // Set maximum height
+                height: "80%",
+                width: "60%",
+                maxHeight: "80%",
                 overflowY: "auto",
                 borderRadius: "10px",
-                position: "relative", // Added position relative to the modal content
+                position: "relative",
               }}
             >
               <span
                 className="close"
                 style={{
                   color: "#aaa",
-                  position: "absolute", // Set position to absolute
-                  top: "10px", // Adjust top position
-                  right: "10px", // Adjust right position
+                  position: "absolute",
+                  top: "10px",
+                  right: "10px",
                   fontSize: "28px",
                   fontWeight: "bold",
                   cursor: "pointer",
@@ -694,23 +958,11 @@ const ProductTable: React.FC = () => {
               >
                 &times;
               </span>
-              {/* Title added */}
+
               <ProfessionalForm />
             </div>
           </div>
         )}
-
-        {/* 
-{isProductListModalOpen && (
-        <div className="modal">
-          <div className="modal-content">
-            <span className="close" onClick={() => setIsProductListModalOpen(false)}>
-              &times;
-            </span>
-            <ProfessionalForm />
-          </div>
-        </div>
-      )} */}
       </div>
     </>
   );
