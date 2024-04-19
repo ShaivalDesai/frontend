@@ -577,6 +577,7 @@ import {
   validateCountry,
   validateCity,
 } from "../../validation";
+import Navbar from "./Navbar";
 
 interface FormData {
   name: string;
@@ -862,6 +863,9 @@ const Home_Profile: React.FC = () => {
   };
 
   return (
+
+    <>
+    <Navbar/>
     <div
       style={{
         display: "flex",
@@ -871,6 +875,7 @@ const Home_Profile: React.FC = () => {
         backgroundSize: "cover",
         backgroundPosition: "center",
         minHeight: "100vh",
+        // marginTop:"-40px"
       }}
     >
       <Container maxWidth="sm">
@@ -880,6 +885,7 @@ const Home_Profile: React.FC = () => {
             padding: 4,
             backgroundColor: "rgba(255,255,255,0.9)",
             borderRadius: "25px",
+            marginTop:"-40px"
           }}
         >
           <Typography variant="h5" gutterBottom>
@@ -1113,6 +1119,7 @@ const Home_Profile: React.FC = () => {
         </Paper>
       </Container>
     </div>
+    </>
   );
 };
 

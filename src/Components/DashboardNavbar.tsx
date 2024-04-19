@@ -166,7 +166,7 @@ const DashboardN = () => {
             </IconButton>
 
             <img
-              src="ff1.png"
+              src="favi.png"
               alt="FashionFleet"
               style={{ height: "50px", marginRight: "auto" }}
             />

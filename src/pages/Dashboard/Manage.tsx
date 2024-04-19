@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import axios from "axios";
 import DashboardN from "../../Components/DashboardNavbar";
 import { FaEdit, FaTrash } from "react-icons/fa";
@@ -23,7 +23,7 @@ interface Product {
   description: string;
   complete_the_look: string;
   specification: string;
-  price: number;
+  price: string;
   category: string;
 }
 
@@ -144,11 +144,6 @@ const ProductTable: React.FC = () => {
     setIsAddOpen(false);
   };
 
-  // const customCategorySort = (a: string, b: string) => {
-  //   const order = ["men", "women", "girls", "boys"];
-  //   return order.indexOf(a.toLowerCase()) - order.indexOf(b.toLowerCase());
-  // };
-
   const handleEdit = (productId: string) => {
     console.log("Edit product:", productId);
   };
@@ -186,66 +181,102 @@ const ProductTable: React.FC = () => {
     }
   };
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-
-    if (file) {
-      // Check file size (1MB = 1024 * 1024 bytes)
-      if (file.size > 1024 * 1024) {
-        setErrors((prevErrors: any) => ({
-          ...prevErrors,
-          image: "File size should be less than 1MB",
-        }));
-        return;
-      }
-
-      const allowedTypes = [
-        "image/jpeg",
-        "image/heic",
-        "image/avif",
-        "image/png",
-      ];
-      if (!allowedTypes.includes(file.type)) {
-        setErrors((prevErrors: any) => ({
-          ...prevErrors,
-          image: "Only JPG, HEIC, and AVIF file types are allowed",
-        }));
-        return;
-      }
-
-      setSelectedFile(file);
-      // Set the selected file as the source of the avatar image
-      const reader = new FileReader();
-      reader.onload = () => {
-        if (reader.readyState === 2) {
-          //   setAvatarImage(reader.result as string);
-        }
-      };
-      reader.readAsDataURL(file);
-    }
+  const handleFileChange = (event: any) => {
+    setSelectedFile(event.target.files[0]);
   };
-
-  // const handleInputChange = (
-  //   e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  //   field: keyof Product
-  // ) => {
-  //   const { value } = e.target;
-  //   if (selectedProduct !== null) {
-  //     setSelectedProduct((prevProduct) => ({
-  //       ...(prevProduct || {}),
-  //       [field]: value,
-  //     }));
-  //   }
-  // };
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
-    setProducts((prevState: any) => ({
+    setSelectedProduct((prevState: any) => ({
       ...prevState,
       [name]: value,
     }));
+  };
+
+  // const handleUpdate = async () => {
+  //   if (!selectedProduct) {
+  //     console.error('No product selected for update');
+  //     return;
+  //   }
+
+  //   const url = `http://127.0.0.1:8000/update_product/`;
+  //   const formData = new FormData();
+
+  //   formData.append('product_id', selectedProduct.product_id);
+  //   formData.append('title', selectedProduct.title);
+  //   formData.append('size', selectedProduct.size);
+  //   formData.append('brand', selectedProduct.brand);
+  //   formData.append('material', selectedProduct.material);
+  //   formData.append('color', selectedProduct.color);
+  //   formData.append('product_type', selectedProduct.product_type);
+  //   formData.append('description', selectedProduct.description);
+  //   formData.append('complete_the_look', selectedProduct.complete_the_look);
+  //   formData.append('specification', selectedProduct.specification);
+  //   formData.append('price', selectedProduct.price);
+  //   formData.append('category', selectedProduct.category);
+
+  //   // Assuming `selectedFile` holds the file to upload from an <input type="file">
+  //   if (selectedFile) {
+  //     formData.append('file', selectedFile);
+  //   }
+
+  //   try {
+  //     const response = await axios.put(url, formData, {
+  //       headers: {
+  //         'Content-Type': 'multipart/form-data', // This header tells the server to expect form data
+  //       },
+  //     });
+  //     console.log('Product updated:', response.data);
+  //     closeModal(); // Assuming you want to close the modal on successful update
+  //   } catch (error) {
+  //     console.error('Failed to update product:', error);
+  //   }
+  // };
+
+  const handleUpdate = async () => {
+    if (!selectedProduct || !selectedProduct.product_id) {
+      console.error("No product selected or product ID missing for update");
+      return;
+    }
+
+    // Constructing the URL with query parameters
+    const baseUrl = `http://127.0.0.1:8000/update_product/`;
+    const params = new URLSearchParams({
+      product_id: selectedProduct.product_id.toString(),
+      size: selectedProduct.size,
+      brand: selectedProduct.brand,
+      material: selectedProduct.material,
+      title: selectedProduct.title,
+      color: selectedProduct.color,
+      product_type: selectedProduct.product_type,
+      description: selectedProduct.description,
+      complete_the_look: selectedProduct.complete_the_look,
+      price: selectedProduct.price,
+      // ideal_for: selectedProduct.ideal_for // Ensure this property exists or handle its absence
+    }).toString();
+
+    const urlWithParams = `${baseUrl}?${params}`;
+
+    const formData = new FormData();
+    
+    if (selectedFile) {
+      formData.append("file", selectedFile);
+    }
+
+    try {
+      // Perform the PUT request
+      const response = await axios.put(urlWithParams, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      console.log("Product updated:", response.data);
+      closeModal(); 
+    } catch (error) {
+      console.error("Failed to update product:", error);
+    }
   };
 
   return (
@@ -324,7 +355,7 @@ const ProductTable: React.FC = () => {
                     style={{
                       cursor: "pointer",
                     }}
-                    // onClick={() => handleImageClick(product)}
+                    onClick={() => handleImageClick(product)}
                   >
                     <td style={tableCellStyle}>
                       <img
@@ -338,19 +369,8 @@ const ProductTable: React.FC = () => {
                         }}
                       />
                     </td>
-                    <td style={tableCellStyle}>
-                      <button
-                        // onClick={() => handleImageClick(product)}
-                        style={{
-                          border: "none",
-                          background: "none",
-                          cursor: "pointer",
-                        }}
-                      >
-                        {product.brand}
-                      </button>
-                    </td>
 
+                    <td style={tableCellStyle}>{product.brand}</td>
                     <td style={tableCellStyle}>{product.product_type}</td>
                     <td style={tableCellStyle}>{product.color}</td>
                     <td style={tableCellStyle}>{product.category}</td>
@@ -565,7 +585,7 @@ const ProductTable: React.FC = () => {
                       variant="outlined"
                       fullWidth
                       name="title"
-                      value={selectedProduct?.title}
+                      value={selectedProduct?.title || ""}
                       onChange={handleChange}
                     />
                   </Grid>
@@ -576,7 +596,7 @@ const ProductTable: React.FC = () => {
                       fullWidth
                       name="size"
                       value={selectedProduct?.size || ""}
-                      // onChange={(e) => handleInputChange(e, "size")}
+                      onChange={handleChange}
                     />
                   </Grid>
                   <Grid item xs={6}>
@@ -586,6 +606,7 @@ const ProductTable: React.FC = () => {
                       fullWidth
                       name="brand"
                       value={selectedProduct?.brand || ""}
+                      onChange={handleChange}
                       // onChange={(e) => handleInputChange(e, "brand")}
                     />
                   </Grid>
@@ -597,7 +618,7 @@ const ProductTable: React.FC = () => {
                       fullWidth
                       name="material"
                       value={selectedProduct?.material || ""}
-                      // onChange={(e) => handleInputChange(e, "material")}
+                      onChange={handleChange}
                     />
                   </Grid>
                   <Grid item xs={6}>
@@ -607,7 +628,7 @@ const ProductTable: React.FC = () => {
                       fullWidth
                       name="color"
                       value={selectedProduct?.color || ""}
-                      // onChange={(e) => handleInputChange(e, "color")}
+                      onChange={handleChange}
                     />
                   </Grid>
                   <Grid item xs={6}>
@@ -617,7 +638,7 @@ const ProductTable: React.FC = () => {
                       fullWidth
                       name="product_type"
                       value={selectedProduct?.product_type || ""}
-                      // onChange={(e) => handleInputChange(e, "product_type")}
+                      onChange={handleChange}
                     />
                   </Grid>
                   <Grid item xs={12}>
@@ -627,7 +648,7 @@ const ProductTable: React.FC = () => {
                       fullWidth
                       name="description"
                       value={selectedProduct?.description || ""}
-                      // onChange={(e) => handleInputChange(e, "description")}
+                      onChange={handleChange}
                     />
                   </Grid>
                   <Grid item xs={12}>
@@ -637,9 +658,7 @@ const ProductTable: React.FC = () => {
                       fullWidth
                       name="complete_the_look"
                       value={selectedProduct?.complete_the_look || ""}
-                      // onChange={(e) =>
-                      //   handleInputChange(e, "complete_the_look")
-                      // }
+                      onChange={handleChange}
                     />
                   </Grid>
 
@@ -650,7 +669,7 @@ const ProductTable: React.FC = () => {
                       fullWidth
                       name="specification"
                       value={selectedProduct?.specification || ""}
-                      // onChange={(e) => handleInputChange(e, "specification")}
+                      onChange={handleChange}
                     />
                   </Grid>
                   <Grid item xs={6}>
@@ -661,7 +680,7 @@ const ProductTable: React.FC = () => {
                       name="price"
                       type="text"
                       value={selectedProduct?.price || ""}
-                      // onChange={(e) => handleInputChange(e, "price")}
+                      onChange={handleChange}
                     />
                   </Grid>
                   <Grid item xs={6}>
@@ -671,7 +690,7 @@ const ProductTable: React.FC = () => {
                       fullWidth
                       name="category"
                       value={selectedProduct?.category || ""}
-                      // onChange={(e) => handleInputChange(e, "category")}
+                      onChange={handleChange}
                     />
                   </Grid>
 
@@ -680,7 +699,11 @@ const ProductTable: React.FC = () => {
                   </Grid>
 
                   <Grid item xs={12}>
-                    <Button variant="contained" color="primary">
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={handleUpdate}
+                    >
                       Update
                     </Button>
                   </Grid>
@@ -689,190 +712,6 @@ const ProductTable: React.FC = () => {
             </div>
           </div>
         )}
-
-        {/* {isEditListModalOpen && (
-          <div
-            className="modal"
-            style={{
-              marginTop: "32px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              position: "fixed",
-              zIndex: 1,
-              left: 0,
-              top: 0,
-              width: "100%",
-              height: "100%",
-              backgroundColor: "rgba(0,0,0,0.4)",
-            }}
-          >
-            <div
-              className="modal-content"
-              id="modal-content"
-              style={{
-                display: "flex",
-                backgroundColor: "#fefefe",
-                padding: "20px",
-                border: "1px solid #888",
-                height: "80%",
-                width: "60%",
-                maxHeight: "80%",
-                overflowY: "auto",
-                borderRadius: "10px",
-                position: "relative",
-              }}
-            >
-              <span
-                className="close"
-                style={{
-                  color: "#aaa",
-                  position: "absolute",
-                  top: "10px",
-                  right: "10px",
-                  fontSize: "28px",
-                  fontWeight: "bold",
-                  cursor: "pointer",
-                }}
-                onClick={closeModal}
-              >
-                &times;
-              </span>
-              <div style={{ display: "flex" }}>
-                <Grid container spacing={2}>
-                  <div style={{ flex: "1" }}>
-                    <img
-                      src={`data:image/jpeg;base64,${selectedProduct?.image}`}
-                      alt="Product"
-                      style={{
-                        width: "100%",
-                        maxHeight: "100%",
-                        objectFit: "contain",
-                      }}
-                    />
-                  </div>
-                  <Grid item xs={6}>
-                    <TextField
-                      label="Title"
-                      variant="outlined"
-                      fullWidth
-                      name="title"
-                      value={selectedProduct?.title || ""}
-                      disabled
-                    />
-                  </Grid>
-                  <Grid item xs={6}>
-                    <TextField
-                      label="Size"
-                      variant="outlined"
-                      fullWidth
-                      name="size"
-                      value={selectedProduct?.size || ""}
-                      disabled
-                    />
-                  </Grid>
-                  <Grid item xs={6}>
-                    <TextField
-                      label="Brand"
-                      variant="outlined"
-                      fullWidth
-                      name="brand"
-                      value={selectedProduct?.brand || ""}
-                      disabled
-                    />
-                  </Grid>
-
-                  <Grid item xs={6}>
-                    <TextField
-                      label="Material"
-                      variant="outlined"
-                      fullWidth
-                      name="material"
-                      value={selectedProduct?.material || ""}
-                      disabled
-                    />
-                  </Grid>
-                  <Grid item xs={6}>
-                    <TextField
-                      label="Color"
-                      variant="outlined"
-                      fullWidth
-                      name="color"
-                      value={selectedProduct?.color || ""}
-                      disabled
-                    />
-                  </Grid>
-                  <Grid item xs={6}>
-                    <TextField
-                      label="Product type"
-                      variant="outlined"
-                      fullWidth
-                      name="product_type"
-                      value={selectedProduct?.product_type || ""}
-                      disabled
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      label="Description"
-                      variant="outlined"
-                      fullWidth
-                      name="description"
-                      value={selectedProduct?.description || ""}
-                      disabled
-                    />
-                  </Grid>
-                  <Grid item xs={6}>
-                    <TextField
-                      label="Complete the Look"
-                      variant="outlined"
-                      fullWidth
-                      name="complete_the_look"
-                      value={selectedProduct?.complete_the_look || ""}
-                      disabled
-                    />
-                  </Grid>
-
-                  <Grid item xs={12}>
-                    <TextField
-                      label="Specification"
-                      variant="outlined"
-                      fullWidth
-                      name="specification"
-                      value={selectedProduct?.specification || ""}
-                      disabled
-                    />
-                  </Grid>
-                  <Grid item xs={6}>
-                    <TextField
-                      label="Price"
-                      variant="outlined"
-                      fullWidth
-                      name="price"
-                      type="text"
-                      value={selectedProduct?.price || ""}
-                      disabled
-                    />
-                  </Grid>
-                  <Grid item xs={6}>
-                    <TextField
-                      label="Category"
-                      variant="outlined"
-                      fullWidth
-                      name="category"
-                      value={selectedProduct?.category || ""}
-                      disabled
-                    />
-                  </Grid>
-
-                  <Grid item xs={12}>
-                    <input type="file" onChange={handleFileChange} />
-                  </Grid>
-                </Grid>
-              </div>
-            </div>
-          </div>
-        )} */}
 
         {isConfirmOpen && (
           <div

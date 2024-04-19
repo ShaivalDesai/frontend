@@ -238,7 +238,7 @@ export default function Dashboard() {
             </IconButton>
 
             <img
-              src="ff1.png"
+              src="fff.png"
               alt="FashionFleet"
               style={{ height: "50px", marginRight: "auto" }}
             />
